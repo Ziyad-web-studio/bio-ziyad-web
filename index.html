@@ -1,51 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Player Analyzer</title>
+  <title>Player Stat Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
-      font-family: Arial;
-      background: #111;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
       color: white;
       text-align: center;
       padding: 20px;
     }
-    input {
-      margin: 5px;
-      padding: 10px;
-      width: 200px;
+
+    h2 {
+      margin-bottom: 20px;
     }
-    button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      background: gold;
+
+    .container {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    input {
+      margin: 6px 0;
+      padding: 12px;
+      width: 90%;
+      border-radius: 8px;
       border: none;
+      outline: none;
+    }
+
+    button {
+      padding: 12px;
+      width: 95%;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      background: gold;
+      font-weight: bold;
       cursor: pointer;
     }
+
     .result {
       margin-top: 20px;
       font-size: 18px;
     }
+
+    .tier {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .pro { color: gold; }
+    .elite { color: #22c55e; }
+    .semi { color: #3b82f6; }
+    .rookie { color: #ef4444; }
+
   </style>
 </head>
+
 <body>
 
 <h2>Player Stat Analyzer</h2>
 
-<input id="wins" placeholder="Wins"><br>
-<input id="podiums" placeholder="Podiums"><br>
-<input id="poles" placeholder="Poles"><br>
-<input id="fastest" placeholder="Fastest Laps"><br>
-<input id="sprint" placeholder="Sprint Wins"><br>
-<input id="starts" placeholder="Race Starts"><br>
-<input id="titles" placeholder="World Titles"><br>
+<div class="container">
 
-<button onclick="hitung()">Hitung</button>
+  <input id="name" placeholder="Nama Player">
 
-<div class="result" id="hasil"></div>
+  <input id="wins" placeholder="Wins" type="number">
+  <input id="podiums" placeholder="Podiums" type="number">
+  <input id="poles" placeholder="Poles" type="number">
+  <input id="fastest" placeholder="Fastest Laps" type="number">
+  <input id="sprint" placeholder="Sprint Wins" type="number">
+  <input id="starts" placeholder="Race Starts" type="number">
+  <input id="titles" placeholder="World Titles" type="number">
+
+  <button onclick="hitung()">Hitung</button>
+
+  <div class="result" id="hasil"></div>
+
+</div>
 
 <script>
 function hitung() {
+
+  let name = document.getElementById("name").value || "Player";
+
   let wins = parseFloat(document.getElementById("wins").value) || 0;
   let podiums = parseFloat(document.getElementById("podiums").value) || 0;
   let poles = parseFloat(document.getElementById("poles").value) || 0;
@@ -73,13 +119,26 @@ function hitung() {
     titleBonus;
 
   let tier = "";
-  if (score >= 80) tier = "PRO";
-  else if (score >= 65) tier = "ELITE";
-  else if (score >= 50) tier = "SEMI PRO";
-  else tier = "ROOKIE";
+  let tierClass = "";
+
+  if (score >= 80) {
+    tier = "PRO";
+    tierClass = "pro";
+  } else if (score >= 65) {
+    tier = "ELITE";
+    tierClass = "elite";
+  } else if (score >= 50) {
+    tier = "SEMI PRO";
+    tierClass = "semi";
+  } else {
+    tier = "ROOKIE";
+    tierClass = "rookie";
+  }
 
   document.getElementById("hasil").innerHTML =
-    "Score: " + score.toFixed(2) + "<br>Class: " + tier;
+    "<b>" + name + "</b><br><br>" +
+    "Score: " + score.toFixed(2) +
+    "<div class='tier " + tierClass + "'>" + tier + "</div>";
 }
 </script>
 
