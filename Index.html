@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Player Analyzer</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      margin: 5px;
+      padding: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background: gold;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Player Stat Analyzer</h2>
+
+<input id="wins" placeholder="Wins"><br>
+<input id="podiums" placeholder="Podiums"><br>
+<input id="poles" placeholder="Poles"><br>
+<input id="fastest" placeholder="Fastest Laps"><br>
+<input id="sprint" placeholder="Sprint Wins"><br>
+<input id="starts" placeholder="Race Starts"><br>
+<input id="titles" placeholder="World Titles"><br>
+
+<button onclick="hitung()">Hitung</button>
+
+<div class="result" id="hasil"></div>
+
+<script>
+function hitung() {
+  let wins = parseFloat(document.getElementById("wins").value) || 0;
+  let podiums = parseFloat(document.getElementById("podiums").value) || 0;
+  let poles = parseFloat(document.getElementById("poles").value) || 0;
+  let fastest = parseFloat(document.getElementById("fastest").value) || 0;
+  let sprint = parseFloat(document.getElementById("sprint").value) || 0;
+  let starts = parseFloat(document.getElementById("starts").value) || 1;
+  let titles = parseFloat(document.getElementById("titles").value) || 0;
+
+  let winRate = wins / starts;
+  let podiumRate = podiums / starts;
+  let poleRate = poles / starts;
+  let fastestRate = fastest / starts;
+  let sprintRate = sprint / starts;
+
+  let expBonus = Math.min(starts, 100) / 100 * 10;
+  let titleBonus = Math.min(titles, 3) * 5;
+
+  let score =
+    (winRate * 40) +
+    (podiumRate * 25) +
+    (poleRate * 10) +
+    (fastestRate * 10) + // x2
+    (sprintRate * 10) +  // x2
+    expBonus +
+    titleBonus;
+
+  let tier = "";
+  if (score >= 80) tier = "PRO";
+  else if (score >= 65) tier = "ELITE";
+  else if (score >= 50) tier = "SEMI PRO";
+  else tier = "ROOKIE";
+
+  document.getElementById("hasil").innerHTML =
+    "Score: " + score.toFixed(2) + "<br>Class: " + tier;
+}
+</script>
+
+</body>
+</html>
