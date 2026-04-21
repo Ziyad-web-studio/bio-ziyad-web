@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stoik Ziyad - Folder & Links</title>
+    <title>Ziyad Web Studio - Folder & Links</title>
     <link rel="icon" type="image/svg+xml" href="/Images/icon.web.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta name="theme-color" content="#000000">
@@ -25,7 +25,6 @@
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 0; pointer-events: none;
         }
-
         #star-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1; pointer-events: none;
@@ -114,9 +113,7 @@
 
         .note-text { font-size: 0.75rem; color: #a1a1aa; margin-top: 12px; line-height: 1.4; font-style: italic; }
 
-        .download-block {
-            display: flex; align-items: center; gap: 15px; margin-top: 10px;
-        }
+        .download-block { display: flex; align-items: center; gap: 15px; margin-top: 10px; }
         .thumbnail-app {
             width: 50px; height: 50px; border-radius: 12px; background: rgba(255,255,255,0.1);
             display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
@@ -140,29 +137,30 @@
     <canvas id="aurora-canvas"></canvas>
     <canvas id="star-canvas"></canvas>
 
+    <!-- MAIN MENU -->
     <div id="main-menu" class="container">
         <div class="profile-section">
             <div class="avatar-box"><img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png" class="avatar" alt="Avatar"></div>
-            <h1 class="username">Stoik Ziyad</h1>
+            <h1 class="username">Ziyad Web Studio</h1>
             <p class="bio">⬇️ Link & Resources ⬇️</p>
         </div>
 
         <div class="link-card" onclick="openCategories()">
             <div class="card-icon"><i class="fas fa-folder-open"></i></div>
             <div class="card-content">
-                <span class="card-title">My Folder & project</span><br>
+                <span class="card-title">My Folder & Project</span><br>
                 <span class="card-sub">Kumpulan file</span>
             </div>
             <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
 
-        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
+        <a href="https://wa.me/6288218812567" target="_blank" rel="noopener noreferrer" class="link-card">
             <div class="card-icon"><i class="fab fa-whatsapp"></i></div>
             <div class="card-content"><span class="card-title">Chat Ziyad Studio</span><br><span class="card-sub">Hubungi kami</span></div>
             <i class="fas fa-chevron-right arrow-icon"></i>
         </a>
 
-        <a href="https://www.tiktok.com/@stoikziyad" target="_blank" rel="noopener noreferrer" class="link-card">
+        <a href="tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
             <div class="card-icon"><i class="fab fa-tiktok"></i></div>
             <div class="card-content"><span class="card-title">TikTok</span><br><span class="card-sub">Konten Pendek & Kreatif</span></div>
             <i class="fas fa-chevron-right arrow-icon"></i>
@@ -171,6 +169,7 @@
         <div class="footer">© Copyright ziyad_studio</div>
     </div>
 
+    <!-- CATEGORY VIEW -->
     <div id="category-view" class="container hidden">
         <div class="header-folder">
             <button class="back-btn" onclick="closeCategories()"><i class="fas fa-arrow-left"></i></button>
@@ -179,7 +178,7 @@
 
         <div class="link-card" onclick="openCodeCopyView()">
             <div class="card-icon"><i class="fas fa-code"></i></div>
-            <div class="card-content"><span class="card-title">bahan bahan buat aplikasi</span><br><span class="card-sub">Teks Khusus</span></div>
+            <div class="card-content"><span class="card-title">Bahan Buat Aplikasi</span><br><span class="card-sub">Teks Khusus</span></div>
             <i class="fas fa-chevron-right arrow-icon"></i>
         </div>
 
@@ -190,10 +189,11 @@
         </div>
     </div>
 
+    <!-- CODE COPY VIEW -->
     <div id="code-copy-view" class="container hidden">
         <div class="header-folder">
             <button class="back-btn" onclick="closeCodeCopyView()"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="username" style="font-size: 1.3rem;">On activity create & aplikasi</h2>
+            <h2 class="username" style="font-size: 1.3rem;">On Activity Create & Aplikasi</h2>
         </div>
 
         <div class="copy-box">
@@ -220,7 +220,7 @@
                     <div class="download-title">Sketchware Pro</div>
                     <div class="download-sub">Aplikasi IDE Android</div>
                 </div>
-                <a href="https://sketchware.pro/download" target="_blank" rel="noopener noreferrer" class="btn-masuk">download</a>
+                <a href="https://sketchware.pro/download" target="_blank" rel="noopener noreferrer" class="btn-masuk">Download</a>
             </div>
         </div>
 
@@ -246,7 +246,7 @@
         </div>
 
         <div class="copy-box">
-            <span class="label">Add source directly</span>
+            <span class="label">Add Source Directly</span>
             <div class="code-wrapper">
                 <div id="text1" class="code-content">android.webkit.WebView web=(android.webkit.WebView)findViewById(R.id.webview1);android.webkit.WebSettings set=web.getSettings();set.setJavaScriptEnabled(true);set.setDomStorageEnabled(true);set.setAllowFileAccessFromFileURLs(true);set.setAllowUniversalAccessFromFileURLs(true);web.setWebChromeClient(new android.webkit.WebChromeClient());</div>
                 <button class="copy-code-btn" onclick="copyDivText('text1', this)">
@@ -256,6 +256,7 @@
         </div>
     </div>
 
+    <!-- FILE VIEW -->
     <div id="file-view" class="container hidden">
         <div class="header-folder">
             <button class="back-btn" onclick="closeFileList()"><i class="fas fa-arrow-left"></i></button>
