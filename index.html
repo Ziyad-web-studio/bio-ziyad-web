@@ -1,158 +1,134 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziyad Web Studio - Folder & Links</title>
-    <link rel="icon" type="image/svg+xml" href="/Images/icon.web.svg">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Ziyad Web Studio</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
-    <meta name="theme-color" content="#000000">
+
+    <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#3953bd",
+            "on-primary": "#ffffff",
+            "surface": "#effcff",
+            "on-surface": "#0f1e21",
+            "on-surface-variant": "#444653",
+            "outline-variant": "#c5c5d5",
+            "background": "#F0F4F8"
+          },
+          fontFamily: {
+            "headline-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-caps": ["Inter"],
+            "label-sm": ["Inter"]
+          }
+        }
+      }
+    }
+    </script>
 </head>
-<body>
-    <canvas id="aurora-canvas"></canvas>
-    <canvas id="star-canvas"></canvas>
+<body class="text-on-surface antialiased min-h-screen flex flex-col">
 
-    <!-- MAIN MENU -->
-    <div id="main-menu" class="container">
-        <div class="profile-section">
-            <div class="avatar-box">
-                <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png" class="avatar" alt="Avatar">
-            </div>
-            <h1 class="username">Ziyad Web Studio</h1>
-            <p class="bio">⬇️ Link & Resources ⬇️</p>
-        </div>
-
-        <div class="link-card" onclick="openCategories()">
-            <div class="card-icon"><i class="fas fa-folder-open"></i></div>
-            <div class="card-content">
-                <span class="card-title">My Folder & Project</span><br>
-                <span class="card-sub">Kumpulan file</span>
-            </div>
-            <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-
-        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="card-icon"><i class="fab fa-whatsapp"></i></div>
-            <div class="card-content">
-                <span class="card-title">Chat Ziyad Studio</span><br>
-                <span class="card-sub">Hubungi kami</span>
-            </div>
-            <i class="fas fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <a href="https://www.tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="card-icon"><i class="fab fa-tiktok"></i></div>
-            <div class="card-content">
-                <span class="card-title">TikTok</span><br>
-                <span class="card-sub">Konten Pendek & Kreatif</span>
-            </div>
-            <i class="fas fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <div class="footer">© Copyright ziyad_studio</div>
-    </div>
-
-    <!-- CATEGORY VIEW -->
-    <div id="category-view" class="container hidden">
-        <div class="header-folder">
-            <button class="back-btn" onclick="closeCategories()"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="username" style="font-size: 1.3rem;">Daftar Kategori</h2>
-        </div>
-
-        <div class="link-card" onclick="openCodeCopyView()">
-            <div class="card-icon"><i class="fas fa-code"></i></div>
-            <div class="card-content">
-                <span class="card-title">Bahan Buat Aplikasi</span><br>
-                <span class="card-sub">Teks Khusus</span>
-            </div>
-            <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-
-        <div class="link-card" onclick="openFileList('desain')">
-            <div class="card-icon"><i class="fas fa-paint-brush"></i></div>
-            <div class="card-content">
-                <span class="card-title">Assets Desain</span><br>
-                <span class="card-sub">3 Files</span>
-            </div>
-            <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-    </div>
-
-    <!-- CODE COPY VIEW -->
-    <div id="code-copy-view" class="container hidden">
-        <div class="header-folder">
-            <button class="back-btn" onclick="closeCodeCopyView()"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="username" style="font-size: 1.3rem;">On Activity Create & Aplikasi</h2>
-        </div>
-
-        <div class="copy-box">
-            <span class="label">Video Tutorial</span>
-            <div class="download-block">
-                <div class="thumbnail-app" style="background: #000;">
-                    <i class="fab fa-tiktok" style="font-size: 1.5rem; color: #fff;"></i>
-                </div>
-                <div class="download-info">
-                    <div class="download-title">Tutorial TikTok</div>
-                    <div class="download-sub">Cara pakai & setup</div>
-                </div>
-                <a href="https://vt.tiktok.com/ZSHECk7Bj/" target="_blank" rel="noopener noreferrer" class="btn-masuk">Tonton</a>
-            </div>
-        </div>
-
-        <div class="copy-box">
-            <span class="label">Tools Pendukung</span>
-            <div class="download-block">
-                <div class="thumbnail-app">
-                    <img src="https://sketchware.pro/img/logo.webp" alt="Sketchware Icon">
-                </div>
-                <div class="download-info">
-                    <div class="download-title">Sketchware Pro</div>
-                    <div class="download-sub">Aplikasi IDE Android</div>
-                </div>
-                <a href="https://sketchware.pro/download" target="_blank" rel="noopener noreferrer" class="btn-masuk">Download</a>
-            </div>
-        </div>
-
-        <div class="copy-box">
-            <span class="label">Prompt</span>
-            <div class="code-wrapper" style="max-height: 100px; overflow-y: auto;">
-                <div id="text3" class="code-content" style="word-break: break-word; white-space: normal;">Buatkan satu file HTML yang berisi aplikasi web chat AI bernama "Aiminizer". Gunakan Tailwind CSS (via CDN) dan JavaScript murni. Desain harus minimalis, terinspirasi dari UI Apple, menggunakan efek glassmorphism, dan memiliki mode gelap terang (dukungan warna CSS variables). Palet warna utama adalah hitam pekat, abu-abu, dan aksen oranye terang. Sertakan fitur dan struktur berikut: 1. Elemen Visual Latar: Tambahkan animasi bola cahaya (orb) yang berdenyut lambat di latar belakang. 2. Header (Efek Kaca): Melayang di atas. Kiri untuk tombol buka pengaturan. Tengah untuk judul "Aiminizer" dan teks kecil "ziyad_studio". Kanan untuk dropdown pilihan model (GPT-3.5 Turbo dan DeepSeek). 3. Area Obrolan: Bisa di-scroll. Pesan pengguna berwarna oranye. Pesan AI berwarna latar sesuai tema. Tampilkan animasi 3 titik memantul saat AI memproses jawaban. 4. Input Pesan (Efek Kaca): Melayang di bawah. Textarea yang tingginya otomatis menyesuaikan teks dan tombol kirim. 5. Panel Pengaturan: Muncul dari samping. Berisi tombol ubah mode gelap, input password API Key, dropdown Base URL (ChatAnywhere), dan textarea untuk System Prompt. Semuanya disimpan di LocalStorage. 6. Pemrosesan Teks: Gunakan library marked.js via CDN agar pesan AI mendukung Markdown (tabel, kode, daftar). Tambahkan efek animasi mesin tik saat AI merespons. Munculkan tombol salin di setiap gelembung pesan AI. 7. Logika Komunikasi: Gunakan Fetch API. Gabungkan system prompt bawaan pengguna dengan prompt tersembunyi absolut yang menyatakan pembuatnya adalah "Ziyad (ziyad_studio), individu muda dengan ambisi ekstrem dan pemikiran strategis". Kodenya harus rapi, responsif untuk perangkat seluler, dan siap dijalankan langsung di browser.</div>
-                <button class="copy-code-btn" onclick="copyDivText('text3', this)">
-                    <i class="fas fa-copy"></i>
+    <div id="view-main" class="view active flex-col min-h-screen">
+        <header class="bg-transparent top-0 w-full z-50">
+            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
+                <div id="studio-title" class="text-xl font-bold text-slate-900 font-headline-md">Ziyad Studio</div>
+                <button aria-label="Share" class="text-slate-600">
+                    <span class="material-symbols-outlined">share</span>
                 </button>
             </div>
-        </div>
+        </header>
 
-        <div class="copy-box">
-            <span class="label">Webview</span>
-            <div class="code-wrapper">
-                <div id="text2" class="code-content">file:///android_asset/index.html</div>
-                <button class="copy-code-btn" onclick="copyDivText('text2', this)">
-                    <i class="fas fa-copy"></i>
-                </button>
-            </div>
-            <p class="note-text"><i class="fas fa-info-circle" style="margin-right: 5px;"></i> Catatan: Kalian harus ganti nama index.html jika kalian menggunakan nama selain itu, misal [nama].html</p>
-        </div>
+        <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
+            <section class="flex flex-col items-center text-center gap-4 w-full">
+                <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg">
+                    <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png" alt="Logo"/>
+                </div>
+                <div>
+                    <h1 class="font-headline-lg text-2xl text-on-surface">Ziyad Web Studio</h1>
+                    <div class="bg-primary text-on-primary rounded-full px-4 py-1 mt-2 inline-block">
+                        <span class="text-xs font-bold uppercase tracking-wider">Link & Resources</span>
+                    </div>
+                </div>
+            </section>
 
-        <div class="copy-box">
-            <span class="label">Add Source Directly</span>
-            <div class="code-wrapper">
-                <div id="text1" class="code-content">android.webkit.WebView web=(android.webkit.WebView)findViewById(R.id.webview1);android.webkit.WebSettings set=web.getSettings();set.setJavaScriptEnabled(true);set.setDomStorageEnabled(true);set.setAllowFileAccessFromFileURLs(true);set.setAllowUniversalAccessFromFileURLs(true);web.setWebChromeClient(new android.webkit.WebChromeClient());</div>
-                <button class="copy-code-btn" onclick="copyDivText('text1', this)">
-                    <i class="fas fa-copy"></i>
+            <section class="w-full flex flex-col gap-4">
+                <button onclick="goTo('view-category')" class="link-card">
+                    <div class="flex items-center gap-4">
+                        <div class="card-icon-wrap"><span class="material-symbols-outlined">folder_open</span></div>
+                        <div class="text-left">
+                            <p class="font-bold">My Folder & Project</p>
+                            <p class="text-sm opacity-70">Kumpulan file & resources</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
                 </button>
-            </div>
-        </div>
+                </section>
+        </main>
     </div>
 
-    <!-- FILE VIEW -->
-    <div id="file-view" class="container hidden">
-        <div class="header-folder">
-            <button class="back-btn" onclick="closeFileList()"><i class="fas fa-arrow-left"></i></button>
-            <h2 id="file-view-title" class="username" style="font-size: 1.3rem;">Files</h2>
-        </div>
-        <div id="file-list-container" style="width: 100%; display: flex; flex-direction: column; gap: 18px;"></div>
+    <div id="view-category" class="view flex-col min-h-screen">
+        <header class="bg-transparent w-full">
+            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
+                <div class="flex items-center gap-3">
+                    <button onclick="goBack('view-main')" class="nav-btn">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <span class="text-xl font-bold">Daftar Kategori</span>
+                </div>
+                <button onclick="goTo('view-main', 'slide-back')" class="nav-btn">
+                    <span class="material-symbols-outlined">home</span>
+                </button>
+            </div>
+        </header>
+        <main class="max-w-[640px] mx-auto w-full px-6 py-4">
+            <button onclick="goTo('view-code')" class="link-card">
+                <div class="flex items-center gap-4">
+                    <div class="card-icon-wrap"><span class="material-symbols-outlined">code</span></div>
+                    <div class="text-left">
+                        <p class="font-bold">Bahan Buat Aplikasi</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </main>
+    </div>
+
+    <div id="view-code" class="view flex-col min-h-screen">
+        <header class="bg-transparent w-full">
+            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
+                <div class="flex items-center gap-3">
+                    <button onclick="goBack('view-category')" class="nav-btn">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <span class="text-xl font-bold">On Activity Create</span>
+                </div>
+                <button onclick="goTo('view-main', 'slide-back')" class="nav-btn">
+                    <span class="material-symbols-outlined">home</span>
+                </button>
+            </div>
+        </header>
+        <main class="max-w-[640px] mx-auto w-full px-6 py-4 flex flex-col gap-4">
+            <div class="copy-box">
+                <span class="copy-label">◈ Webview Path</span>
+                <div class="code-wrapper">
+                    <div id="text-path" class="code-content">file:///android_asset/index.html</div>
+                    <button class="copy-btn" onclick="copyText('text-path', this)"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
