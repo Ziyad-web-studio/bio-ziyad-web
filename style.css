@@ -1,71 +1,87 @@
-body { background-color: #F0F4F8; }
+/* TITLE SWITCHER */
+const titleEl = document.getElementById('studio-title');
+const titles = ['Ziyad Studio', 'Creative Studio'];
+let titleIndex = 0;
+setInterval(() => {
+  titleIndex = (titleIndex + 1) % titles.length;
+  titleEl.style.opacity = '0';
+  titleEl.style.transform = 'translateY(-6px)';
+  setTimeout(() => {
+    titleEl.textContent = titles[titleIndex];
+    titleEl.style.opacity = '1';
+    titleEl.style.transform = 'translateY(0)';
+  }, 300);
+}, 3000);
 
-/* View System */
-.view { display: none; }
-.view.active { display: flex; }
-
-/* Animations */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(24px); }
-    to { opacity: 1; transform: translateX(0); }
+/* LIVE CLOCK */
+function updateClock() {
+  const now = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  const el = document.getElementById('live-clock');
+  const dl = document.getElementById('live-date');
+  if (el) el.textContent = `${h}:${m}:${s}`;
+  if (dl) dl.textContent = dateStr;
 }
-@keyframes slideBack {
-    from { opacity: 0; transform: translateX(-24px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-.slide-in { animation: slideIn 0.25s ease forwards; }
-.slide-back { animation: slideBack 0.25s ease forwards; }
+updateClock();
+setInterval(updateClock, 1000);
 
-/* Components */
-.link-card {
-    background: #fff;
-    width: 100%;
-    border-radius: 24px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    transition: 0.2s;
-}
-.link-card:active { transform: scale(0.98); }
+/* NAVIGATION & DEEP LINKING */
+function goTo(viewId, animClass) {
+  const current = document.querySelector('.view.active');
+  if (current) current.classList.remove('active');
 
-.card-icon-wrap {
-    width: 48px; height: 48px;
-    border-radius: 99px;
-    background: #e1f1f5;
-    display: flex; align-items: center; justify-content: center;
-    color: #3953bd;
+  const next = document.getElementById(viewId);
+  if (next) {
+    next.classList.add('active');
+    next.classList.remove('slide-in', 'slide-back');
+    void next.offsetWidth;
+    next.classList.add(animClass || 'slide-in');
+  }
+
+  window.scrollTo(0, 0);
+  history.pushState(null, null, '#' + viewId);
 }
 
-.nav-btn {
-    width: 40px; height: 40px;
-    border-radius: 99px;
-    background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    border: 1px solid #e2e8f0;
+function goBack(viewId) {
+  goTo(viewId, 'slide-back');
 }
 
-/* Copy System */
-.copy-box {
-    background: #fff;
-    border-radius: 20px;
-    padding: 18px;
-    border: 1px solid #e2e8f0;
-}
-.copy-label {
-    display: block; font-size: 11px; font-weight: 700;
-    color: #3953bd; text-transform: uppercase; margin-bottom: 10px;
-}
-.code-wrapper {
-    position: relative; background: #f8fafc;
-    border-radius: 12px; padding: 14px; padding-right: 48px;
-    border: 1px solid #e2e8f0;
-}
-.code-content { font-family: monospace; font-size: 13px; color: #1e293b; }
-.copy-btn {
-    position: absolute; top: 10px; right: 10px;
-    background: #eff6ff; color: #3953bd;
-    width: 30px; height: 30px; border-radius: 8px;
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.substring(1);
+  if (hash && document.getElementById(hash)) {
+    goTo(hash, 'slide-in');
+  }
+});
+
+window.addEventListener('popstate', () => {
+  const hash = window.location.hash.substring(1) || 'view-main';
+  const target = document.getElementById(hash);
+  if (target) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    target.classList.add('active');
+    target.classList.remove('slide-in', 'slide-back');
+    void target.offsetWidth;
+    target.classList.add('slide-back');
+  }
+});
+
+/* COPY */
+function copyText(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    btn.style.background = '#3953bd';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
 }
