@@ -1,134 +1,82 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Ziyad Web Studio</title>
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aiminizer | Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
-
-    <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#3953bd",
-            "on-primary": "#ffffff",
-            "surface": "#effcff",
-            "on-surface": "#0f1e21",
-            "on-surface-variant": "#444653",
-            "outline-variant": "#c5c5d5",
-            "background": "#F0F4F8"
-          },
-          fontFamily: {
-            "headline-md": ["Manrope"],
-            "headline-lg": ["Manrope"],
-            "body-lg": ["Inter"],
-            "body-sm": ["Inter"],
-            "label-caps": ["Inter"],
-            "label-sm": ["Inter"]
-          }
-        }
-      }
-    }
-    </script>
 </head>
-<body class="text-on-surface antialiased min-h-screen flex flex-col">
+<body class="h-screen w-full flex flex-col">
 
-    <div id="view-main" class="view active flex-col min-h-screen">
-        <header class="bg-transparent top-0 w-full z-50">
-            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-                <div id="studio-title" class="text-xl font-bold text-slate-900 font-headline-md">Ziyad Studio</div>
-                <button aria-label="Share" class="text-slate-600">
-                    <span class="material-symbols-outlined">share</span>
-                </button>
-            </div>
-        </header>
+    <!-- Background Orbs -->
+    <div class="orb w-48 h-48 bg-orange-600 top-[-10%] left-[-10%]"></div>
+    <div class="orb w-64 h-64 bg-zinc-800 bottom-[-10%] right-[-10%]"></div>
 
-        <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
-            <section class="flex flex-col items-center text-center gap-4 w-full">
-                <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg">
-                    <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png" alt="Logo"/>
-                </div>
-                <div>
-                    <h1 class="font-headline-lg text-2xl text-on-surface">Ziyad Web Studio</h1>
-                    <div class="bg-primary text-on-primary rounded-full px-4 py-1 mt-2 inline-block">
-                        <span class="text-xs font-bold uppercase tracking-wider">Link & Resources</span>
-                    </div>
-                </div>
-            </section>
+    <!-- Header -->
+    <header class="fixed top-2 left-1/2 -translate-x-1/2 w-[92%] h-14 glass rounded-2xl z-50 flex items-center justify-between px-4 shadow-lg">
+        <button onclick="toggleSettings()" class="p-2 active:opacity-50">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div class="text-center">
+            <h1 class="text-md font-bold leading-none">Aiminizer</h1>
+            <p class="text-[9px] opacity-40 uppercase tracking-tighter">ziyad_studio</p>
+        </div>
+        <select id="modelSelect" class="bg-transparent text-xs font-semibold focus:outline-none border-none">
+            <option value="gpt-3.5-turbo">GPT-3.5</option>
+            <option value="deepseek-chat">DeepSeek</option>
+        </select>
+    </header>
 
-            <section class="w-full flex flex-col gap-4">
-                <button onclick="goTo('view-category')" class="link-card">
-                    <div class="flex items-center gap-4">
-                        <div class="card-icon-wrap"><span class="material-symbols-outlined">folder_open</span></div>
-                        <div class="text-left">
-                            <p class="font-bold">My Folder & Project</p>
-                            <p class="text-sm opacity-70">Kumpulan file & resources</p>
-                        </div>
-                    </div>
-                    <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
-                </button>
-                </section>
-        </main>
-    </div>
+    <!-- Chat Area -->
+    <main id="chatContainer" class="flex-1 w-full pt-20 pb-24 px-4 overflow-y-auto hide-scroll flex flex-col gap-4">
+    </main>
 
-    <div id="view-category" class="view flex-col min-h-screen">
-        <header class="bg-transparent w-full">
-            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-                <div class="flex items-center gap-3">
-                    <button onclick="goBack('view-main')" class="nav-btn">
-                        <span class="material-symbols-outlined">arrow_back</span>
-                    </button>
-                    <span class="text-xl font-bold">Daftar Kategori</span>
-                </div>
-                <button onclick="goTo('view-main', 'slide-back')" class="nav-btn">
-                    <span class="material-symbols-outlined">home</span>
-                </button>
-            </div>
-        </header>
-        <main class="max-w-[640px] mx-auto w-full px-6 py-4">
-            <button onclick="goTo('view-code')" class="link-card">
-                <div class="flex items-center gap-4">
-                    <div class="card-icon-wrap"><span class="material-symbols-outlined">code</span></div>
-                    <div class="text-left">
-                        <p class="font-bold">Bahan Buat Aplikasi</p>
-                    </div>
-                </div>
-                <span class="material-symbols-outlined">chevron_right</span>
+    <!-- Input Bar -->
+    <div class="fixed bottom-0 w-full px-3 pb-4 safe-pb glass-none bg-gradient-to-t from-[var(--bg)] to-transparent">
+        <div class="glass rounded-[28px] p-1.5 flex items-end gap-2 shadow-xl">
+            <textarea id="userInput" rows="1" placeholder="Pesan..." 
+                class="flex-1 bg-transparent border-none focus:ring-0 resize-none py-3 px-4 text-[15px] max-h-32"
+                oninput="this.style.height='';this.style.height=this.scrollHeight+'px'"></textarea>
+            <button onclick="sendMessage()" class="bg-[var(--accent)] text-white w-11 h-11 rounded-full flex items-center justify-center active:scale-90 transition shadow-lg">
+                <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
             </button>
-        </main>
+        </div>
     </div>
 
-    <div id="view-code" class="view flex-col min-h-screen">
-        <header class="bg-transparent w-full">
-            <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-                <div class="flex items-center gap-3">
-                    <button onclick="goBack('view-category')" class="nav-btn">
-                        <span class="material-symbols-outlined">arrow_back</span>
+    <!-- Settings Panel -->
+    <div id="settingsPanel" class="fixed inset-0 z-[60] invisible overflow-hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="overlay" onclick="toggleSettings()"></div>
+        <div class="absolute left-0 top-0 h-full w-[85%] max-w-sm glass border-r border-white/10 p-6 flex flex-col gap-5 shadow-2xl transition-transform -translate-x-full" id="settingsContent">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-black">Panel Kontrol</h2>
+                <button onclick="toggleSettings()" class="opacity-50"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="space-y-1">
+                    <label class="text-[10px] uppercase opacity-40 font-bold ml-1">Tampilan</label>
+                    <button onclick="toggleTheme()" class="w-full h-12 glass rounded-xl flex items-center justify-between px-4 active:bg-white/10">
+                        <span class="text-sm">Ganti Tema</span>
+                        <i data-lucide="moon" class="w-4 h-4"></i>
                     </button>
-                    <span class="text-xl font-bold">On Activity Create</span>
                 </div>
-                <button onclick="goTo('view-main', 'slide-back')" class="nav-btn">
-                    <span class="material-symbols-outlined">home</span>
-                </button>
-            </div>
-        </header>
-        <main class="max-w-[640px] mx-auto w-full px-6 py-4 flex flex-col gap-4">
-            <div class="copy-box">
-                <span class="copy-label">◈ Webview Path</span>
-                <div class="code-wrapper">
-                    <div id="text-path" class="code-content">file:///android_asset/index.html</div>
-                    <button class="copy-btn" onclick="copyText('text-path', this)"><i class="fas fa-copy"></i></button>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] uppercase opacity-40 font-bold ml-1">API Key</label>
+                    <input type="password" id="apiKey" class="w-full h-12 glass rounded-xl px-4 text-sm focus:ring-1 ring-orange-500 outline-none" placeholder="Masukkan Key...">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] uppercase opacity-40 font-bold ml-1">Sistem</label>
+                    <textarea id="systemPrompt" rows="3" class="w-full p-4 glass rounded-xl text-xs outline-none resize-none" placeholder="Instruksi AI..."></textarea>
                 </div>
             </div>
-        </main>
+
+            <button onclick="saveSettings()" class="mt-auto h-14 bg-[var(--accent)] text-white rounded-2xl font-bold active:opacity-80">Simpan Konfigurasi</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
