@@ -4,92 +4,104 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Ziyad Web Studio</title>
+
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- External Stylesheet -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Tailwind Config -->
 <script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
       colors: {
-        "secondary-fixed-dim": "#dcb8ff",
-        "tertiary": "#5c5b5e",
-        "on-error": "#ffffff",
-        "secondary": "#754aa1",
-        "error": "#ba1a1a",
-        "on-primary-container": "#fffbff",
-        "inverse-surface": "#243336",
-        "outline-variant": "#c5c5d5",
-        "inverse-primary": "#b9c3ff",
-        "surface-tint": "#3c55bf",
-        "surface-bright": "#effcff",
-        "tertiary-container": "#757476",
-        "surface-container": "#e1f1f5",
-        "primary-fixed": "#dde1ff",
-        "on-secondary-container": "#5a3086",
-        "outline": "#757684",
-        "on-primary-fixed": "#001356",
-        "surface-container-high": "#dbebef",
-        "secondary-container": "#ce9ffd",
-        "inverse-on-surface": "#e3f4f8",
-        "on-primary": "#ffffff",
-        "surface": "#effcff",
-        "surface-container-highest": "#d5e5e9",
-        "on-secondary-fixed": "#2c0051",
-        "on-secondary": "#ffffff",
-        "primary-container": "#546cd7",
-        "error-container": "#ffdad6",
-        "surface-container-lowest": "#ffffff",
-        "on-tertiary-fixed-variant": "#474649",
-        "on-error-container": "#93000a",
-        "on-tertiary-fixed": "#1b1b1d",
-        "surface-dim": "#F0F4F8",
-        "secondary-fixed": "#f0dbff",
-        "on-secondary-fixed-variant": "#5c3187",
-        "on-primary-fixed-variant": "#1f3ba6",
-        "surface-container-low": "#e6f6fb",
-        "on-surface": "#0f1e21",
-        "tertiary-fixed": "#e4e2e4",
-        "background": "#F0F4F8",
-        "primary": "#3953bd",
-        "on-tertiary": "#ffffff",
-        "on-surface-variant": "#444653",
-        "on-background": "#0f1e21",
-        "on-tertiary-container": "#fffcfe",
-        "primary-fixed-dim": "#b9c3ff",
-        "tertiary-fixed-dim": "#c8c6c8",
-        "surface-variant": "#d5e5e9"
+        "secondary-fixed-dim":         "#dcb8ff",
+        "tertiary":                    "#5c5b5e",
+        "on-error":                    "#ffffff",
+        "secondary":                   "#754aa1",
+        "error":                       "#ba1a1a",
+        "on-primary-container":        "#fffbff",
+        "inverse-surface":             "#243336",
+        "outline-variant":             "#c5c5d5",
+        "inverse-primary":             "#b9c3ff",
+        "surface-tint":                "#3c55bf",
+        "surface-bright":              "#effcff",
+        "tertiary-container":          "#757476",
+        "surface-container":           "#e1f1f5",
+        "primary-fixed":               "#dde1ff",
+        "on-secondary-container":      "#5a3086",
+        "outline":                     "#757684",
+        "on-primary-fixed":            "#001356",
+        "surface-container-high":      "#dbebef",
+        "secondary-container":         "#ce9ffd",
+        "inverse-on-surface":          "#e3f4f8",
+        "on-primary":                  "#ffffff",
+        "surface":                     "#effcff",
+        "surface-container-highest":   "#d5e5e9",
+        "on-secondary-fixed":          "#2c0051",
+        "on-secondary":                "#ffffff",
+        "primary-container":           "#546cd7",
+        "error-container":             "#ffdad6",
+        "surface-container-lowest":    "#ffffff",
+        "on-tertiary-fixed-variant":   "#474649",
+        "on-error-container":          "#93000a",
+        "on-tertiary-fixed":           "#1b1b1d",
+        "surface-dim":                 "#F0F4F8",
+        "secondary-fixed":             "#f0dbff",
+        "on-secondary-fixed-variant":  "#5c3187",
+        "on-primary-fixed-variant":    "#1f3ba6",
+        "surface-container-low":       "#e6f6fb",
+        "on-surface":                  "#0f1e21",
+        "tertiary-fixed":              "#e4e2e4",
+        "background":                  "#F0F4F8",
+        "primary":                     "#3953bd",
+        "on-tertiary":                 "#ffffff",
+        "on-surface-variant":          "#444653",
+        "on-background":               "#0f1e21",
+        "on-tertiary-container":       "#fffcfe",
+        "primary-fixed-dim":           "#b9c3ff",
+        "tertiary-fixed-dim":          "#c8c6c8",
+        "surface-variant":             "#d5e5e9"
       },
       borderRadius: {
         DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"
       },
       fontFamily: {
-        "headline-md": ["Manrope"],
-        "label-sm": ["Inter"],
-        "body-sm": ["Inter"],
-        "body-lg": ["Inter"],
-        "label-caps": ["Inter"],
-        "headline-lg": ["Manrope"]
+        "headline-md":  ["Manrope"],
+        "label-sm":     ["Inter"],
+        "body-sm":      ["Inter"],
+        "body-lg":      ["Inter"],
+        "label-caps":   ["Inter"],
+        "headline-lg":  ["Manrope"]
       },
       fontSize: {
-        "headline-md": ["20px", {lineHeight:"28px", fontWeight:"600"}],
-        "label-sm":    ["12px", {lineHeight:"16px", fontWeight:"400"}],
-        "body-sm":     ["14px", {lineHeight:"20px", fontWeight:"400"}],
-        "body-lg":     ["16px", {lineHeight:"24px", fontWeight:"500"}],
-        "label-caps":  ["12px", {lineHeight:"16px", letterSpacing:"0.05em", fontWeight:"600"}],
-        "headline-lg": ["24px", {lineHeight:"32px", fontWeight:"700"}]
+        "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+        "label-sm":    ["12px", { lineHeight: "16px", fontWeight: "400" }],
+        "body-sm":     ["14px", { lineHeight: "20px", fontWeight: "400" }],
+        "body-lg":     ["16px", { lineHeight: "24px", fontWeight: "500" }],
+        "label-caps":  ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+        "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "700" }]
       }
     }
   }
 }
 </script>
-<link rel="stylesheet" href="style.css">
 </head>
 <body class="text-on-surface antialiased min-h-screen flex flex-col">
 
-<!-- VIEW: MAIN -->
+<!-- ================================================
+     VIEW: MAIN
+     ================================================ -->
 <div id="view-main" class="view active flex-col min-h-screen">
 
   <header class="bg-transparent top-0 w-full z-50">
@@ -105,6 +117,7 @@ tailwind.config = {
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
 
+    <!-- Profile Section -->
     <section class="flex flex-col items-center text-center gap-4 w-full">
       <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg">
         <img alt="Ziyad Web Studio"
@@ -119,6 +132,7 @@ tailwind.config = {
       </div>
     </section>
 
+    <!-- Navigation Cards -->
     <section class="w-full flex flex-col gap-4">
       <button onclick="goTo('view-category', 'slide-in')" class="link-card">
         <div class="flex items-center gap-4">
@@ -174,7 +188,9 @@ tailwind.config = {
   </footer>
 </div>
 
-<!-- VIEW: CATEGORY -->
+<!-- ================================================
+     VIEW: CATEGORY
+     ================================================ -->
 <div id="view-category" class="view flex-col min-h-screen">
 
   <header class="bg-transparent top-0 w-full z-50">
@@ -220,7 +236,9 @@ tailwind.config = {
   </main>
 </div>
 
-<!-- VIEW: CODE -->
+<!-- ================================================
+     VIEW: CODE (Bahan Buat Aplikasi)
+     ================================================ -->
 <div id="view-code" class="view flex-col min-h-screen">
 
   <header class="bg-transparent top-0 w-full z-50">
@@ -238,6 +256,8 @@ tailwind.config = {
   </header>
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-4">
+
+    <!-- Video Tutorial -->
     <div class="copy-box">
       <span class="copy-label">▶ Video Tutorial</span>
       <div class="download-block">
@@ -252,6 +272,7 @@ tailwind.config = {
       </div>
     </div>
 
+    <!-- Tools Pendukung -->
     <div class="copy-box">
       <span class="copy-label">⚙ Tools Pendukung</span>
       <div class="download-block">
@@ -266,6 +287,7 @@ tailwind.config = {
       </div>
     </div>
 
+    <!-- Prompt -->
     <div class="copy-box">
       <span class="copy-label">✦ Prompt</span>
       <div class="code-wrapper prompt-scroll">
@@ -274,6 +296,7 @@ tailwind.config = {
       </div>
     </div>
 
+    <!-- Webview Path -->
     <div class="copy-box">
       <span class="copy-label">◈ Webview Path</span>
       <div class="code-wrapper">
@@ -283,6 +306,7 @@ tailwind.config = {
       <p class="note-text"><i class="fas fa-info-circle" style="margin-right:5px;color:#3953bd;"></i>Ganti nama index.html jika menggunakan nama file lain, misal [nama].html</p>
     </div>
 
+    <!-- Add Source Directly -->
     <div class="copy-box">
       <span class="copy-label">◉ Add Source Directly</span>
       <div class="code-wrapper">
@@ -290,10 +314,13 @@ tailwind.config = {
         <button class="copy-btn" onclick="copyText('text1', this)"><i class="fas fa-copy"></i></button>
       </div>
     </div>
+
   </main>
 </div>
 
-<!-- VIEW: FILES -->
+<!-- ================================================
+     VIEW: FILES (Assets Desain — Maintenance)
+     ================================================ -->
 <div id="view-files" class="view flex-col min-h-screen">
 
   <header class="bg-transparent top-0 w-full z-50">
@@ -320,12 +347,14 @@ tailwind.config = {
         Halaman ini sedang dalam proses pembaruan. Harap cek kembali nanti ya!
       </p>
 
+      <!-- Live Clock -->
       <div class="w-full bg-slate-50 rounded-2xl px-6 py-4 border border-slate-200 flex flex-col items-center gap-1">
         <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 mb-1">Waktu Sekarang</span>
         <div id="live-clock" class="text-4xl font-bold text-on-surface tracking-tight font-headline-lg">--:--:--</div>
         <div id="live-date" class="font-body-sm text-body-sm text-on-surface-variant opacity-70 mt-1">---</div>
       </div>
 
+      <!-- Maintenance Badge -->
       <div class="flex items-center gap-2 mt-6 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span>
         <span class="font-label-caps text-label-caps text-amber-700 uppercase tracking-wider">Maintenance Mode</span>
@@ -334,6 +363,7 @@ tailwind.config = {
   </main>
 </div>
 
+<!-- External Script -->
 <script src="script.js"></script>
 </body>
 </html>
