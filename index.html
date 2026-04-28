@@ -4,93 +4,47 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Ziyad Web Studio</title>
-
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- External Stylesheet -->
 <link rel="stylesheet" href="style.css">
-
-<!-- Tailwind Config -->
 <script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
       colors: {
-        "secondary-fixed-dim":         "#dcb8ff",
-        "tertiary":                    "#5c5b5e",
-        "on-error":                    "#ffffff",
-        "secondary":                   "#754aa1",
-        "error":                       "#ba1a1a",
-        "on-primary-container":        "#fffbff",
-        "inverse-surface":             "#243336",
-        "outline-variant":             "#c5c5d5",
-        "inverse-primary":             "#b9c3ff",
-        "surface-tint":                "#3c55bf",
-        "surface-bright":              "#effcff",
-        "tertiary-container":          "#757476",
-        "surface-container":           "#e1f1f5",
-        "primary-fixed":               "#dde1ff",
-        "on-secondary-container":      "#5a3086",
-        "outline":                     "#757684",
-        "on-primary-fixed":            "#001356",
-        "surface-container-high":      "#dbebef",
-        "secondary-container":         "#ce9ffd",
-        "inverse-on-surface":          "#e3f4f8",
-        "on-primary":                  "#ffffff",
-        "surface":                     "#effcff",
-        "surface-container-highest":   "#d5e5e9",
-        "on-secondary-fixed":          "#2c0051",
-        "on-secondary":                "#ffffff",
-        "primary-container":           "#546cd7",
-        "error-container":             "#ffdad6",
-        "surface-container-lowest":    "#ffffff",
-        "on-tertiary-fixed-variant":   "#474649",
-        "on-error-container":          "#93000a",
-        "on-tertiary-fixed":           "#1b1b1d",
-        "surface-dim":                 "#F0F4F8",
-        "secondary-fixed":             "#f0dbff",
-        "on-secondary-fixed-variant":  "#5c3187",
-        "on-primary-fixed-variant":    "#1f3ba6",
-        "surface-container-low":       "#e6f6fb",
-        "on-surface":                  "#0f1e21",
-        "tertiary-fixed":              "#e4e2e4",
-        "background":                  "#F0F4F8",
-        "primary":                     "#3953bd",
-        "on-tertiary":                 "#ffffff",
-        "on-surface-variant":          "#444653",
-        "on-background":               "#0f1e21",
-        "on-tertiary-container":       "#fffcfe",
-        "primary-fixed-dim":           "#b9c3ff",
-        "tertiary-fixed-dim":          "#c8c6c8",
-        "surface-variant":             "#d5e5e9"
+        "secondary-fixed-dim": "#dcb8ff","tertiary": "#5c5b5e","on-error": "#ffffff",
+        "secondary": "#754aa1","error": "#ba1a1a","on-primary-container": "#fffbff",
+        "inverse-surface": "#243336","outline-variant": "#c5c5d5","inverse-primary": "#b9c3ff",
+        "surface-tint": "#3c55bf","surface-bright": "#effcff","tertiary-container": "#757476",
+        "surface-container": "#e1f1f5","primary-fixed": "#dde1ff","on-secondary-container": "#5a3086",
+        "outline": "#757684","on-primary-fixed": "#001356","surface-container-high": "#dbebef",
+        "secondary-container": "#ce9ffd","inverse-on-surface": "#e3f4f8","on-primary": "#ffffff",
+        "surface": "#effcff","surface-container-highest": "#d5e5e9","on-secondary-fixed": "#2c0051",
+        "on-secondary": "#ffffff","primary-container": "#546cd7","error-container": "#ffdad6",
+        "surface-container-lowest": "#ffffff","on-tertiary-fixed-variant": "#474649",
+        "on-error-container": "#93000a","on-tertiary-fixed": "#1b1b1d","surface-dim": "#F0F4F8",
+        "secondary-fixed": "#f0dbff","on-secondary-fixed-variant": "#5c3187",
+        "on-primary-fixed-variant": "#1f3ba6","surface-container-low": "#e6f6fb",
+        "on-surface": "#0f1e21","tertiary-fixed": "#e4e2e4","background": "#F0F4F8",
+        "primary": "#3953bd","on-tertiary": "#ffffff","on-surface-variant": "#444653",
+        "on-background": "#0f1e21","on-tertiary-container": "#fffcfe",
+        "primary-fixed-dim": "#b9c3ff","tertiary-fixed-dim": "#c8c6c8","surface-variant": "#d5e5e9"
       },
-      borderRadius: {
-        DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"
-      },
+      borderRadius: { DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" },
       fontFamily: {
-        "headline-md":  ["Manrope"],
-        "label-sm":     ["Inter"],
-        "body-sm":      ["Inter"],
-        "body-lg":      ["Inter"],
-        "label-caps":   ["Inter"],
-        "headline-lg":  ["Manrope"]
+        "headline-md":["Manrope"],"label-sm":["Inter"],"body-sm":["Inter"],
+        "body-lg":["Inter"],"label-caps":["Inter"],"headline-lg":["Manrope"]
       },
       fontSize: {
-        "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
-        "label-sm":    ["12px", { lineHeight: "16px", fontWeight: "400" }],
-        "body-sm":     ["14px", { lineHeight: "20px", fontWeight: "400" }],
-        "body-lg":     ["16px", { lineHeight: "24px", fontWeight: "500" }],
-        "label-caps":  ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
-        "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "700" }]
+        "headline-md": ["20px",{lineHeight:"28px",fontWeight:"600"}],
+        "label-sm":    ["12px",{lineHeight:"16px",fontWeight:"400"}],
+        "body-sm":     ["14px",{lineHeight:"20px",fontWeight:"400"}],
+        "body-lg":     ["16px",{lineHeight:"24px",fontWeight:"500"}],
+        "label-caps":  ["12px",{lineHeight:"16px",letterSpacing:"0.05em",fontWeight:"600"}],
+        "headline-lg": ["24px",{lineHeight:"32px",fontWeight:"700"}]
       }
     }
   }
@@ -99,14 +53,13 @@ tailwind.config = {
 </head>
 <body class="text-on-surface antialiased min-h-screen flex flex-col">
 
-<!-- ================================================
-     VIEW: MAIN
-     ================================================ -->
+<!-- ══════════════════════════════════════ -->
+<!--              MAIN MENU               -->
+<!-- ══════════════════════════════════════ -->
 <div id="view-main" class="view active flex-col min-h-screen">
-
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-      <div id="studio-title" class="text-xl font-bold text-slate-900 font-headline-md transition-all duration-300">Ziyad Studio</div>
+      <div id="studio-title" class="text-xl font-bold text-slate-900 font-headline-md">Ziyad Studio</div>
       <div class="flex items-center gap-4">
         <button aria-label="Share" class="text-slate-600 hover:opacity-80 transition-opacity">
           <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0;">share</span>
@@ -116,13 +69,17 @@ tailwind.config = {
   </header>
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
-
-    <!-- Profile Section -->
     <section class="flex flex-col items-center text-center gap-4 w-full">
-      <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg">
-        <img alt="Ziyad Web Studio"
+      <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg" style="transition:box-shadow 0.3s;">
+        <img id="avatar-img"
+             alt="Ziyad Web Studio"
              class="w-full h-full object-cover"
-             src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"/>
+             style="transition: opacity 0.3s ease;"
+             src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
+             data-logo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
+             data-photo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png"
+             onmouseover="swapAvatar(this, 'photo')"
+             onmouseout="swapAvatar(this, 'logo')"/>
       </div>
       <div class="flex flex-col items-center gap-2">
         <h1 class="font-headline-lg text-headline-lg text-on-surface">Ziyad Web Studio</h1>
@@ -132,13 +89,10 @@ tailwind.config = {
       </div>
     </section>
 
-    <!-- Navigation Cards -->
     <section class="w-full flex flex-col gap-4">
-      <button onclick="goTo('view-category', 'slide-in')" class="link-card">
+      <button onclick="goTo('view-category','slide-in','#category')" class="link-card">
         <div class="flex items-center gap-4">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-outlined text-2xl">folder_open</span>
-          </div>
+          <div class="card-icon-wrap"><span class="material-symbols-outlined text-2xl">folder_open</span></div>
           <div class="flex flex-col text-left">
             <span class="font-body-lg text-body-lg text-on-surface">My Folder &amp; Project</span>
             <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Kumpulan file &amp; resources</span>
@@ -149,9 +103,7 @@ tailwind.config = {
 
       <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
         <div class="flex items-center gap-4">
-          <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;">
-            <i class="fab fa-whatsapp text-2xl"></i>
-          </div>
+          <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
           <div class="flex flex-col text-left">
             <span class="font-body-lg text-body-lg text-on-surface">Chat Ziyad Studio</span>
             <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Hubungi kami</span>
@@ -162,9 +114,7 @@ tailwind.config = {
 
       <a href="https://www.tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
         <div class="flex items-center gap-4">
-          <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;">
-            <i class="fab fa-tiktok text-2xl"></i>
-          </div>
+          <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-tiktok text-2xl"></i></div>
           <div class="flex flex-col text-left">
             <span class="font-body-lg text-body-lg text-on-surface">TikTok</span>
             <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Konten Pendek &amp; Kreatif</span>
@@ -188,31 +138,26 @@ tailwind.config = {
   </footer>
 </div>
 
-<!-- ================================================
-     VIEW: CATEGORY
-     ================================================ -->
+<!-- ══════════════════════════════════════ -->
+<!--           CATEGORY VIEW              -->
+<!-- ══════════════════════════════════════ -->
 <div id="view-category" class="view flex-col min-h-screen">
-
   <header class="bg-transparent top-0 w-full z-50">
-    <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-      <div class="flex items-center gap-3">
-        <button onclick="goBack('view-main')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
-          <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
-        </button>
-        <div class="text-xl font-bold text-slate-900 font-headline-md">Daftar Kategori</div>
-      </div>
-      <button onclick="goTo('view-main', 'slide-back')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors text-slate-600">
-        <span class="material-symbols-outlined" style="font-size:20px;">home</span>
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Daftar Kategori</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
       </button>
     </div>
   </header>
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-4">
-    <button onclick="goTo('view-code', 'slide-in')" class="link-card">
+    <button onclick="goTo('view-code','slide-in','#code')" class="link-card">
       <div class="flex items-center gap-4">
-        <div class="card-icon-wrap">
-          <span class="material-symbols-outlined text-2xl">code</span>
-        </div>
+        <div class="card-icon-wrap"><span class="material-symbols-outlined text-2xl">code</span></div>
         <div class="flex flex-col text-left">
           <span class="font-body-lg text-body-lg text-on-surface">Bahan Buat Aplikasi</span>
           <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Teks khusus &amp; kode</span>
@@ -221,11 +166,9 @@ tailwind.config = {
       <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
     </button>
 
-    <button onclick="goTo('view-files', 'slide-in')" class="link-card">
+    <button onclick="goTo('view-files','slide-in','#desain')" class="link-card">
       <div class="flex items-center gap-4">
-        <div class="card-icon-wrap" style="background:#fef3c7;color:#d97706;">
-          <span class="material-symbols-outlined text-2xl">palette</span>
-        </div>
+        <div class="card-icon-wrap" style="background:#fef3c7;color:#d97706;"><span class="material-symbols-outlined text-2xl">palette</span></div>
         <div class="flex flex-col text-left">
           <span class="font-body-lg text-body-lg text-on-surface">Assets Desain</span>
           <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">3 Files</span>
@@ -236,58 +179,41 @@ tailwind.config = {
   </main>
 </div>
 
-<!-- ================================================
-     VIEW: CODE (Bahan Buat Aplikasi)
-     ================================================ -->
+<!-- ══════════════════════════════════════ -->
+<!--           CODE COPY VIEW             -->
+<!-- ══════════════════════════════════════ -->
 <div id="view-code" class="view flex-col min-h-screen">
-
   <header class="bg-transparent top-0 w-full z-50">
-    <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-      <div class="flex items-center gap-3">
-        <button onclick="goBack('view-category')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
-          <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
-        </button>
-        <div class="text-xl font-bold text-slate-900 font-headline-md">On Activity Create</div>
-      </div>
-      <button onclick="goTo('view-main', 'slide-back')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors text-slate-600">
-        <span class="material-symbols-outlined" style="font-size:20px;">home</span>
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-category','#category')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">On Activity Create</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
       </button>
     </div>
   </header>
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-4">
-
-    <!-- Video Tutorial -->
     <div class="copy-box">
       <span class="copy-label">▶ Video Tutorial</span>
       <div class="download-block">
-        <div class="app-thumb" style="background:#0a0a0a;">
-          <i class="fab fa-tiktok" style="font-size:1.3rem;color:#fff;"></i>
-        </div>
-        <div class="dl-info">
-          <div class="dl-title">Tutorial TikTok</div>
-          <div class="dl-sub">Cara pakai &amp; setup lengkap</div>
-        </div>
+        <div class="app-thumb" style="background:#0a0a0a;"><i class="fab fa-tiktok" style="font-size:1.3rem;color:#fff;"></i></div>
+        <div class="dl-info"><div class="dl-title">Tutorial TikTok</div><div class="dl-sub">Cara pakai &amp; setup lengkap</div></div>
         <a href="https://vt.tiktok.com/ZSHECk7Bj/" target="_blank" rel="noopener noreferrer" class="btn-dl">Tonton</a>
       </div>
     </div>
 
-    <!-- Tools Pendukung -->
     <div class="copy-box">
       <span class="copy-label">⚙ Tools Pendukung</span>
       <div class="download-block">
-        <div class="app-thumb">
-          <img src="https://sketchware.pro/img/logo.webp" alt="Sketchware">
-        </div>
-        <div class="dl-info">
-          <div class="dl-title">Sketchware Pro</div>
-          <div class="dl-sub">Aplikasi IDE Android</div>
-        </div>
+        <div class="app-thumb"><img src="https://sketchware.pro/img/logo.webp" alt="Sketchware"></div>
+        <div class="dl-info"><div class="dl-title">Sketchware Pro</div><div class="dl-sub">Aplikasi IDE Android</div></div>
         <a href="https://sketchware.pro/download" target="_blank" rel="noopener noreferrer" class="btn-dl">Download</a>
       </div>
     </div>
 
-    <!-- Prompt -->
     <div class="copy-box">
       <span class="copy-label">✦ Prompt</span>
       <div class="code-wrapper prompt-scroll">
@@ -296,7 +222,6 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Webview Path -->
     <div class="copy-box">
       <span class="copy-label">◈ Webview Path</span>
       <div class="code-wrapper">
@@ -306,7 +231,6 @@ tailwind.config = {
       <p class="note-text"><i class="fas fa-info-circle" style="margin-right:5px;color:#3953bd;"></i>Ganti nama index.html jika menggunakan nama file lain, misal [nama].html</p>
     </div>
 
-    <!-- Add Source Directly -->
     <div class="copy-box">
       <span class="copy-label">◉ Add Source Directly</span>
       <div class="code-wrapper">
@@ -314,25 +238,21 @@ tailwind.config = {
         <button class="copy-btn" onclick="copyText('text1', this)"><i class="fas fa-copy"></i></button>
       </div>
     </div>
-
   </main>
 </div>
 
-<!-- ================================================
-     VIEW: FILES (Assets Desain — Maintenance)
-     ================================================ -->
+<!-- ══════════════════════════════════════ -->
+<!--            FILE VIEW                 -->
+<!-- ══════════════════════════════════════ -->
 <div id="view-files" class="view flex-col min-h-screen">
-
   <header class="bg-transparent top-0 w-full z-50">
-    <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
-      <div class="flex items-center gap-3">
-        <button onclick="goBack('view-category')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
-          <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
-        </button>
-        <div class="text-xl font-bold text-slate-900 font-headline-md">Assets Desain</div>
-      </div>
-      <button onclick="goTo('view-main', 'slide-back')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors text-slate-600">
-        <span class="material-symbols-outlined" style="font-size:20px;">home</span>
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-category','#category')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Assets Desain</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
       </button>
     </div>
   </header>
@@ -346,15 +266,11 @@ tailwind.config = {
       <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 max-w-xs leading-relaxed">
         Halaman ini sedang dalam proses pembaruan. Harap cek kembali nanti ya!
       </p>
-
-      <!-- Live Clock -->
       <div class="w-full bg-slate-50 rounded-2xl px-6 py-4 border border-slate-200 flex flex-col items-center gap-1">
         <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 mb-1">Waktu Sekarang</span>
         <div id="live-clock" class="text-4xl font-bold text-on-surface tracking-tight font-headline-lg">--:--:--</div>
         <div id="live-date" class="font-body-sm text-body-sm text-on-surface-variant opacity-70 mt-1">---</div>
       </div>
-
-      <!-- Maintenance Badge -->
       <div class="flex items-center gap-2 mt-6 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span>
         <span class="font-label-caps text-label-caps text-amber-700 uppercase tracking-wider">Maintenance Mode</span>
@@ -363,7 +279,6 @@ tailwind.config = {
   </main>
 </div>
 
-<!-- External Script -->
 <script src="script.js"></script>
 </body>
 </html>
