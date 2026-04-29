@@ -1,3 +1,7 @@
+/* ── PRELOAD AVATAR PHOTO ── */
+const preloadPhoto = new Image();
+preloadPhoto.src = "https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png";
+
 /* ── AVATAR SWAP ── */
 function swapAvatar(img, mode) {
   img.style.opacity = '0';
