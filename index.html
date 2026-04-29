@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png">
 <link rel="stylesheet" href="style.css">
 <script>
 tailwind.config = {
@@ -70,16 +71,19 @@ tailwind.config = {
 
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
     <section class="flex flex-col items-center text-center gap-4 w-full">
-      <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg" style="transition:box-shadow 0.3s;">
+      <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg cursor-pointer"
+           style="transition: box-shadow 0.3s, transform 0.3s;"
+           onmouseover="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
+           onmouseout="swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false)"
+           ontouchstart="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
+           ontouchend="setTimeout(()=>{ swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false) }, 1500)">
         <img id="avatar-img"
              alt="Ziyad Web Studio"
              class="w-full h-full object-cover"
-             style="transition: opacity 0.3s ease;"
+             style="transition: opacity 0.25s ease, transform 0.25s ease;"
              src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
              data-logo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
-             data-photo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png"
-             onmouseover="swapAvatar(this, 'photo')"
-             onmouseout="swapAvatar(this, 'logo')"/>
+             data-photo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png"/>
       </div>
       <div class="flex flex-col items-center gap-2">
         <h1 class="font-headline-lg text-headline-lg text-on-surface">Ziyad Web Studio</h1>
@@ -101,7 +105,7 @@ tailwind.config = {
         <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
       </button>
 
-      <a href="https://wa.me/6288218812567" target="_blank" rel="noopener noreferrer" class="link-card">
+      <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
         <div class="flex items-center gap-4">
           <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
           <div class="flex flex-col text-left">
@@ -201,7 +205,7 @@ tailwind.config = {
       <div class="download-block">
         <div class="app-thumb" style="background:#0a0a0a;"><i class="fab fa-tiktok" style="font-size:1.3rem;color:#fff;"></i></div>
         <div class="dl-info"><div class="dl-title">Tutorial TikTok</div><div class="dl-sub">Cara pakai &amp; setup lengkap</div></div>
-        <a href=https://vt.tiktok.com/ZS9SNT5M8/" target="_blank" rel="noopener noreferrer" class="btn-dl">Tonton</a>
+        <a href="https://vt.tiktok.com/ZSHECk7Bj/" target="_blank" rel="noopener noreferrer" class="btn-dl">Tonton</a>
       </div>
     </div>
 
