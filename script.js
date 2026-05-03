@@ -13,19 +13,21 @@ function swapAvatar(img, mode) {
 
 /* ── HASH ROUTING ── */
 const routeMap = {
-  '':          'view-main',
-  '#':         'view-main',
-  '#home':     'view-main',
+  '': 'view-main',
+  '#': 'view-main',
+  '#home': 'view-main',
   '#category': 'view-category',
-  '#code':     'view-code',
-  '#desain':   'view-files',
+  '#code': 'view-code',
+  '#desain': 'view-files',
+  '#ai': 'view-ai'
 };
 
 function navigateToHash(hash) {
   const viewId = routeMap[hash] || 'view-main';
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(viewId);
-  if (target) { target.classList.add('active'); window.scrollTo(0, 0); }
+  if (target) { target.classList.add('active');
+    window.scrollTo(0, 0); }
 }
 
 window.addEventListener('hashchange', () => navigateToHash(window.location.hash));
@@ -85,12 +87,12 @@ setInterval(() => {
 
 /* ── LIVE CLOCK ── */
 function updateClock() {
-  const now    = new Date();
-  const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const h      = String(now.getHours()).padStart(2, '0');
-  const m      = String(now.getMinutes()).padStart(2, '0');
-  const s      = String(now.getSeconds()).padStart(2, '0');
+  const now = new Date();
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
   const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
   const el = document.getElementById('live-clock');
   const dl = document.getElementById('live-date');
