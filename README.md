@@ -7,15 +7,15 @@
   <br><br>
   <p>Website bio-link personal dan portal resource untuk <b>Ziyad Web Studio</b>. Mengusung desain minimalis ala Apple, navigasi SPA yang cepat, dan integrasi langsung ke alat AI.</p>
 </div>
-***
+---
 ## ✨ Fitur Utama
-* **Desain Minimalis** - Dibangun dengan Tailwind CSS menggunakan skema warna terang yang bersih. 
-* **Navigasi SPA & Hash Routing** - Berpindah halaman tanpa memuat ulang (reload), lengkap dengan animasi transisi dan dukungan URL khusus.
-* **Interaksi Dinamis** - Fitur pergantian avatar otomatis saat kursor diarahkan dan pergantian teks judul secara berkala.
-* **Integrasi Trae AI** - Halaman khusus untuk mengarahkan pengunjung ke alat asisten koding cerdas.
-* **Salin Kode Cepat** - Salin teks prompt atau skrip ke papan klip hanya dengan satu klik.
-* **Jam Waktu Nyata** - Penunjuk waktu langsung yang berjalan otomatis pada halaman pemeliharaan.
-***
+* **Desain Minimalis**: Dibangun dengan Tailwind CSS menggunakan skema warna terang yang bersih. 
+* **Navigasi SPA & Hash Routing**: Berpindah halaman tanpa memuat ulang, lengkap dengan animasi transisi dan dukungan URL khusus.
+* **Interaksi Dinamis**: Fitur pergantian avatar otomatis saat disentuh dan pergantian teks judul secara berkala.
+* **Integrasi Trae AI**: Halaman khusus untuk mengarahkan pengunjung ke alat asisten AI.
+* **Salin Kode Cepat**: Salin teks prompt atau skrip ke papan klip hanya dengan satu ketukan.
+* **Jam Waktu Nyata**: Penunjuk waktu langsung yang berjalan otomatis pada halaman pemeliharaan.
+---
 ## 🛠️ Tech Stack
 
 | Teknologi | Fungsi |
@@ -25,7 +25,7 @@
 | **Vanilla JavaScript** | Logika routing navigasi, sistem waktu, dan interaksi |
 | **Font & Ikon** | Font Manrope & Inter, Material Symbols, Font Awesome 6 |
 
-***
+---
 ## 📁 Struktur File
 Proyek telah dipecah menjadi tiga file utama agar mudah dikelola. Tidak ada lagi kode yang disembunyikan.
 ```text
