@@ -54,9 +54,6 @@ tailwind.config = {
 </head>
 <body class="text-on-surface antialiased min-h-screen flex flex-col">
 
-<!-- ══════════════════════════════════════ -->
-<!--              MAIN MENU               -->
-<!-- ══════════════════════════════════════ -->
 <div id="view-main" class="view active flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -93,39 +90,62 @@ tailwind.config = {
       </div>
     </section>
 
-    <section class="w-full flex flex-col gap-4">
-      <button onclick="goTo('view-category','slide-in','#category')" class="link-card">
-        <div class="flex items-center gap-4">
-          <div class="card-icon-wrap"><span class="material-symbols-outlined text-2xl">folder_open</span></div>
-          <div class="flex flex-col text-left">
-            <span class="font-body-lg text-body-lg text-on-surface">My Folder &amp; Project</span>
-            <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Kumpulan file &amp; resources</span>
+    <section class="w-full flex flex-col gap-6">
+      
+      <div class="flex flex-col gap-3">
+        <button onclick="goTo('view-category','slide-in','#category')" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap"><span class="material-symbols-outlined text-2xl">folder_open</span></div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">My Folder &amp; Project</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Kumpulan file &amp; resources</span>
+            </div>
           </div>
-        </div>
-        <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
-      </button>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </button>
+      </div>
 
-      <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
-        <div class="flex items-center gap-4">
-          <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
-          <div class="flex flex-col text-left">
-            <span class="font-body-lg text-body-lg text-on-surface">Chat Ziyad Studio</span>
-            <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Hubungi kami</span>
+      <div class="flex flex-col gap-3">
+        <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-2">Media Sosial dan Contact</span>
+        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">Chat Ziyad Studio</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Hubungi kami</span>
+            </div>
           </div>
-        </div>
-        <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
-      </a>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </a>
 
-      <a href="https://www.tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
-        <div class="flex items-center gap-4">
-          <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-tiktok text-2xl"></i></div>
-          <div class="flex flex-col text-left">
-            <span class="font-body-lg text-body-lg text-on-surface">TikTok</span>
-            <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Konten Pendek &amp; Kreatif</span>
+        <a href="https://www.tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-tiktok text-2xl"></i></div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">TikTok</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Konten Pendek &amp; Kreatif</span>
+            </div>
           </div>
-        </div>
-        <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
-      </a>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-2">Tools AI</span>
+        <button onclick="goTo('view-ai','slide-in','#ai')" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap overflow-hidden bg-black">
+              <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Trae%20AI%20black%20background.png" class="w-full h-full object-contain p-1.5" alt="Trae AI">
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">Trae AI Agent</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Asisten pembuat kode responsif</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </button>
+      </div>
+
     </section>
   </main>
 
@@ -142,9 +162,6 @@ tailwind.config = {
   </footer>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--           CATEGORY VIEW              -->
-<!-- ══════════════════════════════════════ -->
 <div id="view-category" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -183,9 +200,6 @@ tailwind.config = {
   </main>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--           CODE COPY VIEW             -->
-<!-- ══════════════════════════════════════ -->
 <div id="view-code" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -245,9 +259,6 @@ tailwind.config = {
   </main>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--            FILE VIEW                 -->
-<!-- ══════════════════════════════════════ -->
 <div id="view-files" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -278,6 +289,42 @@ tailwind.config = {
       <div class="flex items-center gap-2 mt-6 bg-amber-50 border border-amber-200 rounded-full px-4 py-2">
         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span>
         <span class="font-label-caps text-label-caps text-amber-700 uppercase tracking-wider">Maintenance Mode</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="view-ai" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Trae AI Agent</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full overflow-hidden bg-black flex items-center justify-center mb-4 shadow-md">
+        <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Trae%20AI%20black%20background.png" class="w-full h-full object-contain p-2" alt="Trae AI">
+      </div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Trae AI</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 leading-relaxed">
+        Trae AI adalah agen responsif yang mempercepat proses penulisan kode. Alat ini membantu Anda merencanakan, menulis, dan mengeksekusi program langsung dari satu ruang kerja visual.
+      </p>
+      
+      <div class="w-full flex flex-col gap-3">
+        <a href="https://solo.trae.ai/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md hover:bg-opacity-90 transition-all flex justify-center items-center gap-2">
+          Coba Trae AI
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+        </a>
+        <a href="https://docs.trae.ai/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-100 transition-all flex justify-center items-center gap-2">
+          Baca Dokumentasi
+        </a>
       </div>
     </div>
   </main>
