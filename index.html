@@ -41,10 +41,10 @@ tailwind.config = {
       },
       fontSize: {
         "headline-md": ["20px",{lineHeight:"28px",fontWeight:"600"}],
-        "label-sm":    ["12px",{lineHeight:"16px",fontWeight:"400"}],
-        "body-sm":     ["14px",{lineHeight:"20px",fontWeight:"400"}],
-        "body-lg":     ["16px",{lineHeight:"24px",fontWeight:"500"}],
-        "label-caps":  ["12px",{lineHeight:"16px",letterSpacing:"0.05em",fontWeight:"600"}],
+        "label-sm": ["12px",{lineHeight:"16px",fontWeight:"400"}],
+        "body-sm": ["14px",{lineHeight:"20px",fontWeight:"400"}],
+        "body-lg": ["16px",{lineHeight:"24px",fontWeight:"500"}],
+        "label-caps": ["12px",{lineHeight:"16px",letterSpacing:"0.05em",fontWeight:"600"}],
         "headline-lg": ["24px",{lineHeight:"32px",fontWeight:"700"}]
       }
     }
@@ -54,6 +54,7 @@ tailwind.config = {
 </head>
 <body class="text-on-surface antialiased min-h-screen flex flex-col">
 
+<!-- ===== VIEW MAIN ===== -->
 <div id="view-main" class="view active flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -65,22 +66,21 @@ tailwind.config = {
       </div>
     </div>
   </header>
-
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-8 pb-8 flex flex-col items-center gap-8">
     <section class="flex flex-col items-center text-center gap-4 w-full">
       <div class="w-24 h-24 rounded-full border-4 border-on-surface overflow-hidden shadow-lg cursor-pointer"
-           style="transition: box-shadow 0.3s, transform 0.3s;"
-           onmouseover="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
-           onmouseout="swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false)"
-           ontouchstart="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
-           ontouchend="setTimeout(()=>{ swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false) }, 1500)">
+        style="transition: box-shadow 0.3s, transform 0.3s;"
+        onmouseover="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
+        onmouseout="swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false)"
+        ontouchstart="swapAvatar(this.querySelector('img'), 'photo'); glowAvatar(this, true)"
+        ontouchend="setTimeout(()=>{ swapAvatar(this.querySelector('img'), 'logo'); glowAvatar(this, false) }, 1500)">
         <img id="avatar-img"
-             alt="Ziyad Web Studio"
-             class="w-full h-full object-cover"
-             style="transition: opacity 0.25s ease, transform 0.25s ease;"
-             src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
-             data-logo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
-             data-photo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png"/>
+          alt="Ziyad Web Studio"
+          class="w-full h-full object-cover"
+          style="transition: opacity 0.25s ease, transform 0.25s ease;"
+          src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
+          data-logo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Black%20and%20White%20Minimalist%20Fashion%20Z%20L%20Letter%20Logo.png"
+          data-photo="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png"/>
       </div>
       <div class="flex flex-col items-center gap-2">
         <h1 class="font-headline-lg text-headline-lg text-on-surface">Ziyad Web Studio</h1>
@@ -91,7 +91,6 @@ tailwind.config = {
     </section>
 
     <section class="w-full flex flex-col gap-6">
-      
       <div class="flex flex-col gap-3">
         <button onclick="goTo('view-category','slide-in','#category')" class="link-card">
           <div class="flex items-center gap-4">
@@ -107,7 +106,12 @@ tailwind.config = {
 
       <div class="flex flex-col gap-3">
         <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-2">Media Sosial dan Contact</span>
-        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="link-card">
+
+        <!-- ✅ TOMBOL WHATSAPP - SUDAH DIFIX UNTUK TIKTOK IN-APP BROWSER -->
+        <a href="https://wa.me/6281234567890"
+           onclick="openWhatsApp(event, '6281234567890')"
+           rel="noopener noreferrer"
+           class="link-card">
           <div class="flex items-center gap-4">
             <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
             <div class="flex flex-col text-left">
@@ -145,7 +149,6 @@ tailwind.config = {
           <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
         </button>
       </div>
-
     </section>
   </main>
 
@@ -162,6 +165,7 @@ tailwind.config = {
   </footer>
 </div>
 
+<!-- ===== VIEW CATEGORY ===== -->
 <div id="view-category" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -174,7 +178,6 @@ tailwind.config = {
       </button>
     </div>
   </header>
-
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-4">
     <button onclick="goTo('view-code','slide-in','#code')" class="link-card">
       <div class="flex items-center gap-4">
@@ -186,7 +189,6 @@ tailwind.config = {
       </div>
       <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
     </button>
-
     <button onclick="goTo('view-files','slide-in','#desain')" class="link-card">
       <div class="flex items-center gap-4">
         <div class="card-icon-wrap" style="background:#fef3c7;color:#d97706;"><span class="material-symbols-outlined text-2xl">palette</span></div>
@@ -200,6 +202,7 @@ tailwind.config = {
   </main>
 </div>
 
+<!-- ===== VIEW CODE ===== -->
 <div id="view-code" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -212,7 +215,6 @@ tailwind.config = {
       </button>
     </div>
   </header>
-
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-4">
     <div class="copy-box">
       <span class="copy-label">▶ Video Tutorial</span>
@@ -222,7 +224,6 @@ tailwind.config = {
         <a href="https://vt.tiktok.com/ZSHECk7Bj/" target="_blank" rel="noopener noreferrer" class="btn-dl">Tonton</a>
       </div>
     </div>
-
     <div class="copy-box">
       <span class="copy-label">⚙ Tools Pendukung</span>
       <div class="download-block">
@@ -231,7 +232,6 @@ tailwind.config = {
         <a href="https://sketchware.pro/download" target="_blank" rel="noopener noreferrer" class="btn-dl">Download</a>
       </div>
     </div>
-
     <div class="copy-box">
       <span class="copy-label">✦ Prompt</span>
       <div class="code-wrapper prompt-scroll">
@@ -239,7 +239,6 @@ tailwind.config = {
         <button class="copy-btn" onclick="copyText('text3', this)"><i class="fas fa-copy"></i></button>
       </div>
     </div>
-
     <div class="copy-box">
       <span class="copy-label">◈ Webview Path</span>
       <div class="code-wrapper">
@@ -248,7 +247,6 @@ tailwind.config = {
       </div>
       <p class="note-text"><i class="fas fa-info-circle" style="margin-right:5px;color:#3953bd;"></i>Ganti nama index.html jika menggunakan nama file lain, misal [nama].html</p>
     </div>
-
     <div class="copy-box">
       <span class="copy-label">◉ Add Source Directly</span>
       <div class="code-wrapper">
@@ -259,6 +257,7 @@ tailwind.config = {
   </main>
 </div>
 
+<!-- ===== VIEW FILES ===== -->
 <div id="view-files" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -271,7 +270,6 @@ tailwind.config = {
       </button>
     </div>
   </header>
-
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col items-center justify-center gap-6">
     <div class="w-full bg-white rounded-3xl p-8 flex flex-col items-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-amber-100">
       <div class="w-20 h-20 rounded-full flex items-center justify-center mb-5" style="background:#fff7ed;">
@@ -294,6 +292,7 @@ tailwind.config = {
   </main>
 </div>
 
+<!-- ===== VIEW AI ===== -->
 <div id="view-ai" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
     <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
@@ -306,7 +305,6 @@ tailwind.config = {
       </button>
     </div>
   </header>
-
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
     <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col items-center text-center">
       <div class="w-16 h-16 rounded-full overflow-hidden bg-black flex items-center justify-center mb-4 shadow-md">
@@ -316,7 +314,6 @@ tailwind.config = {
       <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 leading-relaxed">
         Trae AI adalah agen responsif yang mempercepat proses penulisan kode. Alat ini membantu Anda merencanakan, menulis, dan mengeksekusi program langsung dari satu ruang kerja visual.
       </p>
-      
       <div class="w-full flex flex-col gap-3">
         <a href="https://solo.trae.ai/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md hover:bg-opacity-90 transition-all flex justify-center items-center gap-2">
           Coba Trae AI
@@ -331,5 +328,44 @@ tailwind.config = {
 </div>
 
 <script src="script.js"></script>
+
+<!-- ============================================================
+     ✅ FIX WHATSAPP - TIKTOK IN-APP BROWSER
+     Fungsi ini menggantikan redirect langsung ke wa.me
+     dengan deep link whatsapp:// dulu, baru fallback ke wa.me
+     ============================================================ -->
+<script>
+function openWhatsApp(e, phone) {
+  e.preventDefault();
+
+  var userAgent = navigator.userAgent || '';
+  var isTikTok = userAgent.toLowerCase().indexOf('tiktok') !== -1 ||
+                 userAgent.toLowerCase().indexOf('musical_ly') !== -1;
+
+  var waNumber = phone; // format: 628xxxxxxx (tanpa +)
+  var deepLink = 'whatsapp://send?phone=' + waNumber;
+  var fallback = 'https://wa.me/' + waNumber;
+
+  if (isTikTok) {
+    // Di TikTok browser: coba buka app dulu via deep link
+    // Kalau gagal (app ga ada / ga kebuka), fallback ke wa.me setelah 2.5 detik
+    var fallbackTimer = setTimeout(function () {
+      window.location.href = fallback;
+    }, 2500);
+
+    // Kalau user balik ke tab ini (artinya app kebuka), cancel fallback
+    window.addEventListener('blur', function onBlur() {
+      clearTimeout(fallbackTimer);
+      window.removeEventListener('blur', onBlur);
+    });
+
+    window.location.href = deepLink;
+  } else {
+    // Di browser biasa: langsung ke wa.me (sudah works sebelumnya)
+    window.open(fallback, '_blank');
+  }
+}
+</script>
+
 </body>
 </html>
