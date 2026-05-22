@@ -1,80 +1,276 @@
-<div align="center">
-  <h1>🌐 Ziyad Web Studio - Link &amp; Resources Page</h1>
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
-  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel">
-  <br><br>
-  <p>Website bio-link personal dan portal resource untuk <b>Ziyad Web Studio</b>. Mengusung desain minimalis ala Apple, navigasi SPA yang cepat, dan integrasi langsung ke alat AI.</p>
-</div>
+# Ziyad Web Studio - Halaman Link & Sumber Daya
 
-<hr>
+Sebuah web app satu halaman (single‑page) yang simpel dan elegan, berfungsi sebagai bio‑link personal sekaligus pusat sumber daya untuk **Ziyad Web Studio**. Dibangun dengan **HTML5**, **Tailwind CSS** (via CDN), dan **vanilla JavaScript**, hasilnya adalah pengalaman SPA yang responsif dengan hash‑based routing, animasi halus, serta fitur share / copy sekali ketuk.
 
-<h2>✨ Fitur Utama</h2>
-<ul>
-  <li><b>Desain Minimalis</b>: Dibangun dengan Tailwind CSS menggunakan skema warna terang yang bersih.</li>
-  <li><b>Navigasi SPA &amp; Hash Routing</b>: Berpindah halaman tanpa memuat ulang, lengkap dengan animasi transisi dan dukungan URL khusus.</li>
-  <li><b>Interaksi Dinamis</b>: Fitur pergantian avatar otomatis saat disentuh dan pergantian teks judul secara berkala.</li>
-  <li><b>Integrasi Trae AI</b>: Halaman khusus untuk mengarahkan pengunjung ke alat asisten AI.</li>
-  <li><b>Salin Kode Cepat</b>: Salin teks prompt atau skrip ke papan klip hanya dengan satu ketukan.</li>
-  <li><b>Jam Waktu Nyata</b>: Penunjuk waktu langsung yang berjalan otomatis pada halaman pemeliharaan.</li>
-</ul>
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-<hr>
+---
 
-<h2>🛠️ Tech Stack</h2>
-<table>
-  <tr><th>Teknologi</th><th>Fungsi</th></tr>
-  <tr><td><b>HTML5</b></td><td>Struktur utama multi-halaman dalam satu file</td></tr>
-  <tr><td><b>Tailwind CSS</b></td><td>Styling antarmuka dan efek kaca transparan via CDN</td></tr>
-  <tr><td><b>Vanilla JavaScript</b></td><td>Logika routing navigasi, sistem waktu, dan interaksi</td></tr>
-  <tr><td><b>Font &amp; Ikon</b></td><td>Font Manrope &amp; Inter, Material Symbols, Font Awesome 6</td></tr>
-</table>
+## Daftar Isi
+- [Gambaran Umum](#overview)
+- [Fitur Unggulan](#key-features)
+- [Tech Stack](#tech-stack)
+- [Struktur File](#file-structure)
+- [Memulai (Development Lokal)](#getting-started-local-development)
+- [Kustomisasi](#customization)
+- [Opsi Deployment](#deployment-options)
+- [Troubleshooting](#troubleshooting)
+- [Lisensi](#license)
 
-<hr>
+---
 
-<h2>📁 Struktur File</h2>
-<p>Proyek telah dipecah menjadi tiga file utama agar mudah dikelola. Tidak ada lagi kode yang disembunyikan.</p>
-<pre><code>ziyad-web-studio/
-├── index.html        # Struktur elemen dan layout halaman
-├── style.css         # Gaya kustom dan animasi CSS
-├── script.js         # Logika interaksi dan routing
-└── README.md         # Dokumentasi proyek</code></pre>
+## Gambaran Umum
 
-<hr>
+Ziyad Web Studio adalah website **statis, client‑only** yang menampilkan:
 
-<h2>🚀 Panduan Deployment</h2>
-<p>Sistem ini sepenuhnya statis dan dirancang untuk dihosting di <b>Vercel</b>.</p>
-<ol>
-  <li>Unduh atau clone repositori ini.</li>
-  <li>Masuk ke dasbor Vercel.</li>
-  <li>Pilih <b>Add New Project</b> lalu impor repositori ini.</li>
-  <li>Klik <b>Deploy</b>. Tidak membutuhkan pengaturan build sama sekali.</li>
-</ol>
+- Halaman profil utama dengan avatar switcher yang animasi.
+- Akses cepat ke folder, proyek, media sosial, dan tools AI.
+- Tombol share yang memanfaatkan Web Share API (dengan fallback ke clipboard copy).
+- Jam real‑time di halaman maintenance.
+- Navigasi hash‑route yang mulus tanpa perlu reload halaman.
 
-<hr>
+Desainnya terinspirasi dari minimalis ala Apple — palet warna bersih, kartu dengan sudut membulat, dan efek glass‑morphism yang subtle lewat utility Tailwind.
 
-<h2>📌 Daftar Halaman (Routes)</h2>
-<table>
-  <tr><th>Rute Hash</th><th>Target Elemen</th><th>Isi Konten</th></tr>
-  <tr><td><code>#</code></td><td><code>view-main</code></td><td>Profil utama, folder, media sosial, menu navigasi</td></tr>
-  <tr><td><code>#category</code></td><td><code>view-category</code></td><td>Daftar pilihan kategori</td></tr>
-  <tr><td><code>#code</code></td><td><code>view-code</code></td><td>Skrip Activity Create, tutorial video, dan prompt</td></tr>
-  <tr><td><code>#desain</code></td><td><code>view-files</code></td><td>Status pemeliharaan beserta jam waktu nyata</td></tr>
-  <tr><td><code>#ai</code></td><td><code>view-ai</code></td><td>Informasi singkat dan tautan menuju Trae AI</td></tr>
-</table>
+---
 
-<hr>
+## Fitur Unggulan
 
-<h2>🎨 Catatan Desain</h2>
-<ul>
-  <li><b>Palet Warna</b>: Latar belakang biru pucat (<code>#F0F4F8</code>) dengan warna utama biru solid (<code>#3953bd</code>).</li>
-  <li><b>Visual</b>: Mengutamakan kartu dengan sudut membulat lebar (24px) dan bayangan halus untuk kesan modern.</li>
-  <li><b>Performa</b>: Fokus pada kecepatan muat dengan menghilangkan elemen animasi kanvas yang berat.</li>
-</ul>
+- **Layout responsif** – tampil optimal di mobile, tablet, maupun desktop.
+- **Navigasi SPA‑like** – hash‑based routing (`#`, `#category`, `#code`, `#desain`, `#ai`) dengan animasi slide‑in/slide‑out.
+- **Avatar interaktif** – ketuk/hover untuk beralih antara logo dan foto, lengkap dengan efek glow.
+- **Tombol share** – menggunakan `navigator.share` jika tersedia; jika tidak, URL otomatis disalin ke clipboard.
+- **Copy sekali ketuk** – klik ikon copy di samping blok kode untuk langsung menyalin isinya.
+- **Jam real‑time** – ditampilkan di halaman maintenance (`#desain`).
+- **Kode modular** – dipisah menjadi `index.html` (markup), `style.css` (custom styles), dan `script.js` (routing & logika).
+- **Favicon & kesiapan PWA** – sudah dilengkapi favicon set, apple‑touch icon, dan `site.webmanifest` untuk Android Chrome.
+- **Ringan** – tidak butuh build step, tidak pakai framework berat, Tailwind langsung diambil dari CDN.
 
-<hr>
+---
 
-<div align="center">
-  <p>Dikembangkan oleh <a href="https://www.tiktok.com/@ziyad_studio">Ziyad Web Studio</a></p>
-</div>
+## Tech Stack
+
+| Teknologi            | Peran / Kegunaan                                       |
+|----------------------|--------------------------------------------------------|
+| **HTML5**            | Markup semantis dan struktur halaman SPA-like          |
+| **Tailwind CSS**     | Styling utility‑first via CDN (`cdn.tailwindcss.com`)  |
+| **Vanilla JS**       | Routing, manipulasi DOM, avatar swap, logika share, jam |
+| **Font Awesome**     | Ikon brand untuk WhatsApp, TikTok, GitHub, dll.        |
+| **Material Symbols** | Ikon UI (share, folder, code, palette, dll.)           |
+| **Google Fonts**     | Manrope (heading) & Inter (body) via fonts.googleapis.com |
+| **Favicon set**      | `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-*.png` |
+| **Web App Manifest** | `site.webmanifest` untuk pengalaman PWA yang bisa diinstal |
+
+---
+
+## Struktur File
+
+```
+bio-ziyad-web/
+├── index.html          # HTML utama – berisi semua view (main, category, code, files, ai)
+├── style.css           # CSS kustom (animasi, override, dll.)
+├── script.js           # JavaScript – routing, avatar swap, share, clock, copy
+├─ assets/
+│   ├─ favicon.ico
+│   ├─ favicon-16x16.png
+│   ├─ favicon-32x32.png
+│   ├─ apple-touch-icon.png
+│   ├─ android-chrome-192x192.png
+│   ├─ android-chrome-512x512.png
+│   └─ site.webmanifest
+└── README.md           # File ini
+```
+
+> **Catatan:** Semua aset statis (ikon, favicon) disimpan di dalam folder `assets/` dan dirujuk dengan path relatif (`assets/...`).
+
+---
+
+## Memulai (Development Lokal)
+
+Karena proyeknya murni file statis, kamu bisa langsung membukanya di browser **atau** menyajikannya lewat static server agar mime type‑nya benar dan terhindar dari masalah CORS saat menggunakan fitur seperti Web Share API.
+
+### Opsi 1: Buka file langsung (paling cepat)
+
+```bash
+# Pastikan kamu berada di root proyek
+open index.html      # macOS
+start index.html     # Windows
+xdg-open index.html  # Linux
+```
+
+> Beberapa fitur (misalnya Web Share API) mengharuskan halaman diakses via `http://` atau `https://`. Membuka lewat `file://` bisa menonaktifkan tombol share.
+
+### Opsi 2: Jalankan dengan local dev server (direkomendasikan)
+
+Bisa pakai salah satu dari berikut ini:
+
+#### Python 3
+```bash
+python3 -m http.server 8000
+# Lalu buka http://localhost:8000
+```
+
+#### Node.js (http-server)
+```bash
+npx http-server -p 8000
+# Lalu buka http://localhost:8000
+```
+
+#### Ekstensi VS Code Live Server
+1. Instal ekstensi "Live Server".
+2. Klik kanan `index.html` → **Open with Live Server**.
+3. Halaman akan otomatis reload setiap ada perubahan.
+
+### Opsi 3: Pakai `vite` atau `parcel` (agak berlebihan tapi bisa)
+
+Kalau kamu ingin dev server dengan hot reload:
+
+```bash
+npm init -y
+npm install -D vite
+npx vite
+```
+
+Lalu konfigurasi `vite` untuk menyajikan folder tersebut (secara default sudah serve `index.html`).
+
+---
+
+## Kustomisasi
+
+### Mengubah Konten
+
+Semua teks dan link ada di dalam `index.html`. Edit bagian yang relevan:
+
+- **Judul studio** – ubah teks di dalam `<div id="studio-title">`.
+- **Gambar avatar** – modifikasi atribut `data-logo` dan `data-photo` pada `<img>` avatar.
+- **Link & tombol** – update nilai `href` di tag `<a>` (WhatsApp, TikTok, GitHub, dll.).
+- **Blok kode yang bisa disalin** – edit teks di dalam elemen `<div id="text1">`, `#text2`, `#text3`.
+- **Teks halaman maintenance** – edit `<p>` di dalam `#view-files`.
+
+### Penyesuaian Tampilan
+
+- **Konfigurasi Tailwind** – sesuaikan warna, font, breakpoint di tag `<script>` pada `index.html`, di bagian `tailwind.config = { ... }`.
+- **CSS kustom** – tambahkan atau override rule di `style.css`.
+- **Animasi** – ubah durasi transisi atau keyframe di `style.css`.
+
+### Menambahkan View Baru
+
+1. Tambahkan blok `<div id="view-newview" class="view flex-col min-h-screen">` setelah view yang sudah ada.
+2. Update objek `routeMap` di `script.js`:
+   ```js
+   const routeMap = {
+     '': 'view-main',
+     '#': 'view-main',
+     '#home': 'view-main',
+     '#category': 'view-category',
+     '#code': 'view-code',
+     '#desain': 'view-files',
+     '#ai': 'view-ai',
+     '#newview': 'view-newview'   // <-- tambahkan ini
+   };
+   ```
+3. Buat tombol/link navigasi yang memanggil `goTo('view-newview', 'slide-in', '#newview')`.
+
+### Mengganti Favicon
+
+Ganti file di dalam `assets/` dengan milikmu sendiri, pertahankan nama file yang sama, atau update tag `<link>` di `<head>` pada `index.html` agar mengarah ke path yang baru.
+
+---
+
+## Opsi Deployment
+
+Karena situsnya sepenuhnya statis, kamu bisa deploy ke provider static hosting mana saja.
+
+### Vercel (Direkomendasikan – tanpa konfigurasi)
+
+1. Push repositori ke GitHub.
+2. Import repo di Vercel ([vercel.com/new](https://vercel.com/new)).
+3. Vercel otomatis mendeteksi bahwa ini adalah static site dan langsung men-deploy-nya.
+4. Kunjungi URL `*.vercel.app` yang sudah diberikan.
+
+### Netlify
+
+1. Push ke GitHub/GitLab/Bitbucket.
+2. Di Netlify, pilih **New site from Git**.
+3. Build command: biarkan kosong (atau isi `echo "no build"`).
+4. Publish directory: `/` (root repo).
+5. Deploy.
+
+### GitHub Pages
+
+1. Pastikan repositorinya publik (atau aktifkan GitHub Pages untuk repo privat dengan akun Pro).
+2. Buka **Settings → Pages**.
+3. Source: `Deploy from a branch` → `main` (atau `master`) → `/ (root)`.
+4. Simpan; situsmu akan tersedia di `https://<username>.github.io/<repo>/`.
+
+### Firebase Hosting
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase init hosting   # pilih direktori publik sebagai ./ 
+firebase deploy
+```
+
+### AWS S3 + CloudFront (untuk produksi)
+
+1. Buat bucket S3, aktifkan static website hosting.
+2. Upload isi folder (termasuk `assets/`).
+3. Opsional: setup CloudFront untuk HTTPS dan caching.
+
+### Docker (jika ingin dikontainerisasi)
+
+Buat `Dockerfile` sederhana:
+
+```dockerfile
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Lalu:
+
+```bash
+docker build -t ziyad-web .
+docker run -p 8080:80 ziyad-web
+```
+
+Buka `http://localhost:8080`.
+
+---
+
+## Troubleshooting
+
+| Gejala | Kemungkinan Penyebab | Solusi |
+|--------|----------------------|--------|
+| Favicon tidak muncul | Cache browser masih menyimpan favicon lama | Hard‑refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`) atau bersihkan site storage (DevTools → Application → Clear storage). |
+| Tombol share tidak bereaksi | Halaman dibuka via `file://` (Web Share API butuh `http(s)`) | Sajikan lewat local server (`python -m http.server`) atau deploy ke HTTPS. |
+| Ikon muncul sebagai kotak | CDN Font Awesome / Material Symbols diblokir | Cek console untuk error CORS; pastikan ada koneksi internet untuk memuat link CDN. |
+| Layout berantakan di mobile | Tailwind CSS tidak termuat (masalah jaringan) | Verifikasi bahwa `<script src="https://cdn.tailwindcss.com?...">` berhasil dimuat; cek console untuk error 404. |
+| Animasi tidak mulus | Perangkat low‑end atau banyak tab berat di background | Kurangi durasi animasi di `style.css`, atau nonaktifkan via media query `prefers-reduced-motion` jika diperlukan. |
+| Kode tidak tersalin setelah diklik | Clipboard API ditolak (bukan secure context) | Akses lewat `http://localhost` atau `https://`; Clipboard API butuh secure context. |
+
+Kalau menemui masalah lain, buka console DevTools di browser (`F12`) dan cari pesan error di sana — sebagian besar masalah biasanya langsung terlihat.
+
+---
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License** – lihat file [LICENSE](LICENSE) untuk detailnya.
+
+---
+
+## Penghargaan
+
+- [Tailwind CSS](https://tailwindcss.com) – atas framework CSS utility‑first-nya.
+- [Font Awesome](https://fontawesome.com) – atas ikon‑ikon brand-nya.
+- [Material Symbols](https://fonts.google.com/icons) – atas ikon‑ikon sistem UI‑nya.
+- [Google Fonts](https://fonts.google.com) – atas font Manrope dan Inter.
+- Ziyad Web Studio – atas konsep dan desain originalnya.
+
+---
+
+*Selamat ngoding dan berbagi!* 🚀
