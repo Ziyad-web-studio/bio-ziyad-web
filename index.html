@@ -9,6 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
 <link rel="stylesheet" href="style.css">
 <script>
 tailwind.config = {
@@ -60,7 +65,7 @@ tailwind.config = {
     <div class="flex justify-between items-center max-w-[640px] mx-auto px-6 py-4 w-full">
       <div id="studio-title" class="text-xl font-bold text-slate-900 font-headline-md">Ziyad Studio</div>
       <div class="flex items-center gap-4">
-        <button aria-label="Share" class="text-slate-600 hover:opacity-80 transition-opacity">
+        <button aria-label="Share" class="text-slate-600 hover:opacity-80 transition-opacity" onclick="sharePage()">
           <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0;">share</span>
         </button>
       </div>
@@ -132,6 +137,28 @@ tailwind.config = {
           </div>
           <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
         </a>
+
+        <a href="https://github.com/ziyad-web-studio" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-github text-2xl"></i></div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">GitHub</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Kode sumber &amp; proyek</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </a>
+
+        <a href="https://whatsapp.com/channel/0029VbCY4JX59PwLr6KU5f3z" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap" style="background:#25D366;color:#fff;"><i class="fab fa-whatsapp text-2xl"></i></div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">Ikuti Saluran WhatsApp</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Ziyad Studio Creative</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </a>
       </div>
 
       <div class="flex flex-col gap-3">
@@ -144,6 +171,18 @@ tailwind.config = {
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">Trae AI Agent</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Asisten pembuat kode responsif</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </button>
+        <button onclick="goTo('view-antigravity','slide-in','#antigravity')" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap">
+              <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Google-Antigravity-Icon-Full-Color.png" class="w-full h-full object-contain p-1.5" alt="Antigravity CLI">
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">Antigravity CLI</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Terminal TUI untuk pengembangan AI multi-agent</span>
             </div>
           </div>
           <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
@@ -321,6 +360,42 @@ tailwind.config = {
         </a>
         <a href="https://docs.trae.ai/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-100 transition-all flex justify-center items-center gap-2">
           Baca Dokumentasi
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===== VIEW ANTIGRAVITY ===== -->
+<div id="view-antigravity" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Antigravity CLI</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full overflow-hidden bg-black flex items-center justify-center mb-4 shadow-md">
+        <img src="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/Google-Antigravity-Icon-Full-Color.png" class="w-full h-full object-contain p-2" alt="Antigravity CLI">
+      </div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Antigravity CLI</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 leading-relaxed">
+        Antigravity CLI adalah terminal user interface (TUI) ringan dari Google yang berfungsi sebagai platform pengembangan AI untuk berinteraksi dengan agen cerdas langsung dari terminal. Alat yang menggantikan Gemini CLI ini berfokus pada sistem multi-agen, memungkinkan alur kerja paralel, pelacakan konteks real-time, dan manajemen tugas melalui perintah terminal seperti /artifacts dan /diff
+      </p>
+      <div class="w-full flex flex-col gap-3">
+        <a href="https://antigravity.google/product/antigravity-cli" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md hover:bg-opacity-90 transition-all flex justify-center items-center gap-2">
+          Install Antigravity CLI
+          <span class="material-symbols-outlined" style="font-size:18px;">download</span>
+        </a>
+        <a href="https://antigravity.google/docs/cli-overview" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-100 transition-all flex justify-center items-center gap-2">
+          Dokumentasi
+          <span class="material-symbols-outlined" style="font-size:18px;">description</span>
         </a>
       </div>
     </div>

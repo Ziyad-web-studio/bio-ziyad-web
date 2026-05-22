@@ -117,3 +117,29 @@ function copyText(id, btn) {
     }, 2000);
   });
 }
+
+/* ── SHARE PAGE ── */
+function sharePage() {
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      text: 'Ziyad Web Studio',
+      url: window.location.href
+    }).catch(err => {
+      console.error('Share failed:', err);
+      fallbackShare();
+    });
+  } else {
+    fallbackShare();
+  }
+}
+
+function fallbackShare() {
+  // Copy URL to clipboard as fallback
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert('Link telah disalin ke clipboard! Anda dapat membagikan link ini.');
+  }).catch(err => {
+    console.error('Copy failed:', err);
+    prompt('Salin URL ini dan bagikan:', window.location.href);
+  });
+}
