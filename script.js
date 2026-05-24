@@ -137,13 +137,18 @@ function sharePage() {
 }
 
 function fallbackShare() {
-  // Copy URL to clipboard as fallback
   navigator.clipboard.writeText(window.location.href).then(() => {
     alert('Link telah disalin ke clipboard! Anda dapat membagikan link ini.');
   }).catch(err => {
     console.error('Copy failed:', err);
     prompt('Salin URL ini dan bagikan:', window.location.href);
   });
+}
+
+/* ── AVATAR GLOW ── */
+function glowAvatar(el, on) {
+  el.style.boxShadow = on ? '0 0 0 4px #3953bd55, 0 4px 24px #3953bd44' : '';
+  el.style.transform = on ? 'scale(1.07)' : '';
 }
 
 /* ── FEEDBACK FORM ── */
@@ -153,53 +158,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const submitBtn = document.getElementById('fb-submit');
-    const originalContent = submitBtn.innerHTML;
+
+    const submitBtn     = document.getElementById('fb-submit');
+    const originalHTML  = submitBtn.innerHTML;
+    const nameVal       = (form.querySelector('[name="name"]')?.value    || '').trim();
+    const messageVal    = (form.querySelector('[name="message"]')?.value || '').trim();
+    const honeypotVal   = (form.querySelector('[name="website"]')?.value || '').trim();
+
+    // Client-side: validasi panjang minimum (UX saja, bukan garis pertahanan utama)
+    if (messageVal.length < 5) {
+      const textarea = form.querySelector('[name="message"]');
+      textarea.focus();
+      textarea.style.borderColor = '#ba1a1a';
+      setTimeout(() => textarea.style.borderColor = '', 2000);
+      return;
+    }
 
     // Loading state
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.8';
     submitBtn.innerHTML = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
 
-    const formData = new FormData(form);
-    const payload = {
-      name: formData.get('name'),
-      message: formData.get('message')
-    };
-
     try {
       const response = await fetch('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          name:    nameVal,
+          message: messageVal,
+          website: honeypotVal, // honeypot — server akan filter jika terisi
+        })
       });
 
       const result = await response.json();
 
-      if (response.ok) {
-        submitBtn.style.background = '#16a34a'; // Success green
-        submitBtn.style.opacity = '1';
+      if (response.ok && result.success) {
+        // Sukses
+        submitBtn.style.background = '#16a34a';
+        submitBtn.style.opacity    = '1';
         submitBtn.innerHTML = '<span>Terkirim!</span><span class="material-symbols-outlined" style="font-size:20px;">check_circle</span>';
         form.reset();
-        
         setTimeout(() => {
-          submitBtn.disabled = false;
+          submitBtn.disabled        = false;
           submitBtn.style.background = '';
-          submitBtn.innerHTML = originalContent;
+          submitBtn.style.opacity    = '1';
+          submitBtn.innerHTML        = originalHTML;
         }, 4000);
       } else {
-        throw new Error(result.error || 'Gagal mengirim');
+        // Error dari server (validasi, spam, rate limit, dsb)
+        const msg = result.error || 'Gagal mengirim. Coba lagi.';
+        throw new Error(msg);
       }
+
     } catch (error) {
-      submitBtn.style.background = '#ba1a1a'; // Error red
-      submitBtn.style.opacity = '1';
-      submitBtn.innerHTML = `<span>Gagal!</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
+      submitBtn.style.background = '#ba1a1a';
+      submitBtn.style.opacity    = '1';
+      submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
       console.error('Feedback error:', error);
-      
       setTimeout(() => {
-        submitBtn.disabled = false;
+        submitBtn.disabled         = false;
         submitBtn.style.background = '';
-        submitBtn.innerHTML = originalContent;
+        submitBtn.style.opacity    = '1';
+        submitBtn.innerHTML        = originalHTML;
       }, 4000);
     }
   });
