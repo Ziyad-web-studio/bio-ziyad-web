@@ -241,10 +241,27 @@ function glowAvatar(el, on) {
 
 let rlCountdownInterval = null;
 
-function showRateLimitModal(seconds) {
-  const overlay = document.getElementById('rl-overlay');
-  const timerEl = document.getElementById('rl-timer');
+function showRateLimitModal(seconds, hardBlocked = false) {
+  const overlay  = document.getElementById('rl-overlay');
+  const timerEl  = document.getElementById('rl-timer');
+  const titleEl  = document.getElementById('rl-title');
+  const descEl   = document.getElementById('rl-desc');
+  const badgeEl  = document.getElementById('rl-badge');
+  const iconEl   = document.getElementById('rl-icon');
   if (!overlay || !timerEl) return;
+
+  // Ubah teks modal tergantung hard block atau cooldown biasa
+  if (hardBlocked) {
+    if (titleEl)  titleEl.textContent = 'Kamu Diblokir!';
+    if (descEl)   descEl.innerHTML    = 'Terlalu banyak percobaan.<br>IP kamu diblokir sementara.';
+    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Hard Block Aktif';
+    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">block</span>';
+  } else {
+    if (titleEl)  titleEl.textContent = 'Slow down!';
+    if (descEl)   descEl.innerHTML    = 'Feedback kamu sudah terkirim.<br>Tunggu sebentar sebelum mengirim lagi.';
+    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Cooldown Aktif';
+    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">timer</span>';
+  }
 
   let remaining = seconds;
 
@@ -317,13 +334,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showRateLimitModal(90); // 1 menit 30 detik
 
       } else if (response.status === 429) {
+        // Hard block (1 jam) vs rate limit biasa
+        const hardBlocked = result.hardBlocked || false;
         // ⏳ Rate limit dari server
         const retryAfter = parseInt(result.retryAfter || 90);
         submitBtn.disabled        = false;
         submitBtn.style.opacity   = '1';
         submitBtn.style.background = '';
         submitBtn.innerHTML       = originalHTML;
-        showRateLimitModal(retryAfter > 0 ? retryAfter : 90);
+        showRateLimitModal(retryAfter > 0 ? retryAfter : 90, hardBlocked);
 
       } else {
         // ❌ Error lain (validasi, spam, dsb)
