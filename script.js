@@ -292,16 +292,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('feedback-form');
   if (!form) return;
 
-  // Inject container untuk Turnstile (invisible)
+  // Inject container Turnstile (invisible, tidak terlihat user)
   const tsContainer = document.createElement('div');
   tsContainer.id = 'turnstile-container';
-  form.appendChild(tsContainer);
+  tsContainer.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
+  document.body.appendChild(tsContainer);
 
-  // Load Cloudflare Turnstile script
+  // Load Turnstile script lalu render widget langsung
+  // Token akan siap sebelum user klik submit
+  let turnstileToken = '';
+  let turnstileReady = false;
+
+  function renderTurnstile() {
+    if (!window.turnstile || turnstileReady) return;
+    turnstileReady = true;
+    window.turnstile.render('#turnstile-container', {
+      sitekey: '0x4AAAAAADVk_HhQ2E8lQoM1',
+      appearance: 'never',
+      callback: (token) => {
+        turnstileToken = token;
+      },
+      'expired-callback': () => {
+        turnstileToken = '';
+      },
+      'error-callback': () => {
+        turnstileToken = '';
+        turnstileReady = false;
+      },
+    });
+  }
+
   const tsScript = document.createElement('script');
-  tsScript.src   = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  tsScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
   tsScript.async = true;
   tsScript.defer = true;
+  tsScript.onload = renderTurnstile;
   document.head.appendChild(tsScript);
 
   form.addEventListener('submit', async (e) => {
@@ -313,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageVal   = (form.querySelector('[name="message"]')?.value || '').trim();
     const honeypotVal  = (form.querySelector('[name="website"]')?.value || '').trim();
 
-    // Client-side: highlight jika pesan terlalu pendek
+    // Validasi panjang pesan
     if (messageVal.length < 5) {
       const textarea = form.querySelector('[name="message"]');
       textarea.focus();
@@ -322,30 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Loading state
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.8';
-    submitBtn.innerHTML = '<span>Memverifikasi...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
-
-    // Ambil Turnstile token (invisible — user tidak lihat apapun)
-    let turnstileToken = '';
-    try {
-      turnstileToken = await new Promise((resolve, reject) => {
-        window.turnstile.render('#turnstile-container', {
-          sitekey: '0x4AAAAAADVk_HhQ2E8lQoM1',
-          callback: resolve,
-          'error-callback': () => reject(new Error('Turnstile error')),
-          'expired-callback': () => reject(new Error('Turnstile expired')),
-          execution: 'execute',
-          appearance: 'never',
-        });
-        window.turnstile.execute('#turnstile-container');
-      });
-    } catch {
+    // Cek token Turnstile sudah siap
+    if (!turnstileToken) {
       submitBtn.disabled         = false;
-      submitBtn.style.opacity    = '1';
       submitBtn.style.background = '#ba1a1a';
-      submitBtn.innerHTML = '<span>Verifikasi gagal, refresh halaman</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>';
+      submitBtn.innerHTML = '<span>Verifikasi belum siap, tunggu sebentar</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>';
       setTimeout(() => {
         submitBtn.style.background = '';
         submitBtn.innerHTML        = originalHTML;
@@ -353,6 +359,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Loading state
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.8';
     submitBtn.innerHTML = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
 
     try {
@@ -370,19 +379,20 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.style.background = '';
         submitBtn.innerHTML        = originalHTML;
         form.reset();
-        // Reset Turnstile untuk submit berikutnya
+        turnstileToken = '';
+        // Reset Turnstile untuk generate token baru
         window.turnstile?.reset('#turnstile-container');
         showRateLimitModal(90);
 
       } else if (response.status === 429) {
-        const hardBlocked = result.hardBlocked || false;
-        const retryAfter  = parseInt(result.retryAfter || 90);
+        const retryAfter = parseInt(result.retryAfter || 90);
         submitBtn.disabled         = false;
         submitBtn.style.opacity    = '1';
         submitBtn.style.background = '';
         submitBtn.innerHTML        = originalHTML;
+        turnstileToken = '';
         window.turnstile?.reset('#turnstile-container');
-        showRateLimitModal(retryAfter > 0 ? retryAfter : 90, hardBlocked);
+        showRateLimitModal(retryAfter > 0 ? retryAfter : 90, result.hardBlocked || false);
 
       } else {
         throw new Error(result.error || 'Gagal mengirim. Coba lagi.');
@@ -393,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.style.opacity    = '1';
       submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
       console.error('Feedback error:', error);
+      turnstileToken = '';
       window.turnstile?.reset('#turnstile-container');
       setTimeout(() => {
         submitBtn.disabled         = false;
