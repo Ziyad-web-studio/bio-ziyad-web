@@ -19,9 +19,7 @@ const SPAM_KEYWORDS = [
 
 // ── Allowed origins (tambahkan domain kamu di sini)
 const ALLOWED_ORIGINS = [
-  'https://ziyad-studio.vercel.app',
-  'https://ziyadwebstudio.vercel.app',
-  'https://ziyad-web-studio.vercel.app',
+  'https://ziyadbio.my.id',
 ];
 
 // ────────────────────────────────────────────────────────────
