@@ -4,7 +4,7 @@
 //  input validation, spam filter, env vars, IP logging
 // ============================================================
 
-// ── In-memory rate limiter (resets on cold start, good enough for Vercel)
+// ── In-memory rate limiter
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 60 detik
 const RATE_LIMIT_MAX = 1;               // max 1 request per window
@@ -17,7 +17,7 @@ const SPAM_KEYWORDS = [
   'click here', 'free money', 'make money',
 ];
 
-// ── Allowed origins (tambahkan domain kamu di sini)
+// ── Allowed origins
 const ALLOWED_ORIGINS = [
   'https://ziyadbio.my.id',
 ];
@@ -40,7 +40,6 @@ function checkRateLimit(ip) {
   const entry = rateLimitMap.get(ip);
 
   if (!entry || now - entry.timestamp > RATE_LIMIT_WINDOW_MS) {
-    // Window baru — reset counter
     rateLimitMap.set(ip, { count: 1, timestamp: now });
     return { allowed: true, retryAfter: 0 };
   }
@@ -63,7 +62,6 @@ function containsSpam(text) {
 }
 
 function escapeMarkdown(text) {
-  // Escape karakter khusus Telegram Markdown v1
   return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, '\\$&');
 }
 
@@ -73,24 +71,37 @@ function escapeMarkdown(text) {
 
 export default async function handler(req, res) {
 
-  // 1️⃣ Method check
+  const origin = req.headers['origin'] || '';
+
+  // ── CORS headers — wajib agar browser tidak throw Error {}
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Preflight request dari browser
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  // 1. Method check
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const clientIP = getClientIP(req);
 
-  // 2️⃣ Origin validation
-  const origin = req.headers['origin'] || '';
+  // 2. Origin validation
   if (!ALLOWED_ORIGINS.includes(origin)) {
-    console.warn(`[BLOCKED] Invalid origin: ${origin} | IP: ${clientIP}`);
+    console.warn(`[BLOCKED] Invalid origin: "${origin}" | IP: ${clientIP}`);
     return res.status(403).json({ error: 'Forbidden' });
   }
 
-  // 3️⃣ Rate limiting berbasis IP
+  // 3. Rate limiting berbasis IP
   const { allowed, retryAfter } = checkRateLimit(clientIP);
   if (!allowed) {
-    console.warn(`[RATE LIMIT] IP: ${clientIP} diblokir — coba lagi dalam ${retryAfter}s`);
+    console.warn(`[RATE LIMIT] IP: ${clientIP} — retry in ${retryAfter}s`);
     res.setHeader('Retry-After', retryAfter);
     return res.status(429).json({
       error: `Terlalu banyak permintaan. Coba lagi dalam ${retryAfter} detik.`,
@@ -99,15 +110,13 @@ export default async function handler(req, res) {
 
   const { name, message, website } = req.body;
 
-  // 4️⃣ Honeypot anti-bot
-  // Field "website" hidden di frontend — manusia asli tidak mengisinya
+  // 4. Honeypot anti-bot
   if (website && website.trim() !== '') {
     console.warn(`[HONEYPOT] Bot terdeteksi | IP: ${clientIP}`);
-    // Return 200 palsu agar bot tidak tahu ia diblokir
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true }); // silent reject
   }
 
-  // 5️⃣ Validasi input
+  // 5. Validasi input
   if (!message || typeof message !== 'string') {
     return res.status(400).json({ error: 'Pesan wajib diisi.' });
   }
@@ -122,22 +131,22 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Pesan maksimal 1000 karakter.' });
   }
 
-  // 6️⃣ Spam keyword filter
+  // 6. Spam keyword filter
   if (containsSpam(trimmedMessage) || (name && containsSpam(name))) {
-    console.warn(`[SPAM] Pesan ditolak | IP: ${clientIP} | Pesan: ${trimmedMessage.substring(0, 60)}...`);
+    console.warn(`[SPAM] Ditolak | IP: ${clientIP} | "${trimmedMessage.substring(0, 60)}"`);
     return res.status(400).json({ error: 'Pesan mengandung konten yang tidak diizinkan.' });
   }
 
-  // 7️⃣ Ambil token dari environment variables
+  // 7. Env vars
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    console.error('[CONFIG] TELEGRAM_BOT_TOKEN atau TELEGRAM_CHAT_ID belum disetel di env');
+    console.error('[CONFIG] TELEGRAM_BOT_TOKEN atau TELEGRAM_CHAT_ID belum disetel');
     return res.status(500).json({ error: 'Konfigurasi server belum lengkap.' });
   }
 
-  // 8️⃣ Bangun pesan Telegram (sertakan IP untuk monitoring)
+  // 8. Bangun pesan Telegram
   const safeName    = name ? escapeMarkdown(name.trim().substring(0, 100)) : 'Anonim';
   const safeMessage = escapeMarkdown(trimmedMessage);
   const timestamp   = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
@@ -152,7 +161,7 @@ export default async function handler(req, res) {
     `🕐 *Waktu:* ${timestamp}`,
   ].join('\n');
 
-  // 9️⃣ Kirim ke Telegram
+  // 9. Kirim ke Telegram
   try {
     const response = await fetch(
       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
