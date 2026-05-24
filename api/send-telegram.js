@@ -1,5 +1,6 @@
 // ============================================================
 //  /api/send-telegram.js  —  Vercel Serverless API Route
+//  + Cloudflare Turnstile validation
 // ============================================================
 
 const rateLimitMap = new Map();
@@ -29,19 +30,28 @@ function getClientIP(req) {
 function checkRateLimit(ip) {
   const now   = Date.now();
   const entry = rateLimitMap.get(ip);
-
   if (!entry || now - entry.windowStart > WINDOW_MS) {
     rateLimitMap.set(ip, { count: 1, windowStart: now });
     return { allowed: true };
   }
-
   if (entry.count >= MAX_PER_WINDOW) {
     const retryAfter = Math.ceil((WINDOW_MS - (now - entry.windowStart)) / 1000);
     return { allowed: false, retryAfter };
   }
-
   entry.count++;
   return { allowed: true };
+}
+
+async function verifyTurnstile(token, ip) {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) return false;
+  const res  = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret, response: token, remoteip: ip }),
+  });
+  const data = await res.json();
+  return data.success === true;
 }
 
 function containsSpam(text) {
@@ -82,14 +92,24 @@ export default async function handler(req, res) {
     });
   }
 
-  const { name, message, website } = req.body;
+  const { name, message, website, turnstileToken } = req.body;
 
   // Honeypot
   if (website && website.trim() !== '') {
     return res.status(200).json({ success: true });
   }
 
-  // Validasi
+  // Turnstile validation
+  if (!turnstileToken) {
+    return res.status(400).json({ error: 'Verifikasi keamanan gagal. Coba refresh halaman.' });
+  }
+  const turnstileOk = await verifyTurnstile(turnstileToken, clientIP);
+  if (!turnstileOk) {
+    console.warn(`[TURNSTILE] Gagal | IP: ${clientIP}`);
+    return res.status(403).json({ error: 'Verifikasi keamanan gagal. Coba refresh halaman.' });
+  }
+
+  // Validasi input
   if (!message || typeof message !== 'string' || message.trim().length < 5) {
     return res.status(400).json({ error: 'Pesan minimal 5 karakter.' });
   }
