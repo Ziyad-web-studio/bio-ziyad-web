@@ -1,14 +1,12 @@
 // ============================================================
 //  /api/send-telegram.js  —  Vercel Serverless API Route
+//  Rate limiting via Vercel KV (Redis) — shared across instances
 // ============================================================
 
-const rateLimitMap = new Map(); // ip -> { count, windowStart, violations }
-const blockedIPs   = new Map(); // ip -> unblockAt (timestamp)
-
-const WINDOW_MS        = 60 * 1000;  // window 60 detik
-const MAX_PER_WINDOW   = 1;          // max 1 request per window
-const MAX_VIOLATIONS   = 3;          // setelah 3x kena rate limit → hard block
-const HARD_BLOCK_MS    = 60 * 60 * 1000; // hard block 1 jam
+const WINDOW_MS      = 60 * 1000; // 60 detik
+const MAX_PER_WINDOW = 1;
+const MAX_VIOLATIONS = 3;
+const HARD_BLOCK_MS  = 60 * 60 * 1000; // 1 jam
 
 const SPAM_KEYWORDS = [
   'http', '.com', '.net', '.org', '.io',
@@ -21,6 +19,74 @@ const ALLOWED_ORIGINS = [
   'https://ziyadbio.my.id',
 ];
 
+// ── Vercel KV client (native fetch, no library) ──────────────
+
+async function kvGet(key) {
+  const url   = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!url || !token) return null;
+  const res  = await fetch(`${url}/get/${key}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const data = await res.json();
+  return data.result ?? null;
+}
+
+async function kvSet(key, value, exSeconds) {
+  const url   = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!url || !token) return;
+  await fetch(`${url}/set/${key}/${encodeURIComponent(JSON.stringify(value))}?ex=${exSeconds}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+}
+
+// ── Rate limiter pakai KV ────────────────────────────────────
+
+async function checkRateLimit(ip) {
+  const now = Date.now();
+
+  // Cek hard block
+  const hardBlockKey  = `hb:${ip}`;
+  const hardBlockData = await kvGet(hardBlockKey);
+  if (hardBlockData) {
+    const parsed = JSON.parse(hardBlockData);
+    const retryAfter = Math.ceil((parsed.until - now) / 1000);
+    return { allowed: false, hardBlocked: true, retryAfter: Math.max(1, retryAfter) };
+  }
+
+  // Cek / update rate limit window
+  const rlKey  = `rl:${ip}`;
+  const rlData = await kvGet(rlKey);
+  let entry = rlData ? JSON.parse(rlData) : { count: 0, windowStart: now, violations: 0 };
+
+  // Reset window jika sudah expired
+  if (now - entry.windowStart > WINDOW_MS) {
+    entry.count       = 0;
+    entry.windowStart = now;
+  }
+
+  entry.count++;
+
+  if (entry.count > MAX_PER_WINDOW) {
+    entry.violations++;
+    await kvSet(rlKey, entry, Math.ceil(WINDOW_MS / 1000) * 2);
+
+    if (entry.violations >= MAX_VIOLATIONS) {
+      const hardBlockDuration = Math.ceil(HARD_BLOCK_MS / 1000);
+      await kvSet(hardBlockKey, { until: now + HARD_BLOCK_MS }, hardBlockDuration);
+      console.warn(`[HARD BLOCK] IP: ${ip} diblokir 1 jam`);
+      return { allowed: false, hardBlocked: true, retryAfter: hardBlockDuration };
+    }
+
+    const retryAfter = Math.ceil((WINDOW_MS - (now - entry.windowStart)) / 1000);
+    return { allowed: false, hardBlocked: false, retryAfter };
+  }
+
+  await kvSet(rlKey, entry, Math.ceil(WINDOW_MS / 1000) * 2);
+  return { allowed: true };
+}
+
 // ── Helpers ──────────────────────────────────────────────────
 
 function getClientIP(req) {
@@ -32,53 +98,8 @@ function getClientIP(req) {
   );
 }
 
-function checkRateLimit(ip) {
-  const now = Date.now();
-
-  // Cek hard block dulu
-  const blockedUntil = blockedIPs.get(ip);
-  if (blockedUntil) {
-    if (now < blockedUntil) {
-      const retryAfter = Math.ceil((blockedUntil - now) / 1000);
-      return { allowed: false, hardBlocked: true, retryAfter };
-    }
-    // Hard block expired, bersihkan
-    blockedIPs.delete(ip);
-    rateLimitMap.delete(ip);
-  }
-
-  const entry = rateLimitMap.get(ip) || { count: 0, windowStart: now, violations: 0 };
-
-  // Reset window jika sudah lewat
-  if (now - entry.windowStart > WINDOW_MS) {
-    entry.count       = 0;
-    entry.windowStart = now;
-  }
-
-  entry.count++;
-
-  if (entry.count > MAX_PER_WINDOW) {
-    entry.violations++;
-    rateLimitMap.set(ip, entry);
-
-    // Jika sudah terlalu banyak violation → hard block 1 jam
-    if (entry.violations >= MAX_VIOLATIONS) {
-      blockedIPs.set(ip, now + HARD_BLOCK_MS);
-      console.warn(`[HARD BLOCK] IP: ${ip} diblokir 1 jam (${entry.violations} violations)`);
-      return { allowed: false, hardBlocked: true, retryAfter: 3600 };
-    }
-
-    const retryAfter = Math.ceil((WINDOW_MS - (now - entry.windowStart)) / 1000);
-    return { allowed: false, hardBlocked: false, retryAfter };
-  }
-
-  rateLimitMap.set(ip, entry);
-  return { allowed: true };
-}
-
 function containsSpam(text) {
-  const lower = text.toLowerCase();
-  return SPAM_KEYWORDS.some(kw => lower.includes(kw));
+  return SPAM_KEYWORDS.some(kw => text.toLowerCase().includes(kw));
 }
 
 function escapeMarkdown(text) {
@@ -108,13 +129,13 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Forbidden' });
   }
 
-  // Rate limit + hard block
-  const rl = checkRateLimit(clientIP);
+  // Rate limit (shared via KV)
+  const rl = await checkRateLimit(clientIP);
   if (!rl.allowed) {
     const msg = rl.hardBlocked
       ? `IP kamu diblokir selama 1 jam karena terlalu banyak percobaan.`
       : `Terlalu banyak permintaan. Coba lagi dalam ${rl.retryAfter} detik.`;
-    console.warn(`[RATE LIMIT] IP: ${clientIP} | hardBlocked: ${rl.hardBlocked} | retry: ${rl.retryAfter}s`);
+    console.warn(`[RATE LIMIT] IP: ${clientIP} | hard: ${rl.hardBlocked} | retry: ${rl.retryAfter}s`);
     res.setHeader('Retry-After', rl.retryAfter);
     return res.status(429).json({ error: msg, retryAfter: rl.retryAfter, hardBlocked: rl.hardBlocked });
   }
@@ -154,11 +175,9 @@ export default async function handler(req, res) {
   const timestamp   = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
 
   const text = [
-    '📬 *Feedback Baru*',
-    '',
+    '📬 *Feedback Baru*', '',
     `👤 *Nama:* ${safeName}`,
-    `💬 *Pesan:* ${safeMessage}`,
-    '',
+    `💬 *Pesan:* ${safeMessage}`, '',
     `🌐 *IP:* \`${clientIP}\``,
     `🕐 *Waktu:* ${timestamp}`,
   ].join('\n');
