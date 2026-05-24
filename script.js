@@ -292,6 +292,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('feedback-form');
   if (!form) return;
 
+  // Inject container untuk Turnstile (invisible)
+  const tsContainer = document.createElement('div');
+  tsContainer.id = 'turnstile-container';
+  form.appendChild(tsContainer);
+
+  // Load Cloudflare Turnstile script
+  const tsScript = document.createElement('script');
+  tsScript.src   = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  tsScript.async = true;
+  tsScript.defer = true;
+  document.head.appendChild(tsScript);
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -313,39 +325,66 @@ document.addEventListener('DOMContentLoaded', () => {
     // Loading state
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.8';
+    submitBtn.innerHTML = '<span>Memverifikasi...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
+
+    // Ambil Turnstile token (invisible — user tidak lihat apapun)
+    let turnstileToken = '';
+    try {
+      turnstileToken = await new Promise((resolve, reject) => {
+        window.turnstile.render('#turnstile-container', {
+          sitekey: '0x4AAAAAADVk_HhQ2E8lQoM1',
+          callback: resolve,
+          'error-callback': () => reject(new Error('Turnstile error')),
+          'expired-callback': () => reject(new Error('Turnstile expired')),
+          execution: 'execute',
+          appearance: 'never',
+        });
+        window.turnstile.execute('#turnstile-container');
+      });
+    } catch {
+      submitBtn.disabled         = false;
+      submitBtn.style.opacity    = '1';
+      submitBtn.style.background = '#ba1a1a';
+      submitBtn.innerHTML = '<span>Verifikasi gagal, refresh halaman</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>';
+      setTimeout(() => {
+        submitBtn.style.background = '';
+        submitBtn.innerHTML        = originalHTML;
+      }, 3000);
+      return;
+    }
+
     submitBtn.innerHTML = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
 
     try {
       const response = await fetch('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: nameVal, message: messageVal, website: honeypotVal })
+        body: JSON.stringify({ name: nameVal, message: messageVal, website: honeypotVal, turnstileToken })
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // ✅ Sukses — tampilkan modal cooldown 1m30s
-        submitBtn.disabled        = false;
-        submitBtn.style.opacity   = '1';
+        submitBtn.disabled         = false;
+        submitBtn.style.opacity    = '1';
         submitBtn.style.background = '';
-        submitBtn.innerHTML       = originalHTML;
+        submitBtn.innerHTML        = originalHTML;
         form.reset();
-        showRateLimitModal(90); // 1 menit 30 detik
+        // Reset Turnstile untuk submit berikutnya
+        window.turnstile?.reset('#turnstile-container');
+        showRateLimitModal(90);
 
       } else if (response.status === 429) {
-        // Hard block (1 jam) vs rate limit biasa
         const hardBlocked = result.hardBlocked || false;
-        // ⏳ Rate limit dari server
-        const retryAfter = parseInt(result.retryAfter || 90);
-        submitBtn.disabled        = false;
-        submitBtn.style.opacity   = '1';
+        const retryAfter  = parseInt(result.retryAfter || 90);
+        submitBtn.disabled         = false;
+        submitBtn.style.opacity    = '1';
         submitBtn.style.background = '';
-        submitBtn.innerHTML       = originalHTML;
+        submitBtn.innerHTML        = originalHTML;
+        window.turnstile?.reset('#turnstile-container');
         showRateLimitModal(retryAfter > 0 ? retryAfter : 90, hardBlocked);
 
       } else {
-        // ❌ Error lain (validasi, spam, dsb)
         throw new Error(result.error || 'Gagal mengirim. Coba lagi.');
       }
 
@@ -354,6 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.style.opacity    = '1';
       submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
       console.error('Feedback error:', error);
+      window.turnstile?.reset('#turnstile-container');
       setTimeout(() => {
         submitBtn.disabled         = false;
         submitBtn.style.background = '';
