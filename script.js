@@ -1,200 +1,365 @@
-// ============================================================
-//  /api/send-telegram.js  —  Vercel Serverless API Route
-//  Rate limiting via Vercel KV (Redis) — shared across instances
-// ============================================================
+/* ── PRELOAD AVATAR PHOTO ── */
+const preloadPhoto = new Image();
+preloadPhoto.src = "https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png";
 
-const WINDOW_MS      = 60 * 1000; // 60 detik
-const MAX_PER_WINDOW = 1;
-const MAX_VIOLATIONS = 3;
-const HARD_BLOCK_MS  = 60 * 60 * 1000; // 1 jam
-
-const SPAM_KEYWORDS = [
-  'http', '.com', '.net', '.org', '.io',
-  'bitcoin', 'crypto', 'casino', 'forex',
-  'togel', 'slot', 'porn', 'sex', 'viagra',
-  'click here', 'free money', 'make money',
-];
-
-const ALLOWED_ORIGINS = [
-  'https://ziyadbio.my.id',
-];
-
-// ── Vercel KV client (native fetch, no library) ──────────────
-
-async function kvGet(key) {
-  const url   = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) return null;
-  const res  = await fetch(`${url}/get/${key}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  const data = await res.json();
-  return data.result ?? null;
+/* ── AVATAR SWAP ── */
+function swapAvatar(img, mode) {
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = mode === 'photo' ? img.dataset.photo : img.dataset.logo;
+    img.style.opacity = '1';
+  }, 150);
 }
 
-async function kvSet(key, value, exSeconds) {
-  const url   = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) return;
-  await fetch(`${url}/set/${key}/${encodeURIComponent(JSON.stringify(value))}?ex=${exSeconds}`, {
-    headers: { Authorization: `Bearer ${token}` }
+/* ── HASH ROUTING ── */
+const routeMap = {
+  '': 'view-main',
+  '#': 'view-main',
+  '#home': 'view-main',
+  '#category': 'view-category',
+  '#code': 'view-code',
+  '#desain': 'view-files',
+  '#ai': 'view-ai',
+  '#antigravity': 'view-antigravity',
+  '#support': 'view-support'
+};
+
+function navigateToHash(hash) {
+  const viewId = routeMap[hash] || 'view-main';
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById(viewId);
+  if (target) { target.classList.add('active'); window.scrollTo(0, 0); }
+}
+
+window.addEventListener('hashchange', () => navigateToHash(window.location.hash));
+navigateToHash(window.location.hash);
+
+/* ── NAVIGATION ── */
+function goTo(viewId, animClass, hash) {
+  const current = document.querySelector('.view.active');
+  if (current) current.classList.remove('active');
+  const next = document.getElementById(viewId);
+  next.classList.add('active');
+  next.classList.remove('slide-in', 'slide-back');
+  void next.offsetWidth;
+  next.classList.add(animClass || 'slide-in');
+  window.scrollTo(0, 0);
+  if (hash) history.pushState(null, '', hash);
+}
+
+function goBack(viewId, hash) {
+  const current = document.querySelector('.view.active');
+  if (current) current.classList.remove('active');
+  const prev = document.getElementById(viewId);
+  prev.classList.add('active');
+  prev.classList.remove('slide-in', 'slide-back');
+  void prev.offsetWidth;
+  prev.classList.add('slide-back');
+  window.scrollTo(0, 0);
+  if (hash) history.pushState(null, '', hash);
+}
+
+function goHome() {
+  const current = document.querySelector('.view.active');
+  if (current) current.classList.remove('active');
+  const home = document.getElementById('view-main');
+  home.classList.add('active');
+  home.classList.remove('slide-in', 'slide-back');
+  void home.offsetWidth;
+  home.classList.add('slide-back');
+  window.scrollTo(0, 0);
+  history.pushState(null, '', '#');
+}
+
+/* ── TITLE SWITCHER ── */
+const titleEl = document.getElementById('studio-title');
+const titles = ['Ziyad Studio', 'Creative Studio'];
+let titleIndex = 0;
+setInterval(() => {
+  titleIndex = (titleIndex + 1) % titles.length;
+  titleEl.style.opacity = '0';
+  titleEl.style.transform = 'translateY(-6px)';
+  setTimeout(() => {
+    titleEl.textContent = titles[titleIndex];
+    titleEl.style.opacity = '1';
+    titleEl.style.transform = 'translateY(0)';
+  }, 300);
+}, 3000);
+
+/* ── LIVE CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  const el = document.getElementById('live-clock');
+  const dl = document.getElementById('live-date');
+  if (el) el.textContent = `${h}:${m}:${s}`;
+  if (dl) dl.textContent = dateStr;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ── COPY ── */
+function copyText(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    btn.style.background = '#3953bd';
+    btn.style.color = '#fff';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
   });
 }
 
-// ── Rate limiter pakai KV ────────────────────────────────────
+/* ── SHARE PAGE ── */
+function sharePage() {
+  if (navigator.share) {
+    navigator.share({ title: document.title, text: 'Ziyad Web Studio', url: window.location.href })
+      .catch(err => { console.error('Share failed:', err); fallbackShare(); });
+  } else { fallbackShare(); }
+}
+function fallbackShare() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert('Link telah disalin ke clipboard!');
+  }).catch(() => { prompt('Salin URL ini:', window.location.href); });
+}
 
-async function checkRateLimit(ip) {
-  const now = Date.now();
+/* ── AVATAR GLOW ── */
+function glowAvatar(el, on) {
+  el.style.boxShadow = on ? '0 0 0 4px #3953bd55, 0 4px 24px #3953bd44' : '';
+  el.style.transform = on ? 'scale(1.07)' : '';
+}
 
-  // Cek hard block
-  const hardBlockKey  = `hb:${ip}`;
-  const hardBlockData = await kvGet(hardBlockKey);
-  if (hardBlockData) {
-    const parsed = JSON.parse(hardBlockData);
-    const retryAfter = Math.ceil((parsed.until - now) / 1000);
-    return { allowed: false, hardBlocked: true, retryAfter: Math.max(1, retryAfter) };
+/* ── RATE LIMIT MODAL ── */
+// Inject modal HTML + CSS sekali saat script load
+(function injectRateLimitModal() {
+  const style = document.createElement('style');
+  style.textContent = `
+    #rl-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #rl-overlay.show { display: flex; }
+    #rl-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 36px 28px 32px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      animation: rl-pop .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes rl-pop {
+      from { transform: scale(.85); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    #rl-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: #fef2f2;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    #rl-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px; font-weight: 700;
+      color: #0f1e21; margin-bottom: 8px;
+    }
+    #rl-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; color: #6b7280; margin-bottom: 24px; line-height: 1.6;
+    }
+    #rl-timer-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    #rl-timer-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #9ca3af; margin-bottom: 6px;
+    }
+    #rl-timer {
+      font-family: 'Manrope', sans-serif;
+      font-size: 36px; font-weight: 800;
+      color: #0f1e21; letter-spacing: .02em;
+    }
+    #rl-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fef2f2; border: 1px solid #fecaca;
+      border-radius: 999px; padding: 6px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: #dc2626;
+    }
+    #rl-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #ef4444;
+      animation: rl-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes rl-pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(.8); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'rl-overlay';
+  overlay.innerHTML = `
+    <div id="rl-card">
+      <div id="rl-icon">
+        <span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:'FILL' 1;">timer</span>
+      </div>
+      <div id="rl-title">Slow down!</div>
+      <div id="rl-desc">Feedback kamu sudah terkirim.<br>Tunggu sebentar sebelum mengirim lagi.</div>
+      <div id="rl-timer-box">
+        <div id="rl-timer-label">Bisa kirim lagi dalam</div>
+        <div id="rl-timer">1:30</div>
+      </div>
+      <div id="rl-badge"><span class="dot"></span>Cooldown Aktif</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+})();
+
+let rlCountdownInterval = null;
+
+function showRateLimitModal(seconds, hardBlocked = false) {
+  const overlay  = document.getElementById('rl-overlay');
+  const timerEl  = document.getElementById('rl-timer');
+  const titleEl  = document.getElementById('rl-title');
+  const descEl   = document.getElementById('rl-desc');
+  const badgeEl  = document.getElementById('rl-badge');
+  const iconEl   = document.getElementById('rl-icon');
+  if (!overlay || !timerEl) return;
+
+  // Ubah teks modal tergantung hard block atau cooldown biasa
+  if (hardBlocked) {
+    if (titleEl)  titleEl.textContent = 'Kamu Diblokir!';
+    if (descEl)   descEl.innerHTML    = 'Terlalu banyak percobaan.<br>IP kamu diblokir sementara.';
+    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Hard Block Aktif';
+    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">block</span>';
+  } else {
+    if (titleEl)  titleEl.textContent = 'Slow down!';
+    if (descEl)   descEl.innerHTML    = 'Feedback kamu sudah terkirim.<br>Tunggu sebentar sebelum mengirim lagi.';
+    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Cooldown Aktif';
+    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">timer</span>';
   }
 
-  // Cek / update rate limit window
-  const rlKey  = `rl:${ip}`;
-  const rlData = await kvGet(rlKey);
-  let entry = rlData ? JSON.parse(rlData) : { count: 0, windowStart: now, violations: 0 };
+  let remaining = seconds;
 
-  // Reset window jika sudah expired
-  if (now - entry.windowStart > WINDOW_MS) {
-    entry.count       = 0;
-    entry.windowStart = now;
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${String(sec).padStart(2,'0')}`;
   }
 
-  entry.count++;
+  timerEl.textContent = fmt(remaining);
+  overlay.classList.add('show');
 
-  if (entry.count > MAX_PER_WINDOW) {
-    entry.violations++;
-    await kvSet(rlKey, entry, Math.ceil(WINDOW_MS / 1000) * 2);
+  if (rlCountdownInterval) clearInterval(rlCountdownInterval);
+  rlCountdownInterval = setInterval(() => {
+    remaining--;
+    timerEl.textContent = fmt(Math.max(0, remaining));
+    if (remaining <= 0) {
+      clearInterval(rlCountdownInterval);
+      rlCountdownInterval = null;
+      // Auto refresh setelah timer habis
+      window.location.reload();
+    }
+  }, 1000);
+}
 
-    if (entry.violations >= MAX_VIOLATIONS) {
-      const hardBlockDuration = Math.ceil(HARD_BLOCK_MS / 1000);
-      await kvSet(hardBlockKey, { until: now + HARD_BLOCK_MS }, hardBlockDuration);
-      console.warn(`[HARD BLOCK] IP: ${ip} diblokir 1 jam`);
-      return { allowed: false, hardBlocked: true, retryAfter: hardBlockDuration };
+/* ── FEEDBACK FORM ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('feedback-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn    = document.getElementById('fb-submit');
+    const originalHTML = submitBtn.innerHTML;
+    const nameVal      = (form.querySelector('[name="name"]')?.value    || '').trim();
+    const messageVal   = (form.querySelector('[name="message"]')?.value || '').trim();
+    const honeypotVal  = (form.querySelector('[name="website"]')?.value || '').trim();
+
+    // Client-side: highlight jika pesan terlalu pendek
+    if (messageVal.length < 5) {
+      const textarea = form.querySelector('[name="message"]');
+      textarea.focus();
+      textarea.style.borderColor = '#ba1a1a';
+      setTimeout(() => textarea.style.borderColor = '', 2000);
+      return;
     }
 
-    const retryAfter = Math.ceil((WINDOW_MS - (now - entry.windowStart)) / 1000);
-    return { allowed: false, hardBlocked: false, retryAfter };
-  }
+    // Loading state
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.8';
+    submitBtn.innerHTML = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
 
-  await kvSet(rlKey, entry, Math.ceil(WINDOW_MS / 1000) * 2);
-  return { allowed: true };
-}
+    try {
+      const response = await fetch('/api/send-telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nameVal, message: messageVal, website: honeypotVal })
+      });
 
-// ── Helpers ──────────────────────────────────────────────────
+      const result = await response.json();
 
-function getClientIP(req) {
-  return (
-    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
-    req.headers['x-real-ip'] ||
-    req.socket?.remoteAddress ||
-    'unknown'
-  );
-}
+      if (response.ok && result.success) {
+        // ✅ Sukses — tampilkan modal cooldown 1m30s
+        submitBtn.disabled        = false;
+        submitBtn.style.opacity   = '1';
+        submitBtn.style.background = '';
+        submitBtn.innerHTML       = originalHTML;
+        form.reset();
+        showRateLimitModal(90); // 1 menit 30 detik
 
-function containsSpam(text) {
-  return SPAM_KEYWORDS.some(kw => text.toLowerCase().includes(kw));
-}
+      } else if (response.status === 429) {
+        // Hard block (1 jam) vs rate limit biasa
+        const hardBlocked = result.hardBlocked || false;
+        // ⏳ Rate limit dari server
+        const retryAfter = parseInt(result.retryAfter || 90);
+        submitBtn.disabled        = false;
+        submitBtn.style.opacity   = '1';
+        submitBtn.style.background = '';
+        submitBtn.innerHTML       = originalHTML;
+        showRateLimitModal(retryAfter > 0 ? retryAfter : 90, hardBlocked);
 
-function escapeMarkdown(text) {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, '\\$&');
-}
+      } else {
+        // ❌ Error lain (validasi, spam, dsb)
+        throw new Error(result.error || 'Gagal mengirim. Coba lagi.');
+      }
 
-// ── Main handler ─────────────────────────────────────────────
-
-export default async function handler(req, res) {
-  const origin = req.headers['origin'] || '';
-
-  // CORS
-  if (ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
-
-  const clientIP = getClientIP(req);
-
-  // Origin check
-  if (!ALLOWED_ORIGINS.includes(origin)) {
-    console.warn(`[BLOCKED] Origin: "${origin}" | IP: ${clientIP}`);
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-
-  // Rate limit (shared via KV)
-  const rl = await checkRateLimit(clientIP);
-  if (!rl.allowed) {
-    const msg = rl.hardBlocked
-      ? `IP kamu diblokir selama 1 jam karena terlalu banyak percobaan.`
-      : `Terlalu banyak permintaan. Coba lagi dalam ${rl.retryAfter} detik.`;
-    console.warn(`[RATE LIMIT] IP: ${clientIP} | hard: ${rl.hardBlocked} | retry: ${rl.retryAfter}s`);
-    res.setHeader('Retry-After', rl.retryAfter);
-    return res.status(429).json({ error: msg, retryAfter: rl.retryAfter, hardBlocked: rl.hardBlocked });
-  }
-
-  const { name, message, website } = req.body;
-
-  // Honeypot
-  if (website && website.trim() !== '') {
-    console.warn(`[HONEYPOT] IP: ${clientIP}`);
-    return res.status(200).json({ success: true });
-  }
-
-  // Validasi input
-  if (!message || typeof message !== 'string' || message.trim().length < 5) {
-    return res.status(400).json({ error: 'Pesan minimal 5 karakter.' });
-  }
-  if (message.trim().length > 1000) {
-    return res.status(400).json({ error: 'Pesan maksimal 1000 karakter.' });
-  }
-
-  // Spam filter
-  if (containsSpam(message) || (name && containsSpam(name))) {
-    console.warn(`[SPAM] IP: ${clientIP}`);
-    return res.status(400).json({ error: 'Pesan mengandung konten yang tidak diizinkan.' });
-  }
-
-  // Env vars
-  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-  const CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
-  if (!BOT_TOKEN || !CHAT_ID) {
-    return res.status(500).json({ error: 'Konfigurasi server belum lengkap.' });
-  }
-
-  // Kirim ke Telegram
-  const safeName    = name ? escapeMarkdown(name.trim().substring(0, 100)) : 'Anonim';
-  const safeMessage = escapeMarkdown(message.trim());
-  const timestamp   = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-
-  const text = [
-    '📬 *Feedback Baru*', '',
-    `👤 *Nama:* ${safeName}`,
-    `💬 *Pesan:* ${safeMessage}`, '',
-    `🌐 *IP:* \`${clientIP}\``,
-    `🕐 *Waktu:* ${timestamp}`,
-  ].join('\n');
-
-  try {
-    const tgRes  = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'Markdown' }),
-    });
-    const tgData = await tgRes.json();
-
-    if (tgData.ok) return res.status(200).json({ success: true });
-    console.error('[TELEGRAM] Error:', tgData);
-    return res.status(500).json({ error: 'Gagal mengirim pesan ke Telegram.' });
-  } catch (err) {
-    console.error('[TELEGRAM] Fetch error:', err);
-    return res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
-  }
-}
+    } catch (error) {
+      submitBtn.style.background = '#ba1a1a';
+      submitBtn.style.opacity    = '1';
+      submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
+      console.error('Feedback error:', error);
+      setTimeout(() => {
+        submitBtn.disabled         = false;
+        submitBtn.style.background = '';
+        submitBtn.style.opacity    = '1';
+        submitBtn.innerHTML        = originalHTML;
+      }, 4000);
+    }
+  });
+});
