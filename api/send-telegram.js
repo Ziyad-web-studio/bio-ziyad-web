@@ -1,15 +1,15 @@
 // ============================================================
 //  /api/send-telegram.js  —  Vercel Serverless API Route
-//  Security hardened: rate limit, honeypot, origin check,
-//  input validation, spam filter, env vars, IP logging
 // ============================================================
 
-// ── In-memory rate limiter
-const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 60 detik
-const RATE_LIMIT_MAX = 1;               // max 1 request per window
+const rateLimitMap = new Map(); // ip -> { count, windowStart, violations }
+const blockedIPs   = new Map(); // ip -> unblockAt (timestamp)
 
-// ── Spam keyword filter (case-insensitive)
+const WINDOW_MS        = 60 * 1000;  // window 60 detik
+const MAX_PER_WINDOW   = 1;          // max 1 request per window
+const MAX_VIOLATIONS   = 3;          // setelah 3x kena rate limit → hard block
+const HARD_BLOCK_MS    = 60 * 60 * 1000; // hard block 1 jam
+
 const SPAM_KEYWORDS = [
   'http', '.com', '.net', '.org', '.io',
   'bitcoin', 'crypto', 'casino', 'forex',
@@ -17,14 +17,11 @@ const SPAM_KEYWORDS = [
   'click here', 'free money', 'make money',
 ];
 
-// ── Allowed origins
 const ALLOWED_ORIGINS = [
   'https://ziyadbio.my.id',
 ];
 
-// ────────────────────────────────────────────────────────────
-//  Helpers
-// ────────────────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────
 
 function getClientIP(req) {
   return (
@@ -37,118 +34,123 @@ function getClientIP(req) {
 
 function checkRateLimit(ip) {
   const now = Date.now();
-  const entry = rateLimitMap.get(ip);
 
-  if (!entry || now - entry.timestamp > RATE_LIMIT_WINDOW_MS) {
-    rateLimitMap.set(ip, { count: 1, timestamp: now });
-    return { allowed: true, retryAfter: 0 };
+  // Cek hard block dulu
+  const blockedUntil = blockedIPs.get(ip);
+  if (blockedUntil) {
+    if (now < blockedUntil) {
+      const retryAfter = Math.ceil((blockedUntil - now) / 1000);
+      return { allowed: false, hardBlocked: true, retryAfter };
+    }
+    // Hard block expired, bersihkan
+    blockedIPs.delete(ip);
+    rateLimitMap.delete(ip);
   }
 
-  if (entry.count >= RATE_LIMIT_MAX) {
-    const retryAfter = Math.ceil(
-      (RATE_LIMIT_WINDOW_MS - (now - entry.timestamp)) / 1000
-    );
-    return { allowed: false, retryAfter };
+  const entry = rateLimitMap.get(ip) || { count: 0, windowStart: now, violations: 0 };
+
+  // Reset window jika sudah lewat
+  if (now - entry.windowStart > WINDOW_MS) {
+    entry.count       = 0;
+    entry.windowStart = now;
   }
 
   entry.count++;
+
+  if (entry.count > MAX_PER_WINDOW) {
+    entry.violations++;
+    rateLimitMap.set(ip, entry);
+
+    // Jika sudah terlalu banyak violation → hard block 1 jam
+    if (entry.violations >= MAX_VIOLATIONS) {
+      blockedIPs.set(ip, now + HARD_BLOCK_MS);
+      console.warn(`[HARD BLOCK] IP: ${ip} diblokir 1 jam (${entry.violations} violations)`);
+      return { allowed: false, hardBlocked: true, retryAfter: 3600 };
+    }
+
+    const retryAfter = Math.ceil((WINDOW_MS - (now - entry.windowStart)) / 1000);
+    return { allowed: false, hardBlocked: false, retryAfter };
+  }
+
   rateLimitMap.set(ip, entry);
-  return { allowed: true, retryAfter: 0 };
+  return { allowed: true };
 }
 
 function containsSpam(text) {
   const lower = text.toLowerCase();
-  return SPAM_KEYWORDS.some((kw) => lower.includes(kw));
+  return SPAM_KEYWORDS.some(kw => lower.includes(kw));
 }
 
 function escapeMarkdown(text) {
   return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, '\\$&');
 }
 
-// ────────────────────────────────────────────────────────────
-//  Main handler
-// ────────────────────────────────────────────────────────────
+// ── Main handler ─────────────────────────────────────────────
 
 export default async function handler(req, res) {
-
   const origin = req.headers['origin'] || '';
 
-  // ── CORS headers — wajib agar browser tidak throw Error {}
+  // CORS
   if (ALLOWED_ORIGINS.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Preflight request dari browser
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-
-  // 1. Method check
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
   const clientIP = getClientIP(req);
 
-  // 2. Origin validation
+  // Origin check
   if (!ALLOWED_ORIGINS.includes(origin)) {
-    console.warn(`[BLOCKED] Invalid origin: "${origin}" | IP: ${clientIP}`);
+    console.warn(`[BLOCKED] Origin: "${origin}" | IP: ${clientIP}`);
     return res.status(403).json({ error: 'Forbidden' });
   }
 
-  // 3. Rate limiting berbasis IP
-  const { allowed, retryAfter } = checkRateLimit(clientIP);
-  if (!allowed) {
-    console.warn(`[RATE LIMIT] IP: ${clientIP} — retry in ${retryAfter}s`);
-    res.setHeader('Retry-After', retryAfter);
-    return res.status(429).json({
-      error: `Terlalu banyak permintaan. Coba lagi dalam ${retryAfter} detik.`,
-    });
+  // Rate limit + hard block
+  const rl = checkRateLimit(clientIP);
+  if (!rl.allowed) {
+    const msg = rl.hardBlocked
+      ? `IP kamu diblokir selama 1 jam karena terlalu banyak percobaan.`
+      : `Terlalu banyak permintaan. Coba lagi dalam ${rl.retryAfter} detik.`;
+    console.warn(`[RATE LIMIT] IP: ${clientIP} | hardBlocked: ${rl.hardBlocked} | retry: ${rl.retryAfter}s`);
+    res.setHeader('Retry-After', rl.retryAfter);
+    return res.status(429).json({ error: msg, retryAfter: rl.retryAfter, hardBlocked: rl.hardBlocked });
   }
 
   const { name, message, website } = req.body;
 
-  // 4. Honeypot anti-bot
+  // Honeypot
   if (website && website.trim() !== '') {
-    console.warn(`[HONEYPOT] Bot terdeteksi | IP: ${clientIP}`);
-    return res.status(200).json({ success: true }); // silent reject
+    console.warn(`[HONEYPOT] IP: ${clientIP}`);
+    return res.status(200).json({ success: true });
   }
 
-  // 5. Validasi input
-  if (!message || typeof message !== 'string') {
-    return res.status(400).json({ error: 'Pesan wajib diisi.' });
-  }
-
-  const trimmedMessage = message.trim();
-
-  if (trimmedMessage.length < 5) {
+  // Validasi input
+  if (!message || typeof message !== 'string' || message.trim().length < 5) {
     return res.status(400).json({ error: 'Pesan minimal 5 karakter.' });
   }
-
-  if (trimmedMessage.length > 1000) {
+  if (message.trim().length > 1000) {
     return res.status(400).json({ error: 'Pesan maksimal 1000 karakter.' });
   }
 
-  // 6. Spam keyword filter
-  if (containsSpam(trimmedMessage) || (name && containsSpam(name))) {
-    console.warn(`[SPAM] Ditolak | IP: ${clientIP} | "${trimmedMessage.substring(0, 60)}"`);
+  // Spam filter
+  if (containsSpam(message) || (name && containsSpam(name))) {
+    console.warn(`[SPAM] IP: ${clientIP}`);
     return res.status(400).json({ error: 'Pesan mengandung konten yang tidak diizinkan.' });
   }
 
-  // 7. Env vars
+  // Env vars
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
-
   if (!BOT_TOKEN || !CHAT_ID) {
-    console.error('[CONFIG] TELEGRAM_BOT_TOKEN atau TELEGRAM_CHAT_ID belum disetel');
     return res.status(500).json({ error: 'Konfigurasi server belum lengkap.' });
   }
 
-  // 8. Bangun pesan Telegram
+  // Kirim ke Telegram
   const safeName    = name ? escapeMarkdown(name.trim().substring(0, 100)) : 'Anonim';
-  const safeMessage = escapeMarkdown(trimmedMessage);
+  const safeMessage = escapeMarkdown(message.trim());
   const timestamp   = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
 
   const text = [
@@ -161,31 +163,19 @@ export default async function handler(req, res) {
     `🕐 *Waktu:* ${timestamp}`,
   ].join('\n');
 
-  // 9. Kirim ke Telegram
   try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text,
-          parse_mode: 'Markdown',
-        }),
-      }
-    );
+    const tgRes  = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'Markdown' }),
+    });
+    const tgData = await tgRes.json();
 
-    const data = await response.json();
-
-    if (data.ok) {
-      return res.status(200).json({ success: true });
-    } else {
-      console.error('[TELEGRAM] API error:', data);
-      return res.status(500).json({ error: 'Gagal mengirim pesan ke Telegram.' });
-    }
-  } catch (error) {
-    console.error('[TELEGRAM] Fetch error:', error);
+    if (tgData.ok) return res.status(200).json({ success: true });
+    console.error('[TELEGRAM] Error:', tgData);
+    return res.status(500).json({ error: 'Gagal mengirim pesan ke Telegram.' });
+  } catch (err) {
+    console.error('[TELEGRAM] Fetch error:', err);
     return res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
   }
 }
