@@ -432,6 +432,11 @@ tailwind.config = {
 
       <!-- FORM (disembunyikan kalau limit habis) -->
       <form id="feedback-form" class="flex flex-col gap-4 text-left">
+        <!-- Honeypot: hidden dari manusia, bot akan mengisi ini -->
+        <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label for="fb-website">Website</label>
+          <input type="text" id="fb-website" name="website" tabindex="-1" autocomplete="off" placeholder="Leave this empty">
+        </div>
         <div class="flex flex-col gap-1.5">
           <label for="fb-name" class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Nama (Opsional)</label>
           <input type="text" id="fb-name" name="name" placeholder="Siapa namamu?"
@@ -454,13 +459,17 @@ tailwind.config = {
         <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#fef2f2;">
           <span class="material-symbols-outlined text-3xl" style="color:#ef4444;font-variation-settings:'FILL' 1;">block</span>
         </div>
-        <h3 class="font-headline-md text-headline-md text-on-surface">Batas Pengiriman Tercapai</h3>
+        <h3 class="font-headline-md text-headline-md text-on-surface">Feedback Terkirim!</h3>
         <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 max-w-xs leading-relaxed">
-          Kamu sudah mengirim 2 feedback. udah jangan spam lu.🗿
+          Feedback terkirim! Silakan tunggu sebentar sebelum mengirim lagi:
         </p>
+        <div class="w-full bg-slate-50 rounded-2xl px-6 py-4 border border-slate-200 flex flex-col items-center gap-1">
+          <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 mb-1">Tersisa</span>
+          <div id="fb-countdown" class="text-xl font-bold text-on-surface tracking-tight font-headline-md">--:--:--</div>
+        </div>
         <div class="flex items-center gap-2 bg-red-50 border border-red-200 rounded-full px-4 py-2 mt-1">
           <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse inline-block"></span>
-          <span class="font-label-caps text-label-caps text-red-600 uppercase tracking-wider">Limit 2/2 Tercapai</span>
+          <span class="font-label-caps text-label-caps text-red-600 uppercase tracking-wider">Cooldown Aktif</span>
         </div>
       </div>
     </div>
@@ -470,102 +479,157 @@ tailwind.config = {
 <script src="script.js"></script>
 
 <!-- ============================================================
-     ✅ FEEDBACK LIMIT - Max 2x submit, reset hanya dengan clear cache
+     ✅ FEEDBACK SYSTEM — Server-side secured
+     - Rate limit 1x/60s via IP di server (send-telegram.js)
+     - Honeypot anti-bot (field #fb-website)
+     - Frontend limit tetap ada sebagai UX layer (bukan garis pertahanan utama)
+     - Semua validasi utama dilakukan di server
      ============================================================ -->
 <script>
-(function() {
-  var LIMIT = 2;
-  var KEY = 'zws_feedback_count';
+(function () {
+  var BLOCK_KEY  = 'zws_fb_block_until';
+  var BLOCK_DURATION_MS = 60 * 1000; // 60 detik — sesuai server rate limit
 
-  function getCount() {
-    return parseInt(localStorage.getItem(KEY) || '0', 10);
+  // ── Helpers ──────────────────────────────────────────────
+
+  function isBlocked() {
+    var until = parseInt(localStorage.getItem(BLOCK_KEY) || '0', 10);
+    if (!until) return false;
+    if (Date.now() < until) return true;
+    localStorage.removeItem(BLOCK_KEY);
+    return false;
   }
 
-  function setCount(n) {
-    localStorage.setItem(KEY, n);
+  function getBlockedUntil() {
+    return parseInt(localStorage.getItem(BLOCK_KEY) || '0', 10);
   }
 
-  function updateUI() {
-    var count = getCount();
-    var form = document.getElementById('feedback-form');
-    var blocked = document.getElementById('fb-blocked');
-    var banner = document.getElementById('fb-limit-banner');
-    var bannerText = document.getElementById('fb-limit-text');
-
-    if (!form) return;
-
-    if (count >= LIMIT) {
-      // Sembunyikan form, tampilkan blocked state
-      form.classList.add('hidden');
-      blocked.classList.remove('hidden');
-      blocked.classList.add('flex');
-      banner.classList.add('hidden');
-    } else if (count > 0) {
-      // Masih bisa kirim, tapi tampilkan sisa kuota
-      var sisa = LIMIT - count;
-      banner.classList.remove('hidden');
-      banner.classList.add('flex');
-      bannerText.textContent = 'Kamu sudah mengirim ' + count + ' feedback. Sisa kuota: ' + sisa + 'x lagi.';
-    }
+  function setBlocked() {
+    localStorage.setItem(BLOCK_KEY, Date.now() + BLOCK_DURATION_MS);
   }
 
-  // Jalankan updateUI setiap kali view-support dibuka
-  var supportView = document.getElementById('view-support');
-  if (supportView) {
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(m) {
-        if (m.attributeName === 'class') {
-          if (supportView.classList.contains('active')) {
-            updateUI();
-          }
-        }
-      });
-    });
-    observer.observe(supportView, { attributes: true });
+  function formatSisa(ms) {
+    var totalSec = Math.max(0, Math.floor(ms / 1000));
+    var jam      = Math.floor(totalSec / 3600);
+    var menit    = Math.floor((totalSec % 3600) / 60);
+    var detik    = totalSec % 60;
+    if (jam > 0) return jam + ' jam ' + menit + ' menit ' + detik + ' detik';
+    if (menit > 0) return menit + ' menit ' + detik + ' detik';
+    return detik + ' detik';
   }
 
-  // Handle submit
-  var feedbackForm = document.getElementById('feedback-form');
-  if (feedbackForm) {
-    feedbackForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+  var countdown = null;
 
-      var count = getCount();
-      if (count >= LIMIT) {
+  function startCountdown() {
+    var timerEl = document.getElementById('fb-countdown');
+    if (!timerEl) return;
+    if (countdown) clearInterval(countdown);
+    countdown = setInterval(function () {
+      var sisa = getBlockedUntil() - Date.now();
+      if (sisa <= 0) {
+        clearInterval(countdown);
+        countdown = null;
+        localStorage.removeItem(BLOCK_KEY);
         updateUI();
         return;
       }
+      timerEl.textContent = formatSisa(sisa);
+    }, 1000);
+  }
+
+  function updateUI() {
+    var form    = document.getElementById('feedback-form');
+    var blocked = document.getElementById('fb-blocked');
+    var banner  = document.getElementById('fb-limit-banner');
+    if (!form) return;
+
+    if (banner) banner.classList.add('hidden');
+
+    if (isBlocked()) {
+      form.classList.add('hidden');
+      blocked.classList.remove('hidden');
+      blocked.classList.add('flex');
+      startCountdown();
+    } else {
+      form.classList.remove('hidden');
+      blocked.classList.add('hidden');
+      blocked.classList.remove('flex');
+      if (countdown) { clearInterval(countdown); countdown = null; }
+    }
+  }
+
+  // ── Observe view-support becoming active ─────────────────
+
+  var supportView = document.getElementById('view-support');
+  if (supportView) {
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (m) {
+        if (m.attributeName === 'class' && supportView.classList.contains('active')) {
+          updateUI();
+        }
+      });
+    }).observe(supportView, { attributes: true });
+  }
+
+  // ── Form submit handler ───────────────────────────────────
+
+  var feedbackForm = document.getElementById('feedback-form');
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (isBlocked()) { updateUI(); return; }
 
       var submitBtn = document.getElementById('fb-submit');
+      var nameVal   = (document.getElementById('fb-name')?.value    || '').trim();
+      var msgVal    = (document.getElementById('fb-message')?.value || '').trim();
+      var honeypot  = (document.getElementById('fb-website')?.value || '').trim();
+
+      // Client-side: validasi panjang pesan minimal
+      if (msgVal.length < 5) {
+        document.getElementById('fb-message').focus();
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span>Mengirim...</span>';
 
-      // Simulasi kirim (ganti dengan fetch API jika ada backend)
-      setTimeout(function() {
-        var newCount = count + 1;
-        setCount(newCount);
+      fetch('/api/send-telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameVal,
+          message: msgVal,
+          website: honeypot,  // dikirim ke server, server yang memfilter
+        }),
+      })
+        .then(function (res) { return res.json().then(function (d) { return { status: res.status, data: d }; }); })
+        .then(function (result) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Kirim Feedback</span><span class="material-symbols-outlined" style="font-size:20px;">send</span>';
 
-        // Reset form
-        feedbackForm.reset();
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Kirim Feedback</span><span class="material-symbols-outlined" style="font-size:20px;">send</span>';
-
-        // Update tampilan
-        updateUI();
-
-        // Notif sukses sementara
-        if (newCount < LIMIT) {
-          var bannerText = document.getElementById('fb-limit-text');
-          var banner = document.getElementById('fb-limit-banner');
-          banner.classList.remove('hidden');
-          banner.classList.add('flex');
-          bannerText.textContent = 'Feedback terkirim! Sisa kuota: ' + (LIMIT - newCount) + 'x lagi.';
-        }
-      }, 800);
+          if (result.status === 200 && result.data.success) {
+            // Sukses — reset form & set cooldown frontend
+            feedbackForm.reset();
+            setBlocked();
+            updateUI();
+          } else if (result.status === 429) {
+            // Rate limit dari server — sinkronkan UI ke blocked
+            setBlocked();
+            updateUI();
+          } else {
+            // Error lain (spam filter, validasi, dsb)
+            var msg = result.data?.error || 'Terjadi kesalahan. Coba lagi.';
+            alert(msg);
+          }
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Kirim Feedback</span><span class="material-symbols-outlined" style="font-size:20px;">send</span>';
+          alert('Gagal terhubung ke server. Periksa koneksi internetmu.');
+        });
     });
   }
 
-  // Init saat halaman pertama load
   document.addEventListener('DOMContentLoaded', updateUI);
 })();
 </script>
