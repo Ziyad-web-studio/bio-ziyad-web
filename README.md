@@ -16,6 +16,7 @@ Sebuah web app satu halaman (single‑page) yang simpel dan elegan, berfungsi se
 - [Struktur File](#file-structure)
 - [Memulai (Development Lokal)](#getting-started-local-development)
 - [Kustomisasi](#customization)
+- [Feedback Form (Telegram Setup)](#feedback-form-telegram-setup)
 - [Opsi Deployment](#deployment-options)
 - [Troubleshooting](#troubleshooting)
 - [Lisensi](#license)
@@ -176,6 +177,34 @@ Semua teks dan link ada di dalam `index.html`. Edit bagian yang relevan:
 ### Mengganti Favicon
 
 Ganti file di dalam `assets/` dengan milikmu sendiri, pertahankan nama file yang sama, atau update tag `<link>` di `<head>` pada `index.html` agar mengarah ke path yang baru.
+
+---
+
+## Feedback Form (Telegram Setup)
+
+Proyek ini dilengkapi dengan form feedback kustom yang mengirimkan pesan langsung ke Telegram kamu. Untuk keamanan, sistem ini menggunakan **Vercel Serverless Functions** agar Token Bot Telegram tidak bocor ke publik.
+
+### Cara Menyiapkan (Ziyad's Checklist):
+
+1.  **Buat Bot Telegram:**
+    - Chat ke [@BotFather](https://t.me/botfather) di Telegram.
+    - Gunakan perintah `/newbot` dan ikuti langkahnya sampai dapat **API Token** (contoh: `123456:ABC-DEF...`).
+2.  **Dapatkan Chat ID Kamu:**
+    - Chat ke [@userinfobot](https://t.me/userinfobot) di Telegram.
+    - Bot akan memberikan angka **Id** (contoh: `987654321`).
+3.  **Seting di Vercel Dashboard:**
+    - Masuk ke dashboard proyekmu di Vercel.
+    - Pergi ke **Settings** > **Environment Variables**.
+    - Tambahkan dua variabel baru:
+        - `TELEGRAM_BOT_TOKEN`: Isi dengan token dari BotFather.
+        - `TELEGRAM_CHAT_ID`: Isi dengan Chat ID dari userinfobot.
+4.  **Simpan & Redeploy:**
+    - Setelah variabel disimpan, lakukan *redeploy* atau push commit baru ke GitHub agar Vercel mengenali perubahan variabel tersebut.
+
+### Penjelasan Teknis:
+
+- **Frontend:** `index.html` memiliki `<form id="feedback-form">`. Saat dikirim, JavaScript di `script.js` akan mengirim data via `fetch()` ke endpoint `/api/send-telegram`.
+- **Backend (Serverless):** File `api/send-telegram.js` adalah fungsi Node.js yang berjalan di server Vercel. Fungsi ini bertugas mengambil token rahasia dari environment variables dan mengirimkan pesan ke API Telegram. Dengan cara ini, orang lain tidak bisa mencuri token bot kamu melalui "Inspect Element".
 
 ---
 

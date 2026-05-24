@@ -194,12 +194,10 @@ tailwind.config = {
   <footer class="bg-transparent pb-10 mt-auto w-full">
     <div class="flex flex-col items-center gap-3 max-w-[640px] mx-auto w-full px-6">
       <div class="flex justify-center gap-6">
-        <a class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors" href="#">Privacy</a>
-        <a class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors" href="#">Terms</a>
-        <a class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors" href="#">Support</a>
+        <button onclick="goTo('view-support', 'slide-in', '#support')" class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors">Support</button>
       </div>
       <div class="text-sm font-bold text-slate-700 font-headline-md">Ziyad Web Studio</div>
-      <div class="font-label-sm text-label-sm text-slate-500">© 2025 Ziyad Web Studio. All rights reserved.</div>
+      <div class="font-label-sm text-label-sm text-slate-500">© 2026 Ziyad Web Studio. All rights reserved.</div>
     </div>
   </footer>
 </div>
@@ -398,6 +396,50 @@ tailwind.config = {
           <span class="material-symbols-outlined" style="font-size:18px;">description</span>
         </a>
       </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===== VIEW SUPPORT ===== -->
+<div id="view-support" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Support & Feedback</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 text-center">
+      <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4 text-indigo-500">
+        <span class="material-symbols-outlined" style="font-size:32px;">forum</span>
+      </div>
+      <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Bantu Aku Berkembang</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 leading-relaxed mb-6">
+        Punya saran, kritik, atau ide menarik? Kasih tahu aku supaya proyek dan skill-ku bisa jadi lebih baik lagi! Dukungan berupa masukan sangat berarti buatku.
+      </p>
+      
+      <form id="feedback-form" class="flex flex-col gap-4 text-left">
+        <div class="flex flex-col gap-1.5">
+          <label for="fb-name" class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Nama (Opsional)</label>
+          <input type="text" id="fb-name" name="name" placeholder="Siapa namamu?" 
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-sm">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="fb-message" class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Pesan / Saran</label>
+          <textarea id="fb-message" name="message" placeholder="Tulis masukanmu di sini..." required
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-sm h-32 resize-none"></textarea>
+        </div>
+        <button type="submit" id="fb-submit" 
+          class="w-full py-4 bg-primary text-white rounded-3xl font-bold text-body-lg shadow-md hover:translate-y-[-2px] active:scale-[0.95] transition-all flex justify-center items-center gap-2 mt-2 overflow-hidden">
+          <span>Kirim Feedback</span>
+          <span class="material-symbols-outlined" style="font-size:20px;">send</span>
+        </button>
+      </form>
     </div>
   </main>
 </div>

@@ -19,7 +19,9 @@ const routeMap = {
   '#category': 'view-category',
   '#code': 'view-code',
   '#desain': 'view-files',
-  '#ai': 'view-ai'
+  '#ai': 'view-ai',
+  '#antigravity': 'view-antigravity',
+  '#support': 'view-support'
 };
 
 function navigateToHash(hash) {
@@ -143,3 +145,62 @@ function fallbackShare() {
     prompt('Salin URL ini dan bagikan:', window.location.href);
   });
 }
+
+/* ── FEEDBACK FORM ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('feedback-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('fb-submit');
+    const originalContent = submitBtn.innerHTML;
+
+    // Loading state
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.8';
+    submitBtn.innerHTML = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
+
+    const formData = new FormData(form);
+    const payload = {
+      name: formData.get('name'),
+      message: formData.get('message')
+    };
+
+    try {
+      const response = await fetch('/api/send-telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        submitBtn.style.background = '#16a34a'; // Success green
+        submitBtn.style.opacity = '1';
+        submitBtn.innerHTML = '<span>Terkirim!</span><span class="material-symbols-outlined" style="font-size:20px;">check_circle</span>';
+        form.reset();
+        
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.style.background = '';
+          submitBtn.innerHTML = originalContent;
+        }, 4000);
+      } else {
+        throw new Error(result.error || 'Gagal mengirim');
+      }
+    } catch (error) {
+      submitBtn.style.background = '#ba1a1a'; // Error red
+      submitBtn.style.opacity = '1';
+      submitBtn.innerHTML = `<span>Gagal!</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
+      console.error('Feedback error:', error);
+      
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+        submitBtn.innerHTML = originalContent;
+      }, 4000);
+    }
+  });
+});
