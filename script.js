@@ -287,137 +287,151 @@ function showRateLimitModal(seconds, hardBlocked = false) {
   }, 1000);
 }
 
-/* ── FEEDBACK FORM ── */
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('feedback-form');
-  if (!form) return;
+/* ── FEEDBACK FORM + TURNSTILE ── */
+(function () {
+  let turnstileToken = '';
+  let widgetId       = null;
 
-  // Container Turnstile di luar view-support agar selalu visible di DOM
-  const tsContainer = document.createElement('div');
-  tsContainer.id = 'turnstile-container';
-  tsContainer.style.cssText = 'position:fixed;left:-9999px;top:0;width:300px;height:65px;';
-  document.body.appendChild(tsContainer);
-
-  let turnstileToken  = '';
-  let widgetId        = null;
-  let scriptLoaded    = false;
+  // Expose ke window untuk debug
+  window._ts = { getToken: () => turnstileToken, getWidget: () => widgetId };
 
   function renderTurnstile() {
-    if (!window.turnstile || widgetId !== null) return;
-    widgetId = window.turnstile.render('#turnstile-container', {
+    if (!window.turnstile) return;
+    const container = document.getElementById('turnstile-container');
+    if (!container) return;
+
+    // Hapus widget lama
+    if (widgetId !== null) {
+      try { window.turnstile.remove(widgetId); } catch (e) {}
+      widgetId = null;
+    }
+    turnstileToken = '';
+
+    widgetId = window.turnstile.render(container, {
       sitekey: '0x4AAAAAADVk_HhQ2E8lQoM1',
-      callback: (token) => { turnstileToken = token; },
-      'expired-callback': () => { turnstileToken = ''; },
-      'error-callback': () => { turnstileToken = ''; },
+      theme: 'light',
+      callback:           (token) => { turnstileToken = token; console.log('[TS] Token siap ✅'); },
+      'expired-callback': ()      => { console.log('[TS] Token expired, re-render'); renderTurnstile(); },
+      'error-callback':   ()      => { console.log('[TS] Error, retry...'); setTimeout(renderTurnstile, 2000); },
     });
+    console.log('[TS] Widget rendered, id:', widgetId);
   }
 
-  // Load Turnstile script sekali
-  function loadTurnstileScript() {
-    if (scriptLoaded) { renderTurnstile(); return; }
-    scriptLoaded = true;
-    const s = document.createElement('script');
-    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    s.async = true;
+  function loadAndRender() {
+    if (window.turnstile) {
+      renderTurnstile();
+      return;
+    }
+    if (document.getElementById('ts-script')) return; // sudah loading
+    const s  = document.createElement('script');
+    s.id     = 'ts-script';
+    s.src    = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async  = true;
     s.onload = renderTurnstile;
     document.head.appendChild(s);
+    console.log('[TS] Script loading...');
   }
 
-  // Render saat view-support aktif (bukan saat halaman load)
-  const supportView = document.getElementById('view-support');
-  if (supportView) {
-    new MutationObserver((mutations) => {
-      mutations.forEach((m) => {
-        if (m.attributeName === 'class' && supportView.classList.contains('active')) {
-          loadTurnstileScript();
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('feedback-form');
+    if (!form) return;
+
+    // Inject Turnstile container di dalam form, sebelum tombol submit
+    const submitBtn = document.getElementById('fb-submit');
+    const container = document.createElement('div');
+    container.id = 'turnstile-container';
+    container.style.cssText = 'margin-bottom: 4px;';
+    form.insertBefore(container, submitBtn);
+
+    // Render saat view-support aktif
+    const supportView = document.getElementById('view-support');
+    if (supportView) {
+      new MutationObserver(() => {
+        if (supportView.classList.contains('active')) {
+          loadAndRender();
         }
-      });
-    }).observe(supportView, { attributes: true });
+      }).observe(supportView, { attributes: true, attributeFilter: ['class'] });
 
-    // Jika langsung buka #support saat load
-    if (supportView.classList.contains('active')) loadTurnstileScript();
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const submitBtn    = document.getElementById('fb-submit');
-    const originalHTML = submitBtn.innerHTML;
-    const nameVal      = (form.querySelector('[name="name"]')?.value    || '').trim();
-    const messageVal   = (form.querySelector('[name="message"]')?.value || '').trim();
-    const honeypotVal  = (form.querySelector('[name="website"]')?.value || '').trim();
-
-    // Validasi panjang pesan
-    if (messageVal.length < 5) {
-      const textarea = form.querySelector('[name="message"]');
-      textarea.focus();
-      textarea.style.borderColor = '#ba1a1a';
-      setTimeout(() => textarea.style.borderColor = '', 2000);
-      return;
+      // Jika sudah aktif saat load (direct URL #support)
+      if (supportView.classList.contains('active')) loadAndRender();
     }
 
-    // Token belum siap
-    if (!turnstileToken) {
-      submitBtn.style.background = '#ba1a1a';
-      submitBtn.innerHTML = '<span>Verifikasi belum siap, coba lagi</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>';
-      setTimeout(() => {
-        submitBtn.style.background = '';
-        submitBtn.innerHTML        = originalHTML;
-      }, 3000);
-      return;
-    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    // Loading state
-    submitBtn.disabled      = true;
-    submitBtn.style.opacity = '0.8';
-    submitBtn.innerHTML     = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
+      const originalHTML = submitBtn.innerHTML;
+      const nameVal      = (form.querySelector('[name="name"]')?.value    || '').trim();
+      const messageVal   = (form.querySelector('[name="message"]')?.value || '').trim();
+      const honeypotVal  = (form.querySelector('[name="website"]')?.value || '').trim();
 
-    try {
-      const response = await fetch('/api/send-telegram', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: nameVal, message: messageVal, website: honeypotVal, turnstileToken })
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        submitBtn.disabled         = false;
-        submitBtn.style.opacity    = '1';
-        submitBtn.style.background = '';
-        submitBtn.innerHTML        = originalHTML;
-        form.reset();
-        turnstileToken = '';
-        window.turnstile?.reset(widgetId);
-        showRateLimitModal(90);
-
-      } else if (response.status === 429) {
-        const retryAfter = parseInt(result.retryAfter || 90);
-        submitBtn.disabled         = false;
-        submitBtn.style.opacity    = '1';
-        submitBtn.style.background = '';
-        submitBtn.innerHTML        = originalHTML;
-        turnstileToken = '';
-        window.turnstile?.reset(widgetId);
-        showRateLimitModal(retryAfter > 0 ? retryAfter : 90, result.hardBlocked || false);
-
-      } else {
-        throw new Error(result.error || 'Gagal mengirim. Coba lagi.');
+      // Validasi panjang
+      if (messageVal.length < 5) {
+        const textarea = form.querySelector('[name="message"]');
+        textarea.focus();
+        textarea.style.borderColor = '#ba1a1a';
+        setTimeout(() => textarea.style.borderColor = '', 2000);
+        return;
       }
 
-    } catch (error) {
-      submitBtn.style.background = '#ba1a1a';
-      submitBtn.style.opacity    = '1';
-      submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
-      console.error('Feedback error:', error);
-      turnstileToken = '';
-      window.turnstile?.reset(widgetId);
-      setTimeout(() => {
-        submitBtn.disabled         = false;
-        submitBtn.style.background = '';
+      // Token belum siap
+      if (!turnstileToken) {
+        submitBtn.style.background = '#ba1a1a';
+        submitBtn.innerHTML = '<span>Verifikasi belum siap, tunggu 2 detik lalu coba lagi</span><span class="material-symbols-outlined" style="font-size:18px;">error</span>';
+        setTimeout(() => { submitBtn.style.background = ''; submitBtn.innerHTML = originalHTML; }, 3000);
+        return;
+      }
+
+      submitBtn.disabled      = true;
+      submitBtn.style.opacity = '0.8';
+      submitBtn.innerHTML     = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
+
+      const tokenToSend = turnstileToken;
+      turnstileToken = ''; // Kosongkan langsung agar tidak bisa dipakai 2x
+
+      try {
+        const response = await fetch('/api/send-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: nameVal, message: messageVal, website: honeypotVal, turnstileToken: tokenToSend })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          submitBtn.disabled         = false;
+          submitBtn.style.opacity    = '1';
+          submitBtn.style.background = '';
+          submitBtn.innerHTML        = originalHTML;
+          form.reset();
+          renderTurnstile(); // generate token baru
+          showRateLimitModal(90);
+
+        } else if (response.status === 429) {
+          const retryAfter = parseInt(result.retryAfter || 90);
+          submitBtn.disabled         = false;
+          submitBtn.style.opacity    = '1';
+          submitBtn.style.background = '';
+          submitBtn.innerHTML        = originalHTML;
+          renderTurnstile();
+          showRateLimitModal(retryAfter > 0 ? retryAfter : 90, result.hardBlocked || false);
+
+        } else {
+          throw new Error(result.error || 'Gagal mengirim. Coba lagi.');
+        }
+
+      } catch (error) {
+        submitBtn.style.background = '#ba1a1a';
         submitBtn.style.opacity    = '1';
-        submitBtn.innerHTML        = originalHTML;
-      }, 4000);
-    }
+        submitBtn.innerHTML = `<span>${error.message || 'Gagal!'}</span><span class="material-symbols-outlined" style="font-size:20px;">error</span>`;
+        console.error('Feedback error:', error);
+        renderTurnstile();
+        setTimeout(() => {
+          submitBtn.disabled         = false;
+          submitBtn.style.background = '';
+          submitBtn.style.opacity    = '1';
+          submitBtn.innerHTML        = originalHTML;
+        }, 4000);
+      }
+    });
   });
-});
+})();
