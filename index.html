@@ -414,6 +414,13 @@ tailwind.config = {
     </div>
   </header>
   <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+
+    <!-- LIMIT BANNER (muncul kalau sudah kirim) -->
+    <div id="fb-limit-banner" class="hidden w-full bg-amber-50 border border-amber-200 rounded-2xl px-5 py-3 flex items-center gap-3">
+      <span class="material-symbols-outlined text-amber-500" style="font-size:20px;">info</span>
+      <span id="fb-limit-text" class="font-body-sm text-body-sm text-amber-700"></span>
+    </div>
+
     <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 text-center">
       <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4 text-indigo-500">
         <span class="material-symbols-outlined" style="font-size:32px;">forum</span>
@@ -422,11 +429,12 @@ tailwind.config = {
       <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 leading-relaxed mb-6">
         Punya saran, kritik, atau ide menarik? Kasih tahu aku supaya proyek dan skill-ku bisa jadi lebih baik lagi! Dukungan berupa masukan sangat berarti buatku.
       </p>
-      
+
+      <!-- FORM (disembunyikan kalau limit habis) -->
       <form id="feedback-form" class="flex flex-col gap-4 text-left">
         <div class="flex flex-col gap-1.5">
           <label for="fb-name" class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60 px-1">Nama (Opsional)</label>
-          <input type="text" id="fb-name" name="name" placeholder="Siapa namamu?" 
+          <input type="text" id="fb-name" name="name" placeholder="Siapa namamu?"
             class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-sm">
         </div>
         <div class="flex flex-col gap-1.5">
@@ -434,17 +442,133 @@ tailwind.config = {
           <textarea id="fb-message" name="message" placeholder="Tulis masukanmu di sini..." required
             class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-3xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-sm h-32 resize-none"></textarea>
         </div>
-        <button type="submit" id="fb-submit" 
+        <button type="submit" id="fb-submit"
           class="w-full py-4 bg-primary text-white rounded-3xl font-bold text-body-lg shadow-md hover:translate-y-[-2px] active:scale-[0.95] transition-all flex justify-center items-center gap-2 mt-2 overflow-hidden">
           <span>Kirim Feedback</span>
           <span class="material-symbols-outlined" style="font-size:20px;">send</span>
         </button>
       </form>
+
+      <!-- BLOCKED STATE (muncul kalau limit habis) -->
+      <div id="fb-blocked" class="hidden flex flex-col items-center gap-4 py-2">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#fef2f2;">
+          <span class="material-symbols-outlined text-3xl" style="color:#ef4444;font-variation-settings:'FILL' 1;">block</span>
+        </div>
+        <h3 class="font-headline-md text-headline-md text-on-surface">Batas Pengiriman Tercapai</h3>
+        <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 max-w-xs leading-relaxed">
+          Kamu sudah mengirim 2 feedback. Hapus cache browser untuk bisa mengirim lagi.
+        </p>
+        <div class="flex items-center gap-2 bg-red-50 border border-red-200 rounded-full px-4 py-2 mt-1">
+          <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse inline-block"></span>
+          <span class="font-label-caps text-label-caps text-red-600 uppercase tracking-wider">Limit 2/2 Tercapai</span>
+        </div>
+      </div>
     </div>
   </main>
 </div>
 
 <script src="script.js"></script>
+
+<!-- ============================================================
+     ✅ FEEDBACK LIMIT - Max 2x submit, reset hanya dengan clear cache
+     ============================================================ -->
+<script>
+(function() {
+  var LIMIT = 2;
+  var KEY = 'zws_feedback_count';
+
+  function getCount() {
+    return parseInt(localStorage.getItem(KEY) || '0', 10);
+  }
+
+  function setCount(n) {
+    localStorage.setItem(KEY, n);
+  }
+
+  function updateUI() {
+    var count = getCount();
+    var form = document.getElementById('feedback-form');
+    var blocked = document.getElementById('fb-blocked');
+    var banner = document.getElementById('fb-limit-banner');
+    var bannerText = document.getElementById('fb-limit-text');
+
+    if (!form) return;
+
+    if (count >= LIMIT) {
+      // Sembunyikan form, tampilkan blocked state
+      form.classList.add('hidden');
+      blocked.classList.remove('hidden');
+      blocked.classList.add('flex');
+      banner.classList.add('hidden');
+    } else if (count > 0) {
+      // Masih bisa kirim, tapi tampilkan sisa kuota
+      var sisa = LIMIT - count;
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+      bannerText.textContent = 'Kamu sudah mengirim ' + count + ' feedback. Sisa kuota: ' + sisa + 'x lagi.';
+    }
+  }
+
+  // Jalankan updateUI setiap kali view-support dibuka
+  var supportView = document.getElementById('view-support');
+  if (supportView) {
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.attributeName === 'class') {
+          if (supportView.classList.contains('active')) {
+            updateUI();
+          }
+        }
+      });
+    });
+    observer.observe(supportView, { attributes: true });
+  }
+
+  // Handle submit
+  var feedbackForm = document.getElementById('feedback-form');
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var count = getCount();
+      if (count >= LIMIT) {
+        updateUI();
+        return;
+      }
+
+      var submitBtn = document.getElementById('fb-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Mengirim...</span>';
+
+      // Simulasi kirim (ganti dengan fetch API jika ada backend)
+      setTimeout(function() {
+        var newCount = count + 1;
+        setCount(newCount);
+
+        // Reset form
+        feedbackForm.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Kirim Feedback</span><span class="material-symbols-outlined" style="font-size:20px;">send</span>';
+
+        // Update tampilan
+        updateUI();
+
+        // Notif sukses sementara
+        if (newCount < LIMIT) {
+          var bannerText = document.getElementById('fb-limit-text');
+          var banner = document.getElementById('fb-limit-banner');
+          banner.classList.remove('hidden');
+          banner.classList.add('flex');
+          bannerText.textContent = 'Feedback terkirim! Sisa kuota: ' + (LIMIT - newCount) + 'x lagi.';
+        }
+      }, 800);
+    });
+  }
+
+  // Init saat halaman pertama load
+  document.addEventListener('DOMContentLoaded', updateUI);
+})();
+</script>
 
 <!-- ============================================================
      ✅ FIX WHATSAPP - TIKTOK IN-APP BROWSER
