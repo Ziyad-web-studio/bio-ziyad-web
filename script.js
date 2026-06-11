@@ -146,15 +146,24 @@ function copyText(id, btn) {
 
 /* ── SHARE PAGE ── */
 function sharePage() {
+  // Selalu pakai URL root yang bersih (tanpa hash) biar OG banner terbaca WA
+  const shareUrl   = 'https://www.ziyadbio.my.id/';
+  const shareTitle = 'Ziyad Web Studio';
+  const shareText  = 'Kumpulan link, tools, dan resources dari Ziyad Web Studio.';
+
   if (navigator.share) {
-    navigator.share({ title: document.title, text: 'Ziyad Web Studio', url: window.location.href })
-      .catch(err => { console.error('Share failed:', err); fallbackShare(); });
-  } else { fallbackShare(); }
+    navigator.share({ title: shareTitle, text: shareText, url: shareUrl })
+      .catch(err => { console.error('Share failed:', err); fallbackShare(shareUrl); });
+  } else {
+    fallbackShare(shareUrl);
+  }
 }
-function fallbackShare() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
+
+function fallbackShare(url) {
+  const shareUrl = url || 'https://www.ziyadbio.my.id/';
+  navigator.clipboard.writeText(shareUrl).then(() => {
     showToast('Link telah disalin ke clipboard!');
-  }).catch(() => { prompt('Salin URL ini:', window.location.href); });
+  }).catch(() => { prompt('Salin URL ini:', shareUrl); });
 }
 
 /* ── AVATAR GLOW ── */
@@ -279,7 +288,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
   const modalIcon  = document.getElementById('rl-icon');
   if (!overlay || !timerEl) return;
 
-  // Ubah teks modal tergantung hard block atau cooldown biasa
   if (hardBlocked) {
     if (modalTitle) modalTitle.textContent = 'Kamu Diblokir!';
     if (modalDesc)  modalDesc.innerHTML    = 'Terlalu banyak percobaan.<br>IP kamu diblokir sementara.';
@@ -310,7 +318,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
     if (remaining <= 0) {
       clearInterval(rlCountdownInterval);
       rlCountdownInterval = null;
-      // Auto refresh setelah timer habis
       window.location.reload();
     }
   }, 1000);
@@ -321,7 +328,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
   let turnstileToken = '';
   let widgetId       = null;
 
-  // Expose ke window untuk debug
   window._ts = { getToken: () => turnstileToken, getWidget: () => widgetId };
 
   function renderTurnstile() {
@@ -329,7 +335,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
     const container = document.getElementById('turnstile-container');
     if (!container) return;
 
-    // Hapus widget lama
     if (widgetId !== null) {
       try { window.turnstile.remove(widgetId); } catch (e) {}
       widgetId = null;
@@ -351,7 +356,7 @@ function showRateLimitModal(seconds, hardBlocked = false) {
       renderTurnstile();
       return;
     }
-    if (document.getElementById('ts-script')) return; // sudah loading
+    if (document.getElementById('ts-script')) return;
     const s  = document.createElement('script');
     s.id     = 'ts-script';
     s.src    = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
@@ -365,14 +370,12 @@ function showRateLimitModal(seconds, hardBlocked = false) {
     const form = document.getElementById('feedback-form');
     if (!form) return;
 
-    // Inject Turnstile container di dalam form, sebelum tombol submit
     const submitBtn = document.getElementById('fb-submit');
     const container = document.createElement('div');
     container.id = 'turnstile-container';
     container.style.cssText = 'margin-bottom: 4px;';
     form.insertBefore(container, submitBtn);
 
-    // Render saat view-support aktif
     const supportView = document.getElementById('view-support');
     if (supportView) {
       new MutationObserver(() => {
@@ -381,7 +384,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
         }
       }).observe(supportView, { attributes: true, attributeFilter: ['class'] });
 
-      // Jika sudah aktif saat load (direct URL #support)
       if (supportView.classList.contains('active')) loadAndRender();
     }
 
@@ -393,7 +395,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
       const messageVal   = (form.querySelector('[name="message"]')?.value || '').trim();
       const honeypotVal  = (form.querySelector('[name="website"]')?.value || '').trim();
 
-      // Validasi panjang
       if (messageVal.length < 5) {
         const textarea = form.querySelector('[name="message"]');
         textarea.focus();
@@ -402,7 +403,6 @@ function showRateLimitModal(seconds, hardBlocked = false) {
         return;
       }
 
-      // Token belum siap
       if (!turnstileToken) {
         submitBtn.style.background = '#ba1a1a';
         submitBtn.innerHTML = '<span>Verifikasi belum siap, tunggu 2 detik lalu coba lagi</span><span class="material-symbols-outlined" style="font-size:18px;">error</span>';
@@ -415,7 +415,7 @@ function showRateLimitModal(seconds, hardBlocked = false) {
       submitBtn.innerHTML     = '<span>Mengirim...</span><span class="material-symbols-outlined animate-spin" style="font-size:20px;">progress_activity</span>';
 
       const tokenToSend = turnstileToken;
-      turnstileToken = ''; // Kosongkan langsung agar tidak bisa dipakai 2x
+      turnstileToken = '';
 
       try {
         const response = await fetch('/api/send-telegram', {
@@ -432,7 +432,7 @@ function showRateLimitModal(seconds, hardBlocked = false) {
           submitBtn.style.background = '';
           submitBtn.innerHTML        = originalHTML;
           form.reset();
-          renderTurnstile(); // generate token baru
+          renderTurnstile();
           showRateLimitModal(90);
 
         } else if (response.status === 429) {
