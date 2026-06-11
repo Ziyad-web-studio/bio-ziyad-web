@@ -1,0 +1,16 @@
+{
+  "headers": [
+    {
+      "source": "/assets/(.*)\\.jpg",
+      "headers": [
+        { "key": "Content-Type", "value": "image/jpeg" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.png",
+      "headers": [
+        { "key": "Content-Type", "value": "image/png" }
+      ]
+    }
+  ]
+}
