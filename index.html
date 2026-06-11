@@ -4,6 +4,19 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Ziyad Web Studio</title>
+<meta name="description" content="Welcome to my official link in bio."/>
+<meta property="og:url" content="https://www.ziyadbio.my.id/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Ziyad Web Studio"/>
+<meta property="og:description" content="Welcome to my official link in bio."/>
+<meta property="og:image" content="assets/og-banner.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:type" content="image/png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Ziyad Web Studio"/>
+<meta name="twitter:description" content="Welcome to my official link in bio."/>
+<meta name="twitter:image" content="assets/og-banner.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -480,43 +493,7 @@ tailwind.config = {
 
 <!-- Feedback form handler ada di script.js -->
 
-<!-- ============================================================
-     ✅ FIX WHATSAPP - TIKTOK IN-APP BROWSER
-     Fungsi ini menggantikan redirect langsung ke wa.me
-     dengan deep link whatsapp:// dulu, baru fallback ke wa.me
-     ============================================================ -->
-<script>
-function openWhatsApp(e, phone) {
-  e.preventDefault();
-
-  var userAgent = navigator.userAgent || '';
-  var isTikTok = userAgent.toLowerCase().indexOf('tiktok') !== -1 ||
-                 userAgent.toLowerCase().indexOf('musical_ly') !== -1;
-
-  var waNumber = phone; // format: 628xxxxxxx (tanpa +)
-  var deepLink = 'whatsapp://send?phone=' + waNumber;
-  var fallback = 'https://wa.me/' + waNumber;
-
-  if (isTikTok) {
-    // Di TikTok browser: coba buka app dulu via deep link
-    // Kalau gagal (app ga ada / ga kebuka), fallback ke wa.me setelah 2.5 detik
-    var fallbackTimer = setTimeout(function () {
-      window.location.href = fallback;
-    }, 2500);
-
-    // Kalau user balik ke tab ini (artinya app kebuka), cancel fallback
-    window.addEventListener('blur', function onBlur() {
-      clearTimeout(fallbackTimer);
-      window.removeEventListener('blur', onBlur);
-    });
-
-    window.location.href = deepLink;
-  } else {
-    // Di browser biasa: langsung ke wa.me (sudah works sebelumnya)
-    window.open(fallback, '_blank');
-  }
-}
-</script>
+<!-- WhatsApp deep link handler dipindah ke script.js -->
 
 </body>
 </html>

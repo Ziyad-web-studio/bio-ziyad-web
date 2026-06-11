@@ -302,4 +302,60 @@ Proyek ini dilisensikan di bawah **MIT License** – lihat file [LICENSE](LICENS
 
 ---
 
+## Changelog
+
+### 2026-06-11 — Perbaikan Critical Issues
+
+Berikut daftar perbaikan critical yang diterapkan pada tanggal ini:
+
+#### 1. ✅ SEO & Open Graph Tags (`index.html`)
+- Ditambahkan `<meta name="description">` untuk SEO dasar.
+- Ditambahkan tag Open Graph lengkap: `og:url`, `og:type`, `og:title`, `og:description`, `og:image` (termasuk `og:image:width`, `og:image:height`, `og:image:type`).
+- Gambar banner menggunakan `assets/og-banner.png` (1200×630, image/png) yang sudah tersedia di repo.
+
+#### 2. ✅ Fix Variable Shadowing (`script.js`)
+- Variabel `titleEl` di dalam fungsi `showRateLimitModal()` me-*shadow* variabel global `titleEl` (dipakai oleh title switcher di header), yang berpotensi menyebabkan bug.
+- Variabel lokal di dalam modal di-rename menjadi `modalTitle`, `modalDesc`, `modalBadge`, dan `modalIcon` agar tidak bertabrakan dengan scope global.
+
+#### 3. ✅ Dokumentasi Rate Limiting Serverless (`api/send-telegram.js`)
+- Ditambahkan komentar dokumentasi yang menjelaskan bahwa `Map()` in-memory **akan di-reset setiap cold start** di Vercel Serverless.
+- `WINDOW_MS` dinaikkan dari 60 detik → **90 detik** agar selaras dengan cooldown timer di sisi UI (client).
+- Disarankan migrasi ke **Vercel KV** atau **Upstash Redis** untuk rate limiting yang benar-benar persisten.
+
+#### 4. ✅ Web App Manifest (`assets/site.webmanifest`)
+- Field `name` dan `short_name` yang sebelumnya **kosong** kini diisi: `"Ziyad Web Studio"` dan `"Ziyad Studio"`.
+- Ditambahkan `description` dan `start_url` untuk mendukung instalasi PWA yang benar.
+- Diperbaiki path ikon yang sebelumnya salah (`assets/android-chrome-*.png` → `android-chrome-*.png`), karena manifest sudah berada di dalam folder `assets/`, sehingga path relatifnya cukup nama file saja.
+
+### 2026-06-11 — Perbaikan Medium Issues
+
+#### 5. ✅ Browser Back Button (`script.js`)
+- Ditambahkan `popstate` event listener agar tombol back browser berfungsi penuh bersama hash routing yang menggunakan `pushState`.
+
+#### 6. ✅ Title Switcher Optimization (`script.js`)
+- `setInterval` title switcher di-refaktor dengan **Page Visibility API** — interval di-pause saat tab tidak aktif dan di-resume saat tab kembali aktif, menghemat resource CPU.
+
+#### 7. ✅ Toast Notification System (`script.js` + `style.css`)
+- Ditambahkan fungsi `showToast()` sebagai pengganti `alert()` yang menampilkan notifikasi pill-shaped di bagian bawah layar dengan animasi slide-up.
+- `fallbackShare()` kini menggunakan toast alih-alih `alert()`.
+- Ditambahkan CSS untuk komponen `.toast` dan `.toast.show`.
+
+#### 8. ✅ Error Handling `copyText()` (`script.js`)
+- Ditambahkan `.catch()` pada `navigator.clipboard.writeText()` di fungsi `copyText()` — jika clipboard gagal, user mendapat feedback toast alih-alih diam saja.
+
+#### 9. ✅ Pindah `openWhatsApp` ke `script.js` (`index.html` → `script.js`)
+- Fungsi `openWhatsApp` yang sebelumnya inline di `index.html` telah dipindah ke `script.js` untuk organisasi kode yang lebih rapi.
+- Inline script di HTML diganti dengan komentar referensi.
+
+#### 10. ✅ Twitter Card Tags (`index.html`)
+- Ditambahkan meta tag `twitter:card`, `twitter:title`, `twitter:description`, dan `twitter:image` untuk preview optimal saat link dibagikan di Twitter/X.
+
+#### 11. ✅ Aksesibilitas Reduced Motion (`style.css`)
+- Ditambahkan `@media (prefers-reduced-motion: reduce)` yang menonaktifkan semua animasi dan transisi untuk pengguna yang sensitif terhadap gerakan.
+
+#### 12. ✅ Spam Filter Dipresisikan (`api/send-telegram.js`)
+- Keyword spam `'http'`, `'.net'`, `'.org'`, `'.io'` yang terlalu luas diganti dengan `'http://'`, `'https://'`, `'www.'` agar hanya menangkap URL aktual tanpa memblokir feedback yang sah.
+
+---
+
 *Selamat ngoding dan berbagi!* 🚀

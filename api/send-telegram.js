@@ -3,12 +3,17 @@
 //  + Cloudflare Turnstile validation
 // ============================================================
 
+// ⚠️ CATATAN: In-memory Map akan di-reset setiap kali Vercel melakukan cold start.
+// Untuk rate limiting yang benar-benar persisten di lingkungan serverless,
+// gunakan Vercel KV (https://vercel.com/docs/storage/vercel-kv) atau
+// Upstash Redis (https://upstash.com/docs/redis/overall/getstarted).
+// Map ini tetap berguna untuk melindungi dari spam burst selama instance aktif.
 const rateLimitMap = new Map();
-const WINDOW_MS      = 60 * 1000;
+const WINDOW_MS      = 90 * 1000;   // 90 detik — selaras dengan cooldown UI di client
 const MAX_PER_WINDOW = 1;
 
 const SPAM_KEYWORDS = [
-  'http', '.net', '.org', '.io',
+  'http://', 'https://', 'www.',
   'bitcoin', 'crypto', 'casino', 'forex',
   'togel', 'slot', 'porn', 'sex', 'viagra',
   'click here', 'free money', 'make money',

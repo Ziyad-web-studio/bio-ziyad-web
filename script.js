@@ -32,6 +32,7 @@ function navigateToHash(hash) {
 }
 
 window.addEventListener('hashchange', () => navigateToHash(window.location.hash));
+window.addEventListener('popstate', () => navigateToHash(window.location.hash));
 navigateToHash(window.location.hash);
 
 /* ── NAVIGATION ── */
@@ -75,7 +76,7 @@ function goHome() {
 const titleEl = document.getElementById('studio-title');
 const titles = ['Ziyad Studio', 'Creative Studio'];
 let titleIndex = 0;
-setInterval(() => {
+function cycleTitleOnce() {
   titleIndex = (titleIndex + 1) % titles.length;
   titleEl.style.opacity = '0';
   titleEl.style.transform = 'translateY(-6px)';
@@ -84,7 +85,17 @@ setInterval(() => {
     titleEl.style.opacity = '1';
     titleEl.style.transform = 'translateY(0)';
   }, 300);
-}, 3000);
+}
+let titleIntervalId = setInterval(cycleTitleOnce, 3000);
+
+/* Pause title switcher saat tab tidak aktif */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearInterval(titleIntervalId);
+  } else {
+    titleIntervalId = setInterval(cycleTitleOnce, 3000);
+  }
+});
 
 /* ── LIVE CLOCK ── */
 function updateClock() {
@@ -103,6 +114,22 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
+/* ── TOAST NOTIFICATION ── */
+function showToast(message) {
+  let toast = document.getElementById('zs-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'zs-toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.remove('show');
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
 /* ── COPY ── */
 function copyText(id, btn) {
   const text = document.getElementById(id).textContent.trim();
@@ -112,6 +139,8 @@ function copyText(id, btn) {
     btn.style.background = '#3953bd';
     btn.style.color = '#fff';
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+  }).catch(() => {
+    showToast('Gagal menyalin. Coba salin manual.');
   });
 }
 
@@ -124,7 +153,7 @@ function sharePage() {
 }
 function fallbackShare() {
   navigator.clipboard.writeText(window.location.href).then(() => {
-    alert('Link telah disalin ke clipboard!');
+    showToast('Link telah disalin ke clipboard!');
   }).catch(() => { prompt('Salin URL ini:', window.location.href); });
 }
 
@@ -244,23 +273,23 @@ let rlCountdownInterval = null;
 function showRateLimitModal(seconds, hardBlocked = false) {
   const overlay  = document.getElementById('rl-overlay');
   const timerEl  = document.getElementById('rl-timer');
-  const titleEl  = document.getElementById('rl-title');
-  const descEl   = document.getElementById('rl-desc');
-  const badgeEl  = document.getElementById('rl-badge');
-  const iconEl   = document.getElementById('rl-icon');
+  const modalTitle = document.getElementById('rl-title');
+  const modalDesc  = document.getElementById('rl-desc');
+  const modalBadge = document.getElementById('rl-badge');
+  const modalIcon  = document.getElementById('rl-icon');
   if (!overlay || !timerEl) return;
 
   // Ubah teks modal tergantung hard block atau cooldown biasa
   if (hardBlocked) {
-    if (titleEl)  titleEl.textContent = 'Kamu Diblokir!';
-    if (descEl)   descEl.innerHTML    = 'Terlalu banyak percobaan.<br>IP kamu diblokir sementara.';
-    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Hard Block Aktif';
-    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">block</span>';
+    if (modalTitle) modalTitle.textContent = 'Kamu Diblokir!';
+    if (modalDesc)  modalDesc.innerHTML    = 'Terlalu banyak percobaan.<br>IP kamu diblokir sementara.';
+    if (modalBadge) modalBadge.innerHTML   = '<span class="dot"></span>Hard Block Aktif';
+    if (modalIcon)  modalIcon.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">block</span>';
   } else {
-    if (titleEl)  titleEl.textContent = 'Slow down!';
-    if (descEl)   descEl.innerHTML    = 'Feedback kamu sudah terkirim.<br>Tunggu sebentar sebelum mengirim lagi.';
-    if (badgeEl)  badgeEl.innerHTML   = '<span class="dot"></span>Cooldown Aktif';
-    if (iconEl)   iconEl.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">timer</span>';
+    if (modalTitle) modalTitle.textContent = 'Slow down!';
+    if (modalDesc)  modalDesc.innerHTML    = 'Feedback kamu sudah terkirim.<br>Tunggu sebentar sebelum mengirim lagi.';
+    if (modalBadge) modalBadge.innerHTML   = '<span class="dot"></span>Cooldown Aktif';
+    if (modalIcon)  modalIcon.innerHTML    = '<span class="material-symbols-outlined" style="font-size:32px;color:#ef4444;font-variation-settings:\'FILL\' 1;">timer</span>';
   }
 
   let remaining = seconds;
@@ -435,3 +464,31 @@ function showRateLimitModal(seconds, hardBlocked = false) {
     });
   });
 })();
+
+/* ── WHATSAPP DEEP LINK (TikTok In-App Browser Fix) ── */
+function openWhatsApp(e, phone) {
+  e.preventDefault();
+
+  var userAgent = navigator.userAgent || '';
+  var isTikTok = userAgent.toLowerCase().indexOf('tiktok') !== -1 ||
+                 userAgent.toLowerCase().indexOf('musical_ly') !== -1;
+
+  var waNumber = phone;
+  var deepLink = 'whatsapp://send?phone=' + waNumber;
+  var fallback = 'https://wa.me/' + waNumber;
+
+  if (isTikTok) {
+    var fallbackTimer = setTimeout(function () {
+      window.location.href = fallback;
+    }, 2500);
+
+    window.addEventListener('blur', function onBlur() {
+      clearTimeout(fallbackTimer);
+      window.removeEventListener('blur', onBlur);
+    });
+
+    window.location.href = deepLink;
+  } else {
+    window.open(fallback, '_blank');
+  }
+}

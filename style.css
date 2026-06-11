@@ -147,3 +147,38 @@ body { background-color: #F0F4F8; }
   color: #3953bd;
   flex-shrink: 0;
 }
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .slide-in, .slide-back { animation: none !important; }
+  .link-card { transition: none !important; }
+  .copy-btn { transition: none !important; }
+  .btn-dl { transition: none !important; }
+  #studio-title { transition: none !important; }
+  .animate-pulse { animation: none !important; }
+}
+
+/* ── TOAST NOTIFICATION ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e293b;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
