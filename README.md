@@ -40,11 +40,13 @@ Desainnya terinspirasi dari minimalis ala Apple — palet warna bersih, kartu de
 ## Fitur Unggulan
 
 - **Layout responsif** – tampil optimal di mobile, tablet, maupun desktop.
-- **Navigasi SPA‑like** – hash‑based routing (`#`, `#category`, `#code`, `#desain`, `#ai`) dengan animasi slide‑in/slide‑out.
+- **Navigasi SPA‑like** – hash‑based routing (`#`, `#category`, `#code`, `#desain`, `#ai`, `#antigravity`, `#support`, `#reminder`) dengan animasi slide‑in/slide‑out.
 - **Avatar interaktif** – ketuk/hover untuk beralih antara logo dan foto, lengkap dengan efek glow.
 - **Tombol share** – menggunakan `navigator.share` jika tersedia; jika tidak, URL otomatis disalin ke clipboard.
 - **Copy sekali ketuk** – klik ikon copy di samping blok kode untuk langsung menyalin isinya.
 - **Jam real‑time** – ditampilkan di halaman maintenance (`#desain`).
+- **Halaman Reminder Kawaii** 💕 – halaman khusus dengan countdown timer live ke event penting, dilengkapi karakter lucu (🐻), floating hearts, animasi bounce & sparkle, dan desain pastel pink-ungu.
+- **Icon Font Loading Fix** – preconnect hints + `document.fonts.ready` API untuk mencegah icon broken/flash saat pertama kali load.
 - **Kode modular** – dipisah menjadi `index.html` (markup), `style.css` (custom styles), dan `script.js` (routing & logika).
 - **Favicon & kesiapan PWA** – sudah dilengkapi favicon set, apple‑touch icon, dan `site.webmanifest` untuk Android Chrome.
 - **Ringan** – tidak butuh build step, tidak pakai framework berat, Tailwind langsung diambil dari CDN.
@@ -70,9 +72,9 @@ Desainnya terinspirasi dari minimalis ala Apple — palet warna bersih, kartu de
 
 ```
 bio-ziyad-web/
-├── index.html          # HTML utama – berisi semua view (main, category, code, files, ai)
-├── style.css           # CSS kustom (animasi, override, dll.)
-├── script.js           # JavaScript – routing, avatar swap, share, clock, copy
+├── index.html          # HTML utama – berisi semua view (main, category, code, files, ai, antigravity, support, reminder)
+├── style.css           # CSS kustom (animasi, kawaii styles, icon loading fix, dll.)
+├── script.js           # JavaScript – routing, avatar swap, share, clock, copy, countdown timer
 ├─ assets/
 │   ├─ favicon.ico
 │   ├─ favicon-16x16.png
@@ -169,6 +171,9 @@ Semua teks dan link ada di dalam `index.html`. Edit bagian yang relevan:
      '#code': 'view-code',
      '#desain': 'view-files',
      '#ai': 'view-ai',
+     '#antigravity': 'view-antigravity',
+     '#support': 'view-support',
+     '#reminder': 'view-reminder',
      '#newview': 'view-newview'   // <-- tambahkan ini
    };
    ```
@@ -277,7 +282,7 @@ Buka `http://localhost:8080`.
 |--------|----------------------|--------|
 | Favicon tidak muncul | Cache browser masih menyimpan favicon lama | Hard‑refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`) atau bersihkan site storage (DevTools → Application → Clear storage). |
 | Tombol share tidak bereaksi | Halaman dibuka via `file://` (Web Share API butuh `http(s)`) | Sajikan lewat local server (`python -m http.server`) atau deploy ke HTTPS. |
-| Ikon muncul sebagai kotak | CDN Font Awesome / Material Symbols diblokir | Cek console untuk error CORS; pastikan ada koneksi internet untuk memuat link CDN. |
+| Ikon muncul sebagai kotak | CDN Font Awesome / Material Symbols diblokir atau belum selesai load | Sudah di-fix dengan preconnect hints + `document.fonts.ready` API yang menyembunyikan icon sampai font siap. Jika masih bermasalah, cek console untuk error CORS; pastikan ada koneksi internet. |
 | Layout berantakan di mobile | Tailwind CSS tidak termuat (masalah jaringan) | Verifikasi bahwa `<script src="https://cdn.tailwindcss.com?...">` berhasil dimuat; cek console untuk error 404. |
 | Animasi tidak mulus | Perangkat low‑end atau banyak tab berat di background | Kurangi durasi animasi di `style.css`, atau nonaktifkan via media query `prefers-reduced-motion` jika diperlukan. |
 | Kode tidak tersalin setelah diklik | Clipboard API ditolak (bukan secure context) | Akses lewat `http://localhost` atau `https://`; Clipboard API butuh secure context. |
@@ -355,6 +360,33 @@ Berikut daftar perbaikan critical yang diterapkan pada tanggal ini:
 
 #### 12. ✅ Spam Filter Dipresisikan (`api/send-telegram.js`)
 - Keyword spam `'http'`, `'.net'`, `'.org'`, `'.io'` yang terlalu luas diganti dengan `'http://'`, `'https://'`, `'www.'` agar hanya menangkap URL aktual tanpa memblokir feedback yang sah.
+
+### 2026-06-13 — Fitur Baru & Bug Fix
+
+#### 13. ✅ Halaman Reminder Kawaii (`index.html` + `style.css` + `script.js`)
+- Ditambahkan halaman baru `#reminder` (`view-reminder`) dengan desain kawaii bertema pastel pink-ungu.
+- **Countdown timer live** yang menghitung mundur ke tanggal 12 Juni 2027 (update setiap detik).
+- **Karakter lucu**: maskot beruang 🐻 bouncing dengan hati 💕 yang muncul-muncul (animasi `cuteHeartPop`).
+- **Floating elements**: hati, kupu-kupu, bunga sakura, bintang, dan pita melayang di background.
+- **4 kotak countdown** berwarna-warni (pink 🌸, ungu 🦋, oren ⭐, hijau 💖) dengan hover effect.
+- **Pesan cute** untuk Nisa dengan kelinci bouncing 🐰.
+- **3 state otomatis**:
+  - *Normal*: gradient pastel pink dengan countdown aktif.
+  - *Hari H*: card berubah hijau celebration 🎉 dengan pesan "Ayo ke rumah Nisa sekarang~".
+  - *Sudah lewat*: card berubah abu-abu muted.
+- Tombol navigasi **💕 Reminder** ditambahkan di footer halaman utama (sebelah tombol Support).
+- Route `#reminder` → `view-reminder` didaftarkan di `routeMap`.
+
+#### 14. ✅ Fix Icon Loading Bug (`index.html`)
+- **Masalah**: icon Font Awesome (WhatsApp, TikTok, GitHub) dan Material Symbols (folder, share) muncul sebagai kotak/karakter broken saat halaman pertama kali diload atau di-refresh.
+- **Solusi 3 lapis**:
+  1. Ditambahkan `<link rel="preconnect">` ke `fonts.googleapis.com`, `fonts.gstatic.com`, dan `cdnjs.cloudflare.com` untuk mempercepat koneksi CDN.
+  2. Semua icon class (`.material-symbols-outlined`, `.fab`, `.fas`, `.far`) disembunyikan (`opacity: 0`) secara default.
+  3. Setelah `document.fonts.ready` resolve, class `fonts-loaded` ditambahkan ke `<body>` yang men-trigger fade-in (`opacity: 1`, transition 0.25s).
+  4. Safety net: timeout 3 detik sebagai fallback jika `document.fonts.ready` tidak tersedia di browser lama.
+
+#### 15. ✅ Halaman Antigravity CLI (`index.html`)
+- Ditambahkan halaman detail `#antigravity` (`view-antigravity`) berisi deskripsi, link install, dan dokumentasi Antigravity CLI dari Google.
 
 ---
 
