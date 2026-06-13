@@ -19,9 +19,26 @@
 <meta name="twitter:description" content="Kumpulan link, tools, dan resources dari Ziyad Web Studio — developer & creative studio berbasis Indonesia."/>
 <meta name="twitter:image" content="https://www.ziyadbio.my.id/assets/og-banner.jpg"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Hide icon fonts until fully loaded to prevent broken icon flash */
+  .material-symbols-outlined,
+  .fa-solid, .fa-regular, .fa-brands,
+  .fab, .fas, .far {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .fonts-loaded .material-symbols-outlined,
+  .fonts-loaded .fa-solid, .fonts-loaded .fa-regular, .fonts-loaded .fa-brands,
+  .fonts-loaded .fab, .fonts-loaded .fas, .fonts-loaded .far {
+    opacity: 1;
+  }
+</style>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/Ziyad-web-studio/Assets/refs/heads/main/Images/IMG_20260428_081413.png">
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
@@ -72,6 +89,23 @@ tailwind.config = {
 </script>
 </head>
 <body class="text-on-surface antialiased min-h-screen flex flex-col">
+<script>
+  // Reveal icons once icon fonts are loaded
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() {
+      document.body.classList.add('fonts-loaded');
+    });
+  } else {
+    // Fallback for older browsers: show after short delay
+    setTimeout(function() {
+      document.body.classList.add('fonts-loaded');
+    }, 800);
+  }
+  // Safety net: always show after 3 seconds max
+  setTimeout(function() {
+    document.body.classList.add('fonts-loaded');
+  }, 3000);
+</script>
 
 <!-- ===== VIEW MAIN ===== -->
 <div id="view-main" class="view active flex-col min-h-screen">
@@ -207,6 +241,8 @@ tailwind.config = {
   <footer class="bg-transparent pb-10 mt-auto w-full">
     <div class="flex flex-col items-center gap-3 max-w-[640px] mx-auto w-full px-6">
       <div class="flex justify-center gap-6">
+        <button onclick="goTo('view-reminder', 'slide-in', '#reminder')" class="font-label-sm text-label-sm text-pink-400 hover:text-pink-600 transition-colors">💕 Reminder</button>
+        <span class="text-slate-300">·</span>
         <button onclick="goTo('view-support', 'slide-in', '#support')" class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors">Support</button>
       </div>
       <div class="text-sm font-bold text-slate-700 font-headline-md">Ziyad Web Studio</div>
@@ -479,6 +515,124 @@ tailwind.config = {
       Sementara ini hubungi via
       <a href="https://wa.me/6288218812567" target="_blank" rel="noopener noreferrer" class="text-green-500 font-bold hover:underline">WhatsApp</a>
       ya! 💬
+    </p>
+
+  </main>
+</div>
+
+<!-- ===== VIEW REMINDER (CUTE NISA PAGE) ===== -->
+<div id="view-reminder" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-pink-200 hover:bg-pink-50 transition-colors">
+        <span class="material-symbols-outlined text-pink-500" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-pink-600 font-headline-md">💕 Pengingat</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-pink-200 hover:bg-pink-50 transition-colors">
+        <span class="material-symbols-outlined text-pink-500" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col items-center gap-6">
+
+    <!-- CUTE FLOATING ELEMENTS -->
+    <div class="cute-floating" aria-hidden="true">
+      <span class="cute-float cute-f1">💖</span>
+      <span class="cute-float cute-f2">🌸</span>
+      <span class="cute-float cute-f3">✨</span>
+      <span class="cute-float cute-f4">🦋</span>
+      <span class="cute-float cute-f5">💗</span>
+      <span class="cute-float cute-f6">🌷</span>
+      <span class="cute-float cute-f7">🎀</span>
+      <span class="cute-float cute-f8">⭐</span>
+    </div>
+
+    <!-- MAIN CUTE CARD -->
+    <div class="w-full reminder-cute-card">
+
+      <!-- Cute mascot character -->
+      <div class="cute-mascot-wrap">
+        <div class="cute-mascot">
+          <span class="cute-bear">🐻</span>
+          <span class="cute-heart-pop cute-hp1">💕</span>
+          <span class="cute-heart-pop cute-hp2">💖</span>
+          <span class="cute-heart-pop cute-hp3">💗</span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h2 class="font-headline-lg text-headline-lg text-center mb-1" style="color:#e91e8c;">
+        Jangan Lupa Yaa~
+      </h2>
+      <p class="font-body-sm text-body-sm text-pink-400 text-center mb-5">pengingat spesial buat kamu 💌</p>
+
+      <!-- Event Info Card -->
+      <div class="cute-event-card">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#fbbcdf,#c084fc);">
+            <span style="font-size:22px;">🏠</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-body-lg font-bold" style="color:#be185d;">Ke Rumah Nisa 💕</span>
+            <span class="font-label-sm text-pink-400">jangan telat ya~</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 bg-pink-50 rounded-xl px-4 py-2.5 border border-pink-100">
+          <span class="material-symbols-outlined" style="font-size:20px;color:#ec4899;">calendar_month</span>
+          <span class="font-body-sm font-semibold" style="color:#be185d;">12 Juni 2027</span>
+          <span class="ml-auto text-sm">📅</span>
+        </div>
+      </div>
+
+      <!-- Cute Countdown -->
+      <div class="cute-countdown-label">
+        <span class="cute-sparkle">✨</span>
+        Countdown menuju hari H
+        <span class="cute-sparkle">✨</span>
+      </div>
+      <div id="reminder-countdown" class="grid grid-cols-4 gap-3 text-center w-full">
+        <div class="cute-cd-unit" style="--cd-color:#f472b6;">
+          <div class="cute-cd-emoji">🌸</div>
+          <div id="cd-days" class="cute-cd-num">---</div>
+          <div class="cute-cd-label">Hari</div>
+        </div>
+        <div class="cute-cd-unit" style="--cd-color:#c084fc;">
+          <div class="cute-cd-emoji">🦋</div>
+          <div id="cd-hours" class="cute-cd-num">--</div>
+          <div class="cute-cd-label">Jam</div>
+        </div>
+        <div class="cute-cd-unit" style="--cd-color:#fb923c;">
+          <div class="cute-cd-emoji">⭐</div>
+          <div id="cd-minutes" class="cute-cd-num">--</div>
+          <div class="cute-cd-label">Menit</div>
+        </div>
+        <div class="cute-cd-unit" style="--cd-color:#34d399;">
+          <div class="cute-cd-emoji">💖</div>
+          <div id="cd-seconds" class="cute-cd-num">--</div>
+          <div class="cute-cd-label">Detik</div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div id="reminder-status" class="mt-5 flex items-center justify-center gap-2 bg-pink-50 rounded-full px-5 py-2.5 border border-pink-200">
+        <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+        <span class="font-label-sm text-label-sm text-pink-500 font-semibold">Countdown aktif 💗</span>
+      </div>
+    </div>
+
+    <!-- CUTE NISA MESSAGE -->
+    <div class="w-full bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(236,72,153,0.1)] border border-pink-100 text-center">
+      <div class="text-4xl mb-3 cute-bounce">🐰</div>
+      <p class="font-body-sm text-pink-400 leading-relaxed">
+        Hii <span class="font-bold text-pink-600">Nisa</span>~ kalo kamu liat ini,<br>
+        aku bakal dateng tepat waktu kok! 🥺💕<br>
+        <span class="text-xs text-pink-300 mt-2 inline-block">...semoga gak nyasar 😅</span>
+      </p>
+    </div>
+
+    <!-- FUN FOOTER -->
+    <p class="font-body-sm text-body-sm text-pink-300 text-center">
+      dibuat dengan penuh 💕 biar gak lupa
     </p>
 
   </main>

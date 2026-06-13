@@ -21,7 +21,8 @@ const routeMap = {
   '#desain': 'view-files',
   '#ai': 'view-ai',
   '#antigravity': 'view-antigravity',
-  '#support': 'view-support'
+  '#support': 'view-support',
+  '#reminder': 'view-reminder'
 };
 
 function navigateToHash(hash) {
@@ -492,3 +493,59 @@ function openWhatsApp(e, phone) {
     window.open(fallback, '_blank');
   }
 }
+
+/* ── REMINDER COUNTDOWN ── */
+(function() {
+  const TARGET_DATE = new Date('2027-06-12T00:00:00');
+  const daysEl = document.getElementById('cd-days');
+  const hoursEl = document.getElementById('cd-hours');
+  const minutesEl = document.getElementById('cd-minutes');
+  const secondsEl = document.getElementById('cd-seconds');
+  const statusEl = document.getElementById('reminder-status');
+  const cardEl = document.querySelector('.reminder-cute-card');
+
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = TARGET_DATE - now;
+
+    if (diff <= 0) {
+      const isToday = now.getFullYear() === TARGET_DATE.getFullYear() &&
+                      now.getMonth() === TARGET_DATE.getMonth() &&
+                      now.getDate() === TARGET_DATE.getDate();
+
+      if (isToday || diff > -86400000) {
+        // Hari H!
+        daysEl.textContent = '🎉';
+        hoursEl.textContent = '💕';
+        minutesEl.textContent = '🏠';
+        secondsEl.textContent = '❤️';
+        if (cardEl) cardEl.classList.add('today');
+        if (statusEl) statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span><span class="font-label-sm text-label-sm text-green-600 font-bold">🎉 HARI INI! Ayo ke rumah Nisa sekarang~</span>';
+      } else {
+        // Sudah lewat
+        daysEl.textContent = '0';
+        hoursEl.textContent = '0';
+        minutesEl.textContent = '0';
+        secondsEl.textContent = '0';
+        if (cardEl) cardEl.classList.add('passed');
+        if (statusEl) statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-400"></span><span class="font-label-sm text-label-sm text-slate-400">Event sudah lewat 🐻</span>';
+      }
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    daysEl.textContent = days;
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();

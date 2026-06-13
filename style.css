@@ -182,3 +182,199 @@ body { background-color: #F0F4F8; }
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ── CUTE REMINDER PAGE ── */
+
+/* Floating hearts & elements */
+.cute-floating {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.cute-float {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.25;
+  animation: cuteFloat 8s ease-in-out infinite;
+}
+.cute-f1 { top: 5%; left: 8%; animation-delay: 0s; animation-duration: 7s; }
+.cute-f2 { top: 12%; right: 10%; animation-delay: 1.2s; animation-duration: 9s; font-size: 24px; }
+.cute-f3 { top: 30%; left: 5%; animation-delay: 0.5s; animation-duration: 6s; font-size: 16px; }
+.cute-f4 { top: 45%; right: 6%; animation-delay: 2s; animation-duration: 8s; font-size: 22px; }
+.cute-f5 { top: 60%; left: 12%; animation-delay: 1.5s; animation-duration: 7.5s; }
+.cute-f6 { top: 75%; right: 15%; animation-delay: 3s; animation-duration: 6.5s; font-size: 18px; }
+.cute-f7 { top: 20%; left: 80%; animation-delay: 0.8s; animation-duration: 8.5s; font-size: 22px; }
+.cute-f8 { top: 85%; left: 40%; animation-delay: 2.5s; animation-duration: 7s; font-size: 16px; }
+
+@keyframes cuteFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-20px) rotate(10deg) scale(1.1); }
+  50% { transform: translateY(-10px) rotate(-5deg) scale(0.95); }
+  75% { transform: translateY(-25px) rotate(8deg) scale(1.05); }
+}
+
+/* Main cute card */
+.reminder-cute-card {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(160deg, #fff0f6, #fdf2f8, #fce7f3, #f5d0fe);
+  border-radius: 32px;
+  padding: 28px 24px;
+  border: 2px solid #fbcfe8;
+  box-shadow:
+    0 8px 32px rgba(236, 72, 153, 0.12),
+    0 2px 8px rgba(168, 85, 247, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+
+/* Cute mascot */
+.cute-mascot-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.cute-mascot {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cute-bear {
+  font-size: 56px;
+  display: block;
+  animation: cuteBounceChar 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(236, 72, 153, 0.3));
+}
+.cute-heart-pop {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0;
+  animation: cuteHeartPop 3s ease-in-out infinite;
+}
+.cute-hp1 { top: 0; right: 2px; animation-delay: 0s; }
+.cute-hp2 { top: -5px; left: 5px; animation-delay: 1s; font-size: 14px; }
+.cute-hp3 { top: 10px; right: -8px; animation-delay: 2s; font-size: 16px; }
+
+@keyframes cuteBounceChar {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+  75% { transform: translateY(-10px) rotate(-2deg); }
+}
+
+@keyframes cuteHeartPop {
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  15% { opacity: 1; transform: translateY(-15px) scale(1.2); }
+  30% { opacity: 0.8; transform: translateY(-25px) scale(1); }
+  50% { opacity: 0; transform: translateY(-40px) scale(0.6); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.6); }
+}
+
+/* Event info card */
+.cute-event-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  border: 1.5px solid #fce7f3;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.08);
+  margin-bottom: 20px;
+}
+
+/* Countdown label */
+.cute-countdown-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ec4899;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.cute-sparkle {
+  display: inline-block;
+  animation: cuteSpin 2s linear infinite;
+}
+@keyframes cuteSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(15deg) scale(1.2); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(-15deg) scale(1.2); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* Countdown units */
+.cute-cd-unit {
+  background: #fff;
+  border-radius: 20px;
+  padding: 14px 6px 12px;
+  border: 2px solid color-mix(in srgb, var(--cd-color) 30%, white);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--cd-color) 15%, transparent);
+  transition: transform 0.2s;
+}
+.cute-cd-unit:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+.cute-cd-emoji {
+  font-size: 18px;
+  margin-bottom: 4px;
+  animation: cuteBounceChar 3s ease-in-out infinite;
+}
+.cute-cd-num {
+  font-family: 'Manrope', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--cd-color);
+  line-height: 1.2;
+}
+.cute-cd-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* Cute bounce for rabbit */
+.cute-bounce {
+  display: inline-block;
+  animation: cuteBounce 1.5s ease-in-out infinite;
+}
+@keyframes cuteBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Reminder card hari H */
+.reminder-cute-card.today {
+  background: linear-gradient(160deg, #d1fae5, #cffafe, #dbeafe);
+  border-color: #86efac;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+}
+
+/* Reminder card sudah lewat */
+.reminder-cute-card.passed {
+  background: linear-gradient(160deg, #f1f5f9, #e2e8f0);
+  border-color: #cbd5e1;
+}
+.reminder-cute-card.passed .cute-cd-num {
+  color: #94a3b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cute-float,
+  .cute-bear,
+  .cute-heart-pop,
+  .cute-sparkle,
+  .cute-cd-emoji,
+  .cute-bounce { animation: none !important; }
+  .cute-heart-pop { opacity: 1 !important; }
+}
+
