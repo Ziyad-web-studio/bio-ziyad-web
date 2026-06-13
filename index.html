@@ -569,7 +569,7 @@ tailwind.config = {
       <!-- Event Info Card -->
       <div class="cute-event-card">
         <div class="flex items-center gap-3 mb-3">
-          <div class="w-11 h-11 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#fbbcdf,#c084fc);">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center icon-bg-pink">
             <span style="font-size:22px;">🏠</span>
           </div>
           <div class="flex flex-col">
@@ -577,8 +577,8 @@ tailwind.config = {
             <span class="font-label-sm text-pink-400">jangan telat ya~</span>
           </div>
         </div>
-        <div class="flex items-center gap-2 bg-pink-50 rounded-xl px-4 py-2.5 border border-pink-100">
-          <span class="material-symbols-outlined" style="font-size:20px;color:#ec4899;">calendar_month</span>
+        <div class="flex items-center gap-2 date-badge rounded-xl px-4 py-2.5 border">
+          <span class="material-symbols-outlined icon-pink" style="font-size:20px;">calendar_month</span>
           <span class="font-body-sm font-semibold" style="color:#be185d;">12 Juni 2027</span>
           <span class="ml-auto text-sm">📅</span>
         </div>
@@ -591,22 +591,22 @@ tailwind.config = {
         <span class="cute-sparkle">✨</span>
       </div>
       <div id="reminder-countdown" class="grid grid-cols-4 gap-3 text-center w-full">
-        <div class="cute-cd-unit" style="--cd-color:#f472b6;">
+        <div class="cute-cd-unit unit-pink">
           <div class="cute-cd-emoji">🌸</div>
           <div id="cd-days" class="cute-cd-num">---</div>
           <div class="cute-cd-label">Hari</div>
         </div>
-        <div class="cute-cd-unit" style="--cd-color:#c084fc;">
+        <div class="cute-cd-unit unit-blue">
           <div class="cute-cd-emoji">🦋</div>
           <div id="cd-hours" class="cute-cd-num">--</div>
           <div class="cute-cd-label">Jam</div>
         </div>
-        <div class="cute-cd-unit" style="--cd-color:#fb923c;">
+        <div class="cute-cd-unit unit-pink">
           <div class="cute-cd-emoji">⭐</div>
           <div id="cd-minutes" class="cute-cd-num">--</div>
           <div class="cute-cd-label">Menit</div>
         </div>
-        <div class="cute-cd-unit" style="--cd-color:#34d399;">
+        <div class="cute-cd-unit unit-blue">
           <div class="cute-cd-emoji">💖</div>
           <div id="cd-seconds" class="cute-cd-num">--</div>
           <div class="cute-cd-label">Detik</div>
@@ -621,12 +621,12 @@ tailwind.config = {
     </div>
 
     <!-- CUTE NISA MESSAGE -->
-    <div class="w-full bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(236,72,153,0.1)] border border-pink-100 text-center">
+    <div class="w-full cute-message-card rounded-3xl p-6 shadow-[0_4px_20px_rgba(201,232,241,0.5)] border text-center">
       <div class="text-4xl mb-3 cute-bounce">🐰</div>
-      <p class="font-body-sm text-pink-400 leading-relaxed">
-        Hii <span class="font-bold text-pink-600">Nisa</span>~ kalo kamu liat ini,<br>
+      <p class="font-body-sm msg-text leading-relaxed">
+        Hii <span class="font-bold msg-highlight">Nisa</span>~ kalo kamu liat ini,<br>
         aku bakal dateng tepat waktu kok! 🥺💕<br>
-        <span class="text-xs text-pink-300 mt-2 inline-block">...semoga gak nyasar 😅</span>
+        <span class="text-xs msg-subtext mt-2 inline-block">...semoga gak nyasar 😅</span>
       </p>
     </div>
 

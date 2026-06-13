@@ -219,10 +219,10 @@ body { background-color: #F0F4F8; }
 .reminder-cute-card {
   position: relative;
   z-index: 1;
-  background: linear-gradient(135deg, #F4F3F5, #F4D4DC, #C9E8F1);
+  background: #F4F3F5;
   border-radius: 32px;
   padding: 28px 24px;
-  border: 2px solid #e5e5e5;
+  border: 4px solid #fff;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.05),
     0 2px 8px rgba(0, 0, 0, 0.02),
@@ -277,12 +277,22 @@ body { background-color: #F0F4F8; }
 
 /* Event info card */
 .cute-event-card {
-  background: #fff;
+  background: linear-gradient(135deg, #ffffff, #F4D4DC);
   border-radius: 20px;
   padding: 16px;
-  border: 1.5px solid #fce7f3;
-  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.08);
+  border: 1.5px solid #F4D4DC;
+  box-shadow: 0 4px 16px rgba(244, 212, 220, 0.3);
   margin-bottom: 20px;
+}
+.icon-bg-pink {
+  background: linear-gradient(135deg, #F4D4DC, #fbbcdf);
+}
+.date-badge {
+  background: #ffffff;
+  border-color: #F4D4DC;
+}
+.icon-pink {
+  color: #ec4899;
 }
 
 /* Countdown label */
@@ -310,12 +320,30 @@ body { background-color: #F0F4F8; }
 
 /* Countdown units */
 .cute-cd-unit {
-  background: #fff;
   border-radius: 20px;
   padding: 14px 6px 12px;
-  border: 2px solid color-mix(in srgb, var(--cd-color) 30%, white);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--cd-color) 15%, transparent);
+  border: 2px solid #ffffff;
   transition: transform 0.2s;
+}
+.unit-pink {
+  background: #F4D4DC;
+  box-shadow: 0 4px 12px rgba(244, 212, 220, 0.6);
+}
+.unit-pink .cute-cd-num {
+  color: #be185d;
+}
+.unit-pink .cute-cd-label {
+  color: #9d174d;
+}
+.unit-blue {
+  background: #C9E8F1;
+  box-shadow: 0 4px 12px rgba(201, 232, 241, 0.6);
+}
+.unit-blue .cute-cd-num {
+  color: #0369a1;
+}
+.unit-blue .cute-cd-label {
+  color: #075985;
 }
 .cute-cd-unit:hover {
   transform: translateY(-4px) scale(1.05);
@@ -329,14 +357,12 @@ body { background-color: #F0F4F8; }
   font-family: 'Manrope', sans-serif;
   font-size: 26px;
   font-weight: 800;
-  color: var(--cd-color);
   line-height: 1.2;
 }
 .cute-cd-label {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 600;
-  color: #9ca3af;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 2px;
@@ -350,6 +376,21 @@ body { background-color: #F0F4F8; }
 @keyframes cuteBounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+/* Cute Nisa Message Card */
+.cute-message-card {
+  background: linear-gradient(135deg, #ffffff, #C9E8F1);
+  border-color: #C9E8F1;
+}
+.msg-text {
+  color: #0369a1;
+}
+.msg-highlight {
+  color: #be185d;
+}
+.msg-subtext {
+  color: #38bdf8;
 }
 
 /* Reminder card hari H */
