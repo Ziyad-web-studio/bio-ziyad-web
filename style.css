@@ -219,7 +219,7 @@ body { background-color: #F0F4F8; }
 .reminder-cute-card {
   position: relative;
   z-index: 1;
-  background: #F4F3F5;
+  background: linear-gradient(135deg, #F4F3F5, #F4D4DC, #C9E8F1);
   border-radius: 32px;
   padding: 28px 24px;
   border: 2px solid #e5e5e5;
