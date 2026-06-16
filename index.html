@@ -21,21 +21,15 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   /* Hide icon fonts until fully loaded to prevent broken icon flash */
-  .material-symbols-outlined,
-  .fa-solid, .fa-regular, .fa-brands,
-  .fab, .fas, .far {
+  .material-symbols-outlined {
     opacity: 0;
     transition: opacity 0.25s ease;
   }
-  .fonts-loaded .material-symbols-outlined,
-  .fonts-loaded .fa-solid, .fonts-loaded .fa-regular, .fonts-loaded .fa-brands,
-  .fonts-loaded .fab, .fonts-loaded .fas, .fonts-loaded .far {
+  .fonts-loaded .material-symbols-outlined {
     opacity: 1;
   }
 </style>
@@ -165,7 +159,11 @@ tailwind.config = {
            rel="noopener noreferrer"
            class="link-card">
           <div class="flex items-center gap-4">
-            <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;"><i class="fab fa-whatsapp text-2xl"></i></div>
+            <div class="card-icon-wrap" style="background:#dcfce7;color:#16a34a;padding:12px;">
+              <svg viewBox="0 0 448 512" fill="currentColor" class="w-full h-full">
+                <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+              </svg>
+            </div>
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">Chat Ziyad Studio</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Hubungi kami</span>
@@ -176,7 +174,11 @@ tailwind.config = {
 
         <a href="https://www.tiktok.com/@ziyad_studio" target="_blank" rel="noopener noreferrer" class="link-card">
           <div class="flex items-center gap-4">
-            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-tiktok text-2xl"></i></div>
+            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;padding:12px;">
+              <svg viewBox="0 0 448 512" fill="currentColor" class="w-full h-full">
+                <path d="M448 209.9a210.1 210.1 0 0 1-122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2 122.2 122.2 0 0 0 53.9 80.2 121.4 121.4 0 0 0 67.2 22.9V209.9z"/>
+              </svg>
+            </div>
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">TikTok</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Konten Pendek &amp; Kreatif</span>
@@ -187,7 +189,11 @@ tailwind.config = {
 
         <a href="https://github.com/ziyad-web-studio" target="_blank" rel="noopener noreferrer" class="link-card">
           <div class="flex items-center gap-4">
-            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;"><i class="fab fa-github text-2xl"></i></div>
+            <div class="card-icon-wrap" style="background:#f1f5f9;color:#0f172a;padding:12px;">
+              <svg viewBox="0 0 496 512" fill="currentColor" class="w-full h-full">
+                <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16.5 9-27.5 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/>
+              </svg>
+            </div>
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">GitHub</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Kode sumber &amp; proyek</span>
@@ -198,7 +204,11 @@ tailwind.config = {
 
         <a href="https://whatsapp.com/channel/0029VbCY4JX59PwLr6KU5f3z" target="_blank" rel="noopener noreferrer" class="link-card">
           <div class="flex items-center gap-4">
-            <div class="card-icon-wrap" style="background:#25D366;color:#fff;"><i class="fab fa-whatsapp text-2xl"></i></div>
+            <div class="card-icon-wrap" style="background:#25D366;color:#fff;padding:12px;">
+              <svg viewBox="0 0 448 512" fill="currentColor" class="w-full h-full">
+                <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+              </svg>
+            </div>
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">Ikuti Saluran WhatsApp</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Ziyad Studio Creative</span>
@@ -230,6 +240,21 @@ tailwind.config = {
             <div class="flex flex-col text-left">
               <span class="font-body-lg text-body-lg text-on-surface">Antigravity CLI</span>
               <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Terminal TUI untuk pengembangan AI multi-agent (source: google)</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </button>
+        <button onclick="goTo('view-notra','slide-in','#notra')" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap" style="background:#f3e8ff;padding:10px;">
+              <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                <path d="M572.881 462.223c-12.712 43.22-290.678 105.932-394.068 83.898l-48.305-10.169 48.305-78.814 68.644-104.237 73.729-106.78 251.695-127.119 78.814-22.881 17.796 17.796h10.17c17.796 35.593 3.945 147.458-12.712 195.763-25.424 73.729-124.576 96.61-177.966 114.407-4.064 1.355 96.61-5.085 83.898 38.136Z" fill="#c8b2ee" stroke="#1e1e1e" stroke-width="35" stroke-linecap="round"/>
+                <path d="M700 96.111c-162.712-4.237-510.508 111.356-600 607.627" stroke="#1e1e1e" stroke-width="75" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">Notra</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Ubah kode jadi changelog & konten (source: notra)</span>
             </div>
           </div>
           <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
@@ -305,7 +330,11 @@ tailwind.config = {
     <div class="copy-box">
       <span class="copy-label">▶ Video Tutorial</span>
       <div class="download-block">
-        <div class="app-thumb" style="background:#0a0a0a;"><i class="fab fa-tiktok" style="font-size:1.3rem;color:#fff;"></i></div>
+        <div class="app-thumb" style="background:#0a0a0a;padding:12px;">
+          <svg viewBox="0 0 448 512" fill="#fff" class="w-full h-full">
+            <path d="M448 209.9a210.1 210.1 0 0 1-122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2 122.2 122.2 0 0 0 53.9 80.2 121.4 121.4 0 0 0 67.2 22.9V209.9z"/>
+          </svg>
+        </div>
         <div class="dl-info"><div class="dl-title">Tutorial TikTok</div><div class="dl-sub">Cara pakai &amp; setup lengkap</div></div>
         <a href="https://vt.tiktok.com/ZSxffkBsq/" target="_blank" rel="noopener noreferrer" class="btn-dl">Tonton</a>
       </div>
@@ -322,22 +351,22 @@ tailwind.config = {
       <span class="copy-label">✦ Prompt</span>
       <div class="code-wrapper prompt-scroll">
         <div id="text3" class="code-content" style="white-space:normal;word-break:break-word;">Buatkan satu file HTML yang berisi aplikasi web chat AI bernama "Aiminizer". Gunakan Tailwind CSS (via CDN) dan JavaScript murni. Desain harus minimalis, terinspirasi dari UI Apple, menggunakan efek glassmorphism, dan memiliki mode gelap terang (dukungan warna CSS variables). Palet warna utama adalah hitam pekat, abu-abu, dan aksen oranye terang. Sertakan fitur dan struktur berikut: 1. Elemen Visual Latar: Tambahkan animasi bola cahaya (orb) yang berdenyut lambat di latar belakang. 2. Header (Efek Kaca): Melayang di atas. Kiri untuk tombol buka pengaturan. Tengah untuk judul "Aiminizer" dan teks kecil "ziyad_studio". Kanan untuk dropdown pilihan model (GPT-3.5 Turbo dan DeepSeek). 3. Area Obrolan: Bisa di-scroll. Pesan pengguna berwarna oranye. Pesan AI berwarna latar sesuai tema. Tampilkan animasi 3 titik memantul saat AI memproses jawaban. 4. Input Pesan (Efek Kaca): Melayang di bawah. Textarea yang tingginya otomatis menyesuaikan teks dan tombol kirim. 5. Panel Pengaturan: Muncul dari samping. Berisi tombol ubah mode gelap, input password API Key, dropdown Base URL (ChatAnywhere), dan textarea untuk System Prompt. Semuanya disimpan di LocalStorage. 6. Pemrosesan Teks: Gunakan library marked.js via CDN agar pesan AI mendukung Markdown (tabel, kode, daftar). Tambahkan efek animasi mesin tik saat AI merespons. Munculkan tombol salin di setiap gelembung pesan AI. 7. Logika Komunikasi: Gunakan Fetch API. Gabungkan system prompt bawaan pengguna dengan prompt tersembunyi absolut yang menyatakan pembuatnya adalah "Ziyad (ziyad_studio), individu muda dengan ambisi ekstrem dan pemikiran strategis". Kodenya harus rapi, responsif untuk perangkat seluler, dan siap dijalankan langsung di browser.</div>
-        <button class="copy-btn" onclick="copyText('text3', this)"><i class="fas fa-copy"></i></button>
+        <button class="copy-btn" onclick="copyText('text3', this)"><span class="material-symbols-outlined" style="font-size:16px;">content_copy</span></button>
       </div>
     </div>
     <div class="copy-box">
       <span class="copy-label">◈ Webview Path</span>
       <div class="code-wrapper">
         <div id="text2" class="code-content">file:///android_asset/index.html</div>
-        <button class="copy-btn" onclick="copyText('text2', this)"><i class="fas fa-copy"></i></button>
+        <button class="copy-btn" onclick="copyText('text2', this)"><span class="material-symbols-outlined" style="font-size:16px;">content_copy</span></button>
       </div>
-      <p class="note-text"><i class="fas fa-info-circle" style="margin-right:5px;color:#3953bd;"></i>Ganti nama index.html jika menggunakan nama file lain, misal [nama].html</p>
+      <p class="note-text"><span class="material-symbols-outlined" style="font-size:14px;margin-right:5px;color:#3953bd;">info</span>Ganti nama index.html jika menggunakan nama file lain, misal [nama].html</p>
     </div>
     <div class="copy-box">
       <span class="copy-label">◉ Add Source Directly</span>
       <div class="code-wrapper">
         <div id="text1" class="code-content">android.webkit.WebView web=(android.webkit.WebView)findViewById(R.id.webview1);android.webkit.WebSettings set=web.getSettings();set.setJavaScriptEnabled(true);set.setDomStorageEnabled(true);set.setAllowFileAccessFromFileURLs(true);set.setAllowUniversalAccessFromFileURLs(true);web.setWebChromeClient(new android.webkit.WebChromeClient());</div>
-        <button class="copy-btn" onclick="copyText('text1', this)"><i class="fas fa-copy"></i></button>
+        <button class="copy-btn" onclick="copyText('text1', this)"><span class="material-symbols-outlined" style="font-size:16px;">content_copy</span></button>
       </div>
     </div>
   </main>
@@ -444,6 +473,72 @@ tailwind.config = {
           Dokumentasi
           <span class="material-symbols-outlined" style="font-size:18px;">description</span>
         </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===== VIEW NOTRA ===== -->
+<div id="view-notra" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Notra</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center mb-4 shadow-md p-2.5" style="background:linear-gradient(135deg, #f3e8ff, #e9d5ff);">
+        <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+          <path d="M572.881 462.223c-12.712 43.22-290.678 105.932-394.068 83.898l-48.305-10.169 48.305-78.814 68.644-104.237 73.729-106.78 251.695-127.119 78.814-22.881 17.796 17.796h10.17c17.796 35.593 3.945 147.458-12.712 195.763-25.424 73.729-124.576 96.61-177.966 114.407-4.064 1.355 96.61-5.085 83.898 38.136Z" fill="#c8b2ee" stroke="#1e1e1e" stroke-width="35" stroke-linecap="round"/>
+          <path d="M700 96.111c-162.712-4.237-510.508 111.356-600 607.627" stroke="#1e1e1e" stroke-width="75" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Notra</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-1 leading-relaxed">
+        <em class="not-italic font-semibold text-purple-600">"Ship more. Write less. Reach more."</em>
+      </p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 leading-relaxed">
+        Notra adalah platform yang mengubah kode yang sudah dirilis menjadi konten seperti changelog, posting peluncuran, dan update media sosial. Integrasi dengan GitHub, Linear, dan Slack untuk workflow yang mulus.
+      </p>
+      <div class="w-full flex flex-col gap-3">
+        <a href="https://www.usenotra.com/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md hover:bg-opacity-90 transition-all flex justify-center items-center gap-2">
+          Kunjungi Notra
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+        </a>
+        <a href="https://docs.usenotra.com/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-100 transition-all flex justify-center items-center gap-2">
+          Baca Dokumentasi
+          <span class="material-symbols-outlined" style="font-size:18px;">description</span>
+        </a>
+        <a href="https://app.usenotra.com/login" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-100 transition-all flex justify-center items-center gap-2">
+          Login / Daftar
+          <span class="material-symbols-outlined" style="font-size:18px;">login</span>
+        </a>
+      </div>
+      <div class="mt-6 w-full pt-5 border-t border-slate-100">
+        <span class="font-label-caps text-label-caps text-slate-400 uppercase tracking-wider">Integrasi</span>
+        <div class="flex justify-center gap-4 mt-3">
+          <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700">
+            <svg viewBox="0 0 496 512" fill="currentColor" style="width:14px;height:14px;">
+              <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16.5 9-27.5 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/>
+            </svg>
+            GitHub
+          </span>
+          <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700">
+            <svg viewBox="0 0 448 512" fill="currentColor" style="width:14px;height:14px;">
+              <path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06a47.06 47.06 0 0 1-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/>
+            </svg>
+            Slack
+          </span>
+          <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700">
+            <span class="material-symbols-outlined" style="font-size:14px;">linear_scale</span> Linear
+          </span>
+        </div>
       </div>
     </div>
   </main>

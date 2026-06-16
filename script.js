@@ -22,7 +22,8 @@ const routeMap = {
   '#ai': 'view-ai',
   '#antigravity': 'view-antigravity',
   '#support': 'view-support',
-  '#reminder': 'view-reminder'
+  '#reminder': 'view-reminder',
+  '#notra': 'view-notra'
 };
 
 function navigateToHash(hash) {
@@ -136,7 +137,7 @@ function copyText(id, btn) {
   const text = document.getElementById(id).textContent.trim();
   navigator.clipboard.writeText(text).then(() => {
     const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i>';
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">check</span>';
     btn.style.background = '#3953bd';
     btn.style.color = '#fff';
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);

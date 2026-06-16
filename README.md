@@ -46,7 +46,8 @@ Desainnya terinspirasi dari minimalis ala Apple — palet warna bersih, kartu de
 - **Copy sekali ketuk** – klik ikon copy di samping blok kode untuk langsung menyalin isinya.
 - **Jam real‑time** – ditampilkan di halaman maintenance (`#desain`).
 - **Halaman Reminder Kawaii** 💕 – halaman khusus dengan countdown timer live ke event penting, dilengkapi karakter lucu (🐻), floating hearts, animasi bounce & sparkle, dan desain pastel pink-ungu.
-- **Icon Font Loading Fix** – preconnect hints + `document.fonts.ready` API untuk mencegah icon broken/flash saat pertama kali load.
+- **Brand Icons via Inline SVG** – WhatsApp, TikTok, GitHub, Slack, dan Notra pake inline SVG — zero external dependency, loading instan.
+- **Icon Font Loading Fix** – `document.fonts.ready` API untuk mencegah icon broken/flash saat pertama kali load (Material Symbols).
 - **Kode modular** – dipisah menjadi `index.html` (markup), `style.css` (custom styles), dan `script.js` (routing & logika).
 - **Favicon & kesiapan PWA** – sudah dilengkapi favicon set, apple‑touch icon, dan `site.webmanifest` untuk Android Chrome.
 - **Ringan** – tidak butuh build step, tidak pakai framework berat, Tailwind langsung diambil dari CDN.
@@ -60,8 +61,8 @@ Desainnya terinspirasi dari minimalis ala Apple — palet warna bersih, kartu de
 | **HTML5**            | Markup semantis dan struktur halaman SPA-like          |
 | **Tailwind CSS**     | Styling utility‑first via CDN (`cdn.tailwindcss.com`)  |
 | **Vanilla JS**       | Routing, manipulasi DOM, avatar swap, logika share, jam |
-| **Font Awesome**     | Ikon brand untuk WhatsApp, TikTok, GitHub, dll.        |
-| **Material Symbols** | Ikon UI (share, folder, code, palette, dll.)           |
+| **Inline SVG**       | Ikon brand (WhatsApp, TikTok, GitHub, Slack, Notra) — zero dependency |
+| **Material Symbols** | Ikon UI (share, folder, code, palette, copy, check, dll.) |
 | **Google Fonts**     | Manrope (heading) & Inter (body) via fonts.googleapis.com |
 | **Favicon set**      | `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-*.png` |
 | **Web App Manifest** | `site.webmanifest` untuk pengalaman PWA yang bisa diinstal |
@@ -387,6 +388,18 @@ Berikut daftar perbaikan critical yang diterapkan pada tanggal ini:
 
 #### 15. ✅ Halaman Antigravity CLI (`index.html`)
 - Ditambahkan halaman detail `#antigravity` (`view-antigravity`) berisi deskripsi, link install, dan dokumentasi Antigravity CLI dari Google.
+
+#### 16. ✅ Halaman Notra (`index.html` + `script.js`)
+- Ditambahkan halaman baru `#notra` (`view-notra`) dengan link ke Notra, dokumentasi, dan login.
+- Menggunakan Notra SVG mark resmi sebagai icon.
+
+#### 17. ✅ Eliminasi Font Awesome — Pindah ke Inline SVG (`index.html` + `script.js`)
+- Semua brand icons (WhatsApp, TikTok, GitHub, Slack) diganti dari Font Awesome CDN ke inline SVG.
+- Ikon UI (copy, check, info) diganti dari Font Awesome ke Material Symbols yang sudah ada.
+- Hapus dependensi CDN Font Awesome (`cdnjs.cloudflare.com/ajax/libs/font-awesome`).
+- Hapus preconnect ke `cdnjs.cloudflare.com`.
+- Bersihkan CSS `fonts-loaded` — hapus selector Font Awesome.
+- **Benefit**: zero external dependency untuk brand icons, TikTok icon guaranteed, loading lebih cepat.
 
 ---
 
