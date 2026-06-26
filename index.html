@@ -259,6 +259,18 @@ tailwind.config = {
           </div>
           <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
         </button>
+        <button onclick="goTo('view-atomicmail','slide-in','#atomicmail')" class="link-card">
+          <div class="flex items-center gap-4">
+            <div class="card-icon-wrap overflow-hidden bg-black p-1.5">
+              <img src="https://s3.eu-central-1.amazonaws.com/cdn1.atomicmail.io/Media+Kit/Logos/Black_Green+2.svg?fbclid=PAT01DUASoCL9leHRuA2FlbQIxMABzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAacW6jmecl1r__bngcamSa5edm6gc2XxXNmlvurf3H0_IWJAqvgu_i856OehRg_aem_OwmTx5KniqUFjOvl5CNQzA" class="w-full h-full object-contain" alt="AtomicMail">
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="font-body-lg text-body-lg text-on-surface">AtomicMail AI</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Email privasi dengan asisten AI (source: atomicmail)</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+        </button>
       </div>
     </section>
   </main>
@@ -269,6 +281,8 @@ tailwind.config = {
         <button onclick="goTo('view-reminder', 'slide-in', '#reminder')" class="font-label-sm text-label-sm text-pink-400 hover:text-pink-600 transition-colors">💕 Reminder</button>
         <span class="text-slate-300">·</span>
         <button onclick="goTo('view-support', 'slide-in', '#support')" class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors">Support</button>
+        <span class="text-slate-300">·</span>
+        <button onclick="goTo('view-terms', 'slide-in', '#terms')" class="font-label-sm text-label-sm text-slate-500 hover:text-indigo-500 transition-colors">Terms</button>
       </div>
       <div class="text-sm font-bold text-slate-700 font-headline-md">Ziyad Web Studio</div>
       <div class="font-label-sm text-label-sm text-slate-500">© 2026 Ziyad Web Studio. All rights reserved.</div>
@@ -544,6 +558,38 @@ tailwind.config = {
   </main>
 </div>
 
+<!-- ===== VIEW ATOMICMAIL ===== -->
+<div id="view-atomicmail" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">AtomicMail</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col items-center text-center">
+      <div class="w-full rounded-2xl overflow-hidden mb-6 shadow-sm border border-slate-100">
+        <img src="https://cdn.prod.website-files.com/667c19cea59556c83ff867fc/6745c82b5c47a6b67fd5b6ec_Promo%206-p-800.webp" class="w-full h-auto object-cover" alt="AtomicMail Promo">
+      </div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">AtomicMail AI</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mb-6 leading-relaxed">
+        Atomic Mail adalah layanan email privasi dengan enkripsi end-to-end. Dilengkapi dengan asisten AI terintegrasi yang membantu menulis draft, meringkas isi, dan memeriksa keamanan lampiran.
+      </p>
+      <div class="w-full flex flex-col gap-3">
+        <a href="https://atomicmail.io/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md hover:bg-opacity-90 transition-all flex justify-center items-center gap-2">
+          Kunjungi AtomicMail
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
+
 <!-- ===== VIEW SUPPORT (MAINTENANCE MODE) ===== -->
 <div id="view-support" class="view flex-col min-h-screen">
   <header class="bg-transparent top-0 w-full z-50">
@@ -730,6 +776,56 @@ tailwind.config = {
       dibuat dengan penuh 💕 biar gak lupa
     </p>
 
+  </main>
+</div>
+
+<!-- ===== VIEW TERMS ===== -->
+<div id="view-terms" class="view flex-col min-h-screen">
+  <header class="bg-transparent top-0 w-full z-50">
+    <div class="flex items-center gap-3 max-w-[640px] mx-auto px-6 py-4 w-full">
+      <button onclick="goBack('view-main','#')" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">arrow_back</span>
+      </button>
+      <div class="flex-grow text-xl font-bold text-slate-900 font-headline-md">Syarat & Ketentuan</div>
+      <button onclick="goHome()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 transition-colors">
+        <span class="material-symbols-outlined text-on-surface" style="font-size:20px;">home</span>
+      </button>
+    </div>
+  </header>
+  <main class="flex-grow w-full max-w-[640px] mx-auto px-6 pt-4 pb-8 flex flex-col gap-6">
+    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Terms and Conditions</h2>
+      
+      <div class="font-body-sm text-body-sm text-on-surface-variant opacity-80 space-y-4 leading-relaxed text-left">
+        <p>
+          Selamat datang di <strong>Ziyad Web Studio</strong>. Dengan mengakses dan menggunakan platform atau resource yang ada di website ini, Anda setuju untuk mematuhi ketentuan-ketentuan berikut.
+        </p>
+
+        <h3 class="font-bold text-slate-800 mt-6 mb-2">1. Penggunaan Resources</h3>
+        <p>
+          Semua aset, referensi, dan alat (tools) yang disediakan pada situs ini bertujuan untuk pembelajaran dan pengembangan. Anda bebas menggunakannya untuk proyek personal maupun profesional, kecuali jika dinyatakan lain secara spesifik pada masing-masing lisensi alat (seperti layanan pihak ketiga).
+        </p>
+
+        <h3 class="font-bold text-slate-800 mt-6 mb-2">2. Pihak Ketiga (Third-Party Services)</h3>
+        <p>
+          Situs ini mungkin berisi tautan ke layanan atau produk pihak ketiga. Ziyad Web Studio tidak bertanggung jawab atas kebijakan privasi, isi konten, atau segala kerugian yang terjadi dari penggunaan platform pihak ketiga tersebut. Kami menyarankan Anda untuk selalu membaca Terms of Service di platform mereka.
+        </p>
+
+        <h3 class="font-bold text-slate-800 mt-6 mb-2">3. Batasan Tanggung Jawab</h3>
+        <p>
+          Ziyad Web Studio menyediakan konten "sebagaimana adanya" tanpa garansi apa pun. Kami berusaha sebaik mungkin agar informasi selalu akurat dan terbaru, namun kami tidak bertanggung jawab atas error, downtime, maupun ketidaksesuaian sistem di lingkungan lokal Anda ketika menggunakan kode dari kami.
+        </p>
+
+        <h3 class="font-bold text-slate-800 mt-6 mb-2">4. Perubahan Ketentuan</h3>
+        <p>
+          Syarat dan ketentuan ini dapat diperbarui sewaktu-waktu tanpa pemberitahuan sebelumnya. Pengguna diharapkan untuk rutin memeriksa halaman ini untuk melihat adanya perubahan.
+        </p>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-slate-100 flex justify-center">
+        <p class="font-label-sm text-label-sm text-slate-400">Terakhir diperbarui: Juni 2026</p>
+      </div>
+    </div>
   </main>
 </div>
 
